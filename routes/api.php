@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EdPart\Schedule\Legacy;
+use App\Http\Controllers\EdPart\Schedule\LegacyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+/**
+ * Legacy support of schedule
+ */
+Route::get('schedule/legacy/{date}', [LegacyController::class, 'getSchedule']);
+Route::get('schedule/legacy/{date}/{type}', [LegacyController::class, 'getList']);

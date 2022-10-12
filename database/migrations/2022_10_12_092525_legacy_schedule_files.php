@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('legacyScheduleFiles', function(Blueprint $table) {
             $table -> id();
-            $table -> foreignId('scheduleId')
+            $table -> foreignId('schedule_id')
                 -> references('id')
                 -> on('legacySchedule');
-            $table -> unsignedInteger('attachmentId');
+            $table -> unsignedInteger('attachment_id');
             $table -> timestamps();
         });
 
         Schema::table('legacyScheduleFiles', function(Blueprint $table) {
-            $table -> foreign('attachmentId')
+            $table -> foreign('attachment_id')
                 -> references('id')
                 -> on('attachments');
         });

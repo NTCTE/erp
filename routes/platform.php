@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
+use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
+use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -126,6 +129,26 @@ Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('pla
 //     });
 
 // Screens of ERP system
+// Platform > Schedule LEGACY List
+Route::screen('schedule/legacy', FullList::class)
+    -> name('schedule.legacy')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Расписание (старое)', route('schedule.legacy'));
+    });
+// Platform > Schedule LEGACY List > Edit
+Route::screen('schedule/legacy/list/{list}', Edit::class)
+    -> name('schedule.legacy.item')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('schedule.legacy');
+    });
+// Platform > Schedule LEGACY List > Add
+Route::screen('schedule/legacy/add', Add::class)
+    -> name('schedule.legacy.add')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('schedule.legacy')
+            -> push('Добавить', route('schedule.legacy.add'));
+    });
 
 // Platform > Persons
 // Route::screen('persons', FullList::class)

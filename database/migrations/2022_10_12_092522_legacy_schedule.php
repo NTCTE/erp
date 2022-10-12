@@ -14,10 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('legacySchedule', function(Blueprint $table) {
-            $table
-                -> id();
-            $table
-                -> date('date');
+            $table -> id();
+            $table -> date('date_at');
+            $table -> timestamps();
         });
     }
 

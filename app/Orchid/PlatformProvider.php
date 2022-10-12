@@ -28,6 +28,13 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+            Menu::make('Учебная часть')
+                -> icon('organization')
+                -> list([
+                    Menu::make('Расписание (старое)')
+                        -> icon('table')
+                        -> route('schedule.legacy'),
+                ]),
             // Menu::make('Персоны')
             //     -> icon('people')
             //     -> list([
@@ -140,6 +147,8 @@ class PlatformProvider extends OrchidServiceProvider
                 -> addPermission('persons.posting.view', 'Просмотр движения по контингенту')
                 -> addPermission('persons.posting.add', 'Добавлять данные по движению контингента')
                 -> addPermission('persons.posting.edit', 'Изменить данные движения по контингенту'),
+            ItemPermission::group('Расписание (старое)')
+                -> addPermission('schedule.legacy.add', 'Добавить/изменить расписание'),
         ];
     }
 }
