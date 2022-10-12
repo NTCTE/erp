@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\User\ProfilePasswordLayout;
-use App\Orchid\Layouts\User\UserEditLayout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Orchid\Platform\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Screen\Sight;
 use Orchid\Support\Color;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -40,7 +38,7 @@ class UserProfileScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'My account';
+        return 'Моя учетная запись';
     }
 
     /**
@@ -50,7 +48,7 @@ class UserProfileScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Update your account details such as name, email address and password';
+        return 'Вы можете проверить свои данные, а также вы можете сменить свой пароль. Остальные данные меняются только через администратора, либо через Отдел кадров.';
     }
 
     /**
@@ -69,46 +67,23 @@ class UserProfileScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::block(UserEditLayout::class)
-                ->title(__('Profile Information'))
-                ->description(__("Update your account's profile information and email address."))
-                ->commands(
-                    Button::make(__('Save'))
-                        ->type(Color::DEFAULT())
-                        ->icon('check')
-                        ->method('save')
-                ),
+            Layout::block(Layout::legend('user', [
+                Sight::make('name', 'ФИО'),
+                Sight::make('email', 'Адрес электронной почты'),
+            ]))
+                -> title('Основная информация учетной записи')
+                -> description('Вы можете ознакомиться с основной информацией о вас. Если вы обнаружили ошибку, то нужно сообщить администратору системы, либо в Отдел кадров.'),
 
             Layout::block(ProfilePasswordLayout::class)
-                ->title(__('Update Password'))
-                ->description(__('Ensure your account is using a long, random password to stay secure.'))
-                ->commands(
-                    Button::make(__('Update password'))
-                        ->type(Color::DEFAULT())
-                        ->icon('check')
-                        ->method('changePassword')
+                -> title('Обновить пароль')
+                -> description('В целях безопасности, рекомендуется менять пароль не менее, чем раз в полгода. Рекомендуется использовать длинный пароль, который содержит цифры, знаки.')
+                -> commands(
+                    Button::make('Обновить пароль')
+                        -> type(Color::DEFAULT())
+                        -> icon('check')
+                        -> method('changePassword')
                 ),
         ];
-    }
-
-    /**
-     * @param Request $request
-     */
-    public function save(Request $request): void
-    {
-        $request->validate([
-            'user.name'  => 'required|string',
-            'user.email' => [
-                'required',
-                Rule::unique(User::class, 'email')->ignore($request->user()),
-            ],
-        ]);
-
-        $request->user()
-            ->fill($request->get('user'))
-            ->save();
-
-        Toast::info(__('Profile updated.'));
     }
 
     /**

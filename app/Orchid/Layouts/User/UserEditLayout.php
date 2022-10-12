@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Rows;
@@ -22,14 +23,16 @@ class UserEditLayout extends Rows
                 ->type('text')
                 ->max(255)
                 ->required()
-                ->title(__('Name'))
-                ->placeholder(__('Name')),
+                ->title('ФИО')
+                ->placeholder('Полные фамилия, имя и отчество (при наличии)'),
+                // -> canSee(Auth::user() -> hasAccess('platform.system.userEdit')),
 
             Input::make('user.email')
                 ->type('email')
                 ->required()
-                ->title(__('Email'))
-                ->placeholder(__('Email')),
+                ->title('Адрес электронной почты')
+                ->placeholder('Корпоративный адрес электронной почты'),
+                // -> canSee(Auth::user() -> hasAccess('platform.system.userEdit')),
         ];
     }
 }

@@ -7,8 +7,9 @@ use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
-use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
+// use App\Orchid\Screens\Persons\Add;
+// use App\Orchid\Screens\Persons\FullList;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -96,14 +97,14 @@ Route::screen('roles', RoleListScreen::class)
             ->push(__('Roles'), route('platform.systems.roles'));
     });
 
-// Example...
-Route::screen('example', ExampleScreen::class)
-    ->name('platform.example')
-    ->breadcrumbs(function (Trail $trail) {
-        return $trail
-            ->parent('platform.index')
-            ->push('Example screen');
-    });
+// // Example...
+// Route::screen('example', ExampleScreen::class)
+//     ->name('platform.example')
+//     ->breadcrumbs(function (Trail $trail) {
+//         return $trail
+//             ->parent('platform.index')
+//             ->push('Example screen');
+//     });
 
 Route::screen('example-fields', ExampleFieldsScreen::class)->name('platform.example.fields');
 Route::screen('example-layouts', ExampleLayoutsScreen::class)->name('platform.example.layouts');
@@ -112,4 +113,33 @@ Route::screen('example-editors', ExampleTextEditorsScreen::class)->name('platfor
 Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.example.cards');
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
 
-//Route::screen('idea', Idea::class, 'platform.screens.idea');
+// Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+
+// // Platform > Profile
+// Route::screen('profile', UserProfileScreen::class)
+//     ->name('platform.profile')
+//     ->breadcrumbs(function (Trail $trail) {
+//         return $trail
+//             ->parent('platform.index')
+//             ->push(__('Profile'), route('platform.profile'));
+//     });
+
+// Screens of ERP system
+
+// Platform > Persons
+// Route::screen('persons', FullList::class)
+//     -> name('persons')
+//     -> breadcrumbs(function(Trail $trail) {
+//         return $trail
+//             -> parent('platform.index')
+//             -> push('Персоны', route('persons'));
+//     });
+// // Platform > Persons > Add
+// Route::screen('persons/add', Add::class)
+//     -> name('persons.add')
+//     -> breadcrumbs(function(Trail $trail) {
+//         return $trail
+//             -> parent('persons')
+//             -> push('Добавить персону', route('persons.add'));
+//     });

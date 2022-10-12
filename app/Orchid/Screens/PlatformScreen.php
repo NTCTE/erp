@@ -27,7 +27,7 @@ class PlatformScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Get Started';
+        return 'Воркспейс';
     }
 
     /**
@@ -37,7 +37,17 @@ class PlatformScreen extends Screen
      */
     public function description(): ?string
     {
-        return 'Welcome to your Orchid application.';
+        $time = Date('G');
+        $ret = '';
+        if ($time >= 0 && $time < 6)
+            $ret = '🌃 Доброй ночи!';
+        elseif ($time >= 6 && $time < 12)
+            $ret = '🌅 Доброе утро!';
+        elseif ($time >= 12 && $time < 18)
+            $ret = '🏙️ Добрый день!';
+        else 
+            $ret = '🌇 Добрый вечер!';
+        return "{$ret} Мы рады вас видеть в системе.";
     }
 
     /**
@@ -48,17 +58,13 @@ class PlatformScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            Link::make('Website')
-                ->href('http://orchid.software')
+            Link::make('Сайт колледжа')
+                ->href(config('nttek.contact.site'))
                 ->icon('globe-alt'),
 
-            Link::make('Documentation')
-                ->href('https://orchid.software/en/docs')
+            Link::make('Документация')
+                ->href('#')
                 ->icon('docs'),
-
-            Link::make('GitHub')
-                ->href('https://github.com/orchidsoftware/platform')
-                ->icon('social-github'),
         ];
     }
 
@@ -70,7 +76,7 @@ class PlatformScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::view('platform::partials.welcome'),
+            Layout::view('nttek.welcome'),
         ];
     }
 }

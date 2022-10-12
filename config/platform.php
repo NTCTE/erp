@@ -128,8 +128,8 @@ return [
     */
 
     'template' => [
-        'header' => '',
-        'footer' => '',
+        'header' => 'branding.header',
+        'footer' => 'branding.footer',
     ],
 
     /*
@@ -142,7 +142,7 @@ return [
     */
 
     'attachment' => [
-        'disk'      => env('FILESYSTEM_DISK', 'public'),
+        'disk'      => 'public',
         'generator' => \Orchid\Attachment\Engines\Generator::class,
     ],
 
@@ -206,7 +206,7 @@ return [
     */
 
     'turbo' => [
-        'cache' => false,
+        'cache' => false
     ],
 
     /*
