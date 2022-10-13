@@ -4,12 +4,17 @@ namespace App\Http\Controllers\EdPart\Schedule;
 
 use App\Http\Controllers\Controller;
 use App\Models\Legacy\Schedule\FullList;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Shuchkin\SimpleXLSX;
 
+/**
+ * LegacyController - контроллер API для расписания в старом режиме. Адаптировано под API.
+ */
 class LegacyController extends Controller
 {
+    /**
+     * Получить информацию о расписании по пути /api/legacy/{date}.
+     */
     public function getSchedule($date) {
         $schedule = FullList::where('date_at', $date) -> first();
         if (!empty($schedule)) {
@@ -38,7 +43,10 @@ class LegacyController extends Controller
                 'message' => 'Schedule on this date is not found'
             ], 404);
     }
-
+    
+    /**
+     * Получить список расписания по преподавателям, либо по группам, либо всем массивом.
+     */
     public function getList($date, $type = '', $name = '') {
         $schedule = FullList::where('date_at', $date) -> first();
         if (!empty($schedule)) {
@@ -82,6 +90,9 @@ class LegacyController extends Controller
             ], 404);
     }
 
+    /**
+     * Парсер XLSX-таблицы по дате.
+     */
     private function parseXLSX($path, $onlySchedule = true) {
         $xlsx = SimpleXLSX::parse($path);
         $return = [];
@@ -170,6 +181,9 @@ class LegacyController extends Controller
         return $return;
     }
 
+    /**
+     * Получить массив расписания на преподавателя.
+     */
     private function get_teacher($name = '', $arr = []) {
         if (!empty($name) && !empty($arr)) {
             $ret = [];
@@ -185,10 +199,14 @@ class LegacyController extends Controller
                                         'name' => $lesson['name'],
                                         'rooms' => $lesson['rooms'],
                                     ];
+            ksort($ret);
             return $ret;
         } else return false;
     }
 
+    /**
+     * Получить массив расписания на группу.
+     */
     private function get_group($name = '', $arr = []) {
         if (!empty($name) && !empty($arr)) {
             $name = mb_strtoupper($name);
