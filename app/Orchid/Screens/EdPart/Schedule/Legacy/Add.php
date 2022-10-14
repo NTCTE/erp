@@ -80,6 +80,13 @@ class Add extends Screen
         ];
     }
 
+    public function permission(): ?iterable
+    {
+        return [
+            'edPart.schedule.legacy.add'
+        ];
+    }
+
     public function saveDate(Request $request, FullList $list, Files $files) {
         $request = $request -> get('schedule');
 

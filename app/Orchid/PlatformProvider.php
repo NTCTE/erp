@@ -8,7 +8,6 @@ use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
-use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
@@ -33,8 +32,10 @@ class PlatformProvider extends OrchidServiceProvider
                 -> list([
                     Menu::make('Расписание (старое)')
                         -> icon('table')
-                        -> route('schedule.legacy'),
-                ]),
+                        -> route('schedule.legacy')
+                        -> permission('edPart.schedule.legacy.add'),
+                ])
+                -> permission('edPart.*'),
             // Menu::make('Персоны')
             //     -> icon('people')
             //     -> list([
@@ -148,7 +149,7 @@ class PlatformProvider extends OrchidServiceProvider
                 -> addPermission('persons.posting.add', 'Добавлять данные по движению контингента')
                 -> addPermission('persons.posting.edit', 'Изменить данные движения по контингенту'),
             ItemPermission::group('Расписание (старое)')
-                -> addPermission('schedule.legacy.add', 'Добавить/изменить расписание'),
+                -> addPermission('edPart.schedule.legacy.add', 'Добавить/изменить расписание'),
         ];
     }
 }
