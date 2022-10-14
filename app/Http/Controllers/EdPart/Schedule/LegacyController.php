@@ -18,12 +18,13 @@ class LegacyController extends Controller
     public function getSchedule($date) {
         $schedule = FullList::where('date_at', $date) -> first();
         if (!empty($schedule)) {
-            $path = $schedule
+            $s_path = $schedule
                 -> files()
                 -> orderByDesc('updated_at')
                 -> first()
                 -> url;
-            $path = Storage::path("{$path['disk']}/{$path['path']}{$path['name']}.{$path['extension']}");
+
+            $path = Storage::path("{$s_path['disk']}/{$s_path['path']}{$s_path['name']}.{$s_path['extension']}");
             return [
                 'date' => $schedule['date_at'],
                 'countOfChanges' => $schedule
@@ -32,6 +33,7 @@ class LegacyController extends Controller
                 'lastChange' => $schedule
                     -> files
                     -> max('updated_at'),
+                'url' => $s_path['url'],
                 'data' => $this -> parseXLSX(
                     $path,
                     false
