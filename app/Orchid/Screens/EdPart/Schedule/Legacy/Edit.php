@@ -75,6 +75,13 @@ class Edit extends Screen
         ];
     }
 
+    public function permission(): ?iterable
+    {
+        return [
+            'edPart.schedule.legacy.add'
+        ];
+    }
+
     public function addChange(FullList $fullList, Request $request) {
         $file = new Files();
         $file -> fill([

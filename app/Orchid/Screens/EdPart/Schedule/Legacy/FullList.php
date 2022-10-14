@@ -61,4 +61,11 @@ class FullList extends Screen
             LegacyScheduleFullList::class,
         ];
     }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'edPart.schedule.legacy.add'
+        ];
+    }
 }
