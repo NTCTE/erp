@@ -100,6 +100,7 @@ class LegacyController extends Controller
         $return = [];
         if (!$onlySchedule)
             $return = [
+                'buildings' => [],
                 'teachers' => [],
                 'groups' => [],
             ];
@@ -113,6 +114,11 @@ class LegacyController extends Controller
                         'address' => $sheet[1][2],
                     ],
                     'schedule' => [],
+                ];
+            } else {
+                $return['buildings'][] = [
+                    'number' => $sheet[1][1],
+                    'address' => $sheet[1][2],
                 ];
             }
             $cursor = [
@@ -130,7 +136,7 @@ class LegacyController extends Controller
                                 'schedule' => [],
                             ];
                         else
-                            $return['groups'][] = $sheet[$cursor['row']][$cursor['col']];
+                            $return['groups'][$cntSheet][] = $sheet[$cursor['row']][$cursor['col']];
                         for ($cntLesson = 2; $cntLesson <= 8; $cntLesson++) {
                             if (!empty($sheet[$cursor['row'] + $cntLesson][$cursor['col'] + 1])) {
                                 if ($onlySchedule) {
@@ -169,6 +175,8 @@ class LegacyController extends Controller
                 $cursor['row'] += 9;
                 $cursor['col'] = 0;
             }
+            if (!$onlySchedule)
+                sort($return['groups'][$cntSheet]);
         }
         if (!$onlySchedule) {
             $return['teachers'] = (function() use ($return) {
