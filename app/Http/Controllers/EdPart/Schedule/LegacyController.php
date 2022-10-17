@@ -186,7 +186,6 @@ class LegacyController extends Controller
                 return $ret;
             })();
             sort($return['teachers']);
-            sort($return['groups']);
         }
         return $return;
     }
