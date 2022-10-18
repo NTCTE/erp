@@ -21,4 +21,9 @@ class Files extends Model
     public function url() {
         return $this -> belongsTo(Attachment::class, 'attachment_id');
     }
+
+    public function getFile() {
+        return $this -> hasOne(Attachment::class, 'id', 'attachment_id')
+            -> withDefault();
+    }
 }
