@@ -49,6 +49,9 @@ class Edit extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Удалить')
+                -> icon('trash')
+                -> method('deleteDate'),
             Button::make('Внеси изменение')
                 -> icon('pencil')
                 -> method('addChange'),
@@ -91,6 +94,20 @@ class Edit extends Screen
             -> save();
 
         Alert::success('Изменение в расписании успешно сохранено!');
+
+        return redirect()
+            -> route('schedule.legacy');
+    }
+
+    public function deleteDate(FullList $fullList) {
+        foreach (Files::where('schedule_id', $fullList -> id) -> get() as $item) {
+            $item -> delete();
+            $item -> getFile
+                -> delete();
+        }
+        $fullList -> delete();
+        
+        Alert::success("Расписание на выбранное число успешно удалено!");
 
         return redirect()
             -> route('schedule.legacy');

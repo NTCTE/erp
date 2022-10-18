@@ -3,16 +3,22 @@
 namespace App\Models\Legacy\Schedule;
 
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class FullList extends Model
 {
-    use AsSource;
+    use AsSource, Filterable;
 
     protected $table = 'legacySchedule';
 
     protected $fillable = [
         'date_at',
+    ];
+
+    protected $allowedSorts = [
+        'date_at',
+        'updated_at'
     ];
 
     public function getDateAtAttribute($value) {

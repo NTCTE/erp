@@ -28,20 +28,25 @@ class FullList extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('date', 'Дата расписания')
+            TD::make('date_at', 'Дата расписания')
+                -> sort()
                 -> render(function(ScheduleFullList $list) {
                     return Link::make($list -> date_at)
                         -> route('schedule.legacy.item', $list);
+                }),
+            TD::make('updated_at', 'Дата последнего изменения')
+                -> sort()
+                -> render(function(ScheduleFullList $list) {
+                    $files = new Files();
+                    return Date(
+                        'd.m.Y H:i:s',
+                        strtotime($files::where('schedule_id', $list -> id) -> max('updated_at'))
+                    );
                 }),
             TD::make('countOfChanges', 'Количество изменений в расписании')
                 -> render(function(ScheduleFullList $list) {
                     $files = new Files();
                     return $files::where('schedule_id', $list -> id) -> count();
-                }),
-            TD::make('dateOfLastChange', 'Дата последнего изменения')
-                -> render(function(ScheduleFullList $list) {
-                    $files = new Files();
-                    return $files::where('schedule_id', $list -> id) -> max('updated_at');
                 }),
         ];
     }
