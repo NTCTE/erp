@@ -15,35 +15,42 @@ class LegacyController extends Controller
     /**
      * Получить информацию о расписании по пути /api/legacy/{date}.
      */
-    public function getSchedule($date) {
-        $schedule = FullList::where('date_at', $date) -> first();
-        if (!empty($schedule)) {
-            $s_path = $schedule
-                -> files()
-                -> orderByDesc('updated_at')
-                -> first()
-                -> url;
+    public function getSchedule($date = '') {
+            if (!empty($date)) {
+            $schedule = FullList::where('date_at', $date) -> first();
+            if (!empty($schedule)) {
+                $s_path = $schedule
+                    -> files()
+                    -> orderByDesc('updated_at')
+                    -> first()
+                    -> url;
 
-            $path = Storage::path("{$s_path['disk']}/{$s_path['path']}{$s_path['name']}.{$s_path['extension']}");
-            return [
-                'date' => $schedule['date_at'],
-                'countOfChanges' => $schedule
-                    -> files
-                    -> count(),
-                'lastChange' => $schedule
-                    -> files
-                    -> max('updated_at'),
-                'url' => $s_path['url'],
-                'data' => $this -> parseXLSX(
-                    $path,
-                    false
-                ),
-            ];
+                $path = Storage::path("{$s_path['disk']}/{$s_path['path']}{$s_path['name']}.{$s_path['extension']}");
+                return [
+                    'date' => $schedule['date_at'],
+                    'countOfChanges' => $schedule
+                        -> files
+                        -> count(),
+                    'lastChange' => $schedule
+                        -> files
+                        -> max('updated_at'),
+                    'url' => $s_path['url'],
+                    'data' => $this -> parseXLSX(
+                        $path,
+                        false
+                    ),
+                ];
+            }
+            else
+                return response() -> json([
+                    'message' => 'Schedule on this date is not found'
+                ], 404);
+        } else {
+            $ret = [];
+            foreach (FullList::orderByDesc('date_at') -> limit(10) -> get() as $item)
+                $ret[] = $item['date_at'];
+            return $ret;
         }
-        else
-            return response() -> json([
-                'message' => 'Schedule on this date is not found'
-            ], 404);
     }
     
     /**

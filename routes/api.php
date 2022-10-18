@@ -23,5 +23,5 @@ use Illuminate\Support\Facades\Route;
 /**
  * Legacy support of schedule
  */
-Route::get('schedule/legacy/{date}', [LegacyController::class, 'getSchedule']);
+Route::get('schedule/legacy/{date?}', [LegacyController::class, 'getSchedule']);
 Route::get('schedule/legacy/{date}/{type}/{name?}', [LegacyController::class, 'getList']);

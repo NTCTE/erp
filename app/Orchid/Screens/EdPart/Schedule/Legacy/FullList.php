@@ -17,7 +17,9 @@ class FullList extends Screen
     public function query(): iterable
     {
         return [
-            'schedules' => ScheduleFullList::paginate(),
+            'schedules' => ScheduleFullList::filters()
+                -> defaultSort('id')
+                -> paginate(),
         ];
     }
 
