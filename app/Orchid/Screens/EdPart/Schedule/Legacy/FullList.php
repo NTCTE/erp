@@ -18,7 +18,7 @@ class FullList extends Screen
     {
         return [
             'schedules' => ScheduleFullList::filters()
-                -> defaultSort('id')
+                -> defaultSort('id', 'desc')
                 -> paginate(),
         ];
     }
