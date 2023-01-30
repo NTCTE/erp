@@ -23,7 +23,29 @@ class Repository extends Screen
      */
     public function name(): ?string
     {
-        return 'Repository';
+        return 'Репозиторий';
+    }
+    
+    /**
+     * Description of screen.
+     *
+     * @return string
+     */
+    public function description(): ?string
+    {
+        return 'На данном окне вы можете изменить редактировать системные таблицы.';
+    }
+    
+    /**
+     * Permissions of screen.
+     *
+     * @return iterable
+     */
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.systems.repository',
+        ];
     }
 
     /**

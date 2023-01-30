@@ -36,16 +36,24 @@ class PlatformProvider extends OrchidServiceProvider
                         -> permission('edPart.schedule.legacy.add'),
                 ])
                 -> permission('edPart.*'),
-            Menu::make(__('Users'))
-                ->icon('user')
-                ->route('platform.systems.users')
-                ->permission('platform.systems.users')
-                ->title(__('Access rights')),
-
-            Menu::make(__('Roles'))
-                ->icon('lock')
-                ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
+            Menu::make('Система')
+                -> icon('config')
+                -> list([
+                    Menu::make('Репозиторий')
+                        -> icon('number-list')
+                        -> route('system.repository')
+                        -> permission('platform.systems.repository'),
+                    Menu::make(__('Users'))
+                        ->icon('user')
+                        ->route('platform.systems.users')
+                        ->permission('platform.systems.users')
+                        ->title(__('Access rights')),
+                    Menu::make(__('Roles'))
+                        ->icon('lock')
+                        ->route('platform.systems.roles')
+                        ->permission('platform.systems.roles'),
+                ])
+                -> permission('platform.systems.*'),
         ];
     }
 
@@ -69,7 +77,8 @@ class PlatformProvider extends OrchidServiceProvider
         return [
             ItemPermission::group(__('System'))
                 -> addPermission('platform.systems.roles', __('Roles'))
-                -> addPermission('platform.systems.users', __('Users')),
+                -> addPermission('platform.systems.users', __('Users'))
+                -> addPermission('platform.systems.repository', 'Репозиторий'),
             ItemPermission::group('Контингент')
                 -> addPermission('contingent.readonly', 'Режим чтения')
                 -> addPermission('contingent.write', 'Режим записи'),

@@ -8,6 +8,7 @@ use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\System\Repository;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -93,6 +94,7 @@ Route::screen('roles', RoleListScreen::class)
     });
 
 // Screens of ERP system
+// SCHEDULE LEGACY
 // Platform > Schedule LEGACY List
 Route::screen('schedule/legacy', FullList::class)
     -> name('schedule.legacy')
@@ -112,4 +114,14 @@ Route::screen('schedule/legacy/add', Add::class)
     -> breadcrumbs(function(Trail $trail) {
         return $trail -> parent('schedule.legacy')
             -> push('Добавить', route('schedule.legacy.add'));
+    });
+
+// SYSTEM
+// System > Repository
+Route::screen('/system/repository', Repository::class)
+    -> name('system.repository')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Система')
+            -> push('Репозиторий', 'system.repository');
     });
