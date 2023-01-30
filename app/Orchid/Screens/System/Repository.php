@@ -2,18 +2,24 @@
 
 namespace App\Orchid\Screens\System;
 
+use App\Models\System\Repository\Repository as RepositoryRepository;
+use App\Orchid\Layouts\System\Repository\RepositoryTable;
 use Orchid\Screen\Screen;
 
 class Repository extends Screen
 {
+    public $repository;
+
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(RepositoryRepository $repository): iterable
     {
-        return [];
+        return [
+            'repository' => $repository::paginate(),
+        ];
     }
 
     /**
@@ -65,6 +71,8 @@ class Repository extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            RepositoryTable::class,
+        ];
     }
 }

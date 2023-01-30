@@ -23,7 +23,12 @@ class DocumentSchemaScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'DocumentSchemaScreen';
+        return 'Схемы документов';
+    }
+
+    public function description(): ?string
+    {
+        return 'Таблица со схемами документов, которые можно привязать к пользователю. Удалить схему нельзя, можно только перевести ее в режим "только для чтения"!';
     }
 
     /**

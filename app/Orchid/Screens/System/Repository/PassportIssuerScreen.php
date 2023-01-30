@@ -23,7 +23,12 @@ class PassportIssuerScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'PassportIssuerScreen';
+        return 'Места выдачи паспортов';
+    }
+
+    public function description(): ?string
+    {
+        return 'Обычно, отсюда работать не нужно, таблица "Места выдачи паспортов" заполняется автоматически. Если есть жизненная необходимость, то добавьте отсюда. Но зачем?';
     }
 
     /**

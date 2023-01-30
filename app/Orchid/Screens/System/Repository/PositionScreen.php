@@ -23,7 +23,12 @@ class PositionScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'PositionScreen';
+        return 'Должности';
+    }
+
+    public function description(): ?string
+    {
+        return 'Обычно, отсюда работать не нужно, таблица "Должности" заполняется автоматически. Если есть жизненная необходимость, то добавьте отсюда. Но зачем?';
     }
 
     /**

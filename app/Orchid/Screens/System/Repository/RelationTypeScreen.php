@@ -23,7 +23,12 @@ class RelationTypeScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'RelationTypeScreen';
+        return 'Родственные связи';
+    }
+
+    public function description(): ?string
+    {
+        return 'Список родственных связей, используемых в системе.';
     }
 
     /**

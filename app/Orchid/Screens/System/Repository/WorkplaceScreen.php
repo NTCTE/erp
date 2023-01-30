@@ -23,7 +23,12 @@ class WorkplaceScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'WorkplaceScreen';
+        return 'Рабочие места';
+    }
+
+    public function description(): ?string
+    {
+        return 'Обычно, отсюда работать не нужно, таблица "Рабочие места" заполняется автоматически. Если есть жизненная необходимость, то добавьте отсюда. Но зачем?';
     }
 
     /**
