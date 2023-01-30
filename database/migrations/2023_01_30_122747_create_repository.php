@@ -15,9 +15,13 @@ return new class extends Migration
     {
         Schema::create('repository', function (Blueprint $table) {
             $table -> id();
+            $table -> char('name', 100)
+                -> unique();
             $table -> char('class_type', 255)
                 -> unique();
             $table -> char('path', 200)
+                -> unique();
+            $table -> char('uri', 50)
                 -> unique();
         });
     }

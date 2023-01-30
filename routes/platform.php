@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\System\Repository\Repository as RepositoryRepository;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
@@ -9,11 +10,6 @@ use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\System\Repository;
-use App\Orchid\Screens\System\Repository\DocumentSchemaScreen;
-use App\Orchid\Screens\System\Repository\PassportIssuerScreen;
-use App\Orchid\Screens\System\Repository\PositionScreen;
-use App\Orchid\Screens\System\Repository\RelationTypeScreen;
-use App\Orchid\Screens\System\Repository\WorkplaceScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -130,38 +126,13 @@ Route::screen('/system/repository', Repository::class)
             -> push('Система')
             -> push('Репозиторий', 'system.repository');
     });
-// System > Repository > Document Schemas
-Route::screen('/system/repository/document-schemas', DocumentSchemaScreen::class)
-    -> name('system.repository.documentSchemas')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('system.repository')
-            -> push('Схемы документов', route('system.repository.documentSchemas'));
-    });
-// System > Repository > Passport Issuers
-Route::screen('/system/repository/passport-issuers', PassportIssuerScreen::class)
-    -> name('system.repository.passportIssuers')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('system.repository')
-            -> push('Места выдачи паспорта', route('system.repository.passportIssuers'));
-    });
-// System > Repository > Positions
-Route::screen('/system/repository/positions', PositionScreen::class)
-    -> name('system.repository.positions')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('system.repository')
-            -> push('Должности', route('system.repository.positions'));
-    });
-// System > Repository > Relation Types
-Route::screen('/system/repository/relation-types', RelationTypeScreen::class)
-    -> name('system.repository.relationTypes')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('system.repository')
-            -> push('Родственные связи', route('system.repository.relationTypes'));
-    });
-// System > Repository > Workplaces
-Route::screen('/system/repository/workplaces', WorkplaceScreen::class)
-    -> name('system.repository.workplaces')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('system.repository')
-            -> push('Родственные связи', route('system.repository.workplaces'));
-    });
+
+// System > Repository > Entities
+foreach (RepositoryRepository::all() as $entity) {
+    Route::screen("/system/repository/{$entity['uri']}", $entity['class_type'])
+        -> name($entity['path'])
+        -> breadcrumbs(function(Trail $trail) use ($entity) {
+            return $trail -> parent('system.repository')
+                -> push($entity['name'], route($entity['path']));
+        });
+}
