@@ -2,18 +2,24 @@
 
 namespace App\Orchid\Screens\System\Repository;
 
+use App\Models\System\Repository\Position;
+use App\Orchid\Layouts\System\Repository\PositionTable;
 use Orchid\Screen\Screen;
 
 class PositionScreen extends Screen
 {
+    public $position;
+
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Position $position): iterable
     {
-        return [];
+        return [
+            'position' => $position::paginate(),
+        ];
     }
 
     /**
@@ -48,6 +54,8 @@ class PositionScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            PositionTable::class,
+        ];
     }
 }

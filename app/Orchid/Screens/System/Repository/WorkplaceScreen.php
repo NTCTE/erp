@@ -2,18 +2,24 @@
 
 namespace App\Orchid\Screens\System\Repository;
 
+use App\Models\System\Repository\Workplace;
+use App\Orchid\Layouts\System\Repository\WorkplaceTable;
 use Orchid\Screen\Screen;
 
 class WorkplaceScreen extends Screen
 {
+    public $workplace;
+
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Workplace $workplace): iterable
     {
-        return [];
+        return [
+            'workplace' => $workplace::paginate(),
+        ];
     }
 
     /**
@@ -48,6 +54,8 @@ class WorkplaceScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            WorkplaceTable::class,
+        ];
     }
 }

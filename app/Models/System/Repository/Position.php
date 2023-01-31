@@ -9,5 +9,5 @@ class Position extends Model
 {
     use AsSource;
 
-    protected $timestamps = false;
+    public $timestamps = false;
 }

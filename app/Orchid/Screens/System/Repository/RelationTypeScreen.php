@@ -2,18 +2,24 @@
 
 namespace App\Orchid\Screens\System\Repository;
 
+use App\Models\System\Repository\RelationType;
+use App\Orchid\Layouts\System\Repository\RelationTypeTable;
 use Orchid\Screen\Screen;
 
 class RelationTypeScreen extends Screen
 {
+    public $rel_type;
+
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(RelationType $rel_type): iterable
     {
-        return [];
+        return [
+            'rel_type' => $rel_type::paginate(),
+        ];
     }
 
     /**
@@ -48,6 +54,8 @@ class RelationTypeScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            RelationTypeTable::class,
+        ];
     }
 }
