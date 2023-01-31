@@ -36,6 +36,15 @@ class PlatformProvider extends OrchidServiceProvider
                         -> permission('edPart.schedule.legacy.add'),
                 ])
                 -> permission('edPart.*'),
+            Menu::make('Организация')
+                    -> icon('directions')
+                    -> permission('org.*')
+                    -> list([
+                        Menu::make('Контингент')
+                            -> icon('friends')
+                            -> permission('org.contingent.*')
+                            -> route('org.contingent'),
+                    ]),
             Menu::make('Система')
                 -> icon('config')
                 -> list([
@@ -79,11 +88,11 @@ class PlatformProvider extends OrchidServiceProvider
                 -> addPermission('platform.systems.roles', __('Roles'))
                 -> addPermission('platform.systems.users', __('Users'))
                 -> addPermission('platform.systems.repository', 'Репозиторий'),
-            ItemPermission::group('Контингент')
-                -> addPermission('contingent.readonly', 'Режим чтения')
-                -> addPermission('contingent.write', 'Режим записи'),
             ItemPermission::group('Расписание (старое)')
                 -> addPermission('edPart.schedule.legacy.add', 'Добавить/изменить расписание'),
+            ItemPermission::group('Организация')
+                -> addPermission('org.contingent.read', 'Контингент: чтение')
+                -> addPermission('org.contingent.write', 'Контингент: запись'),
         ];
     }
 }

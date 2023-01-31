@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Models\System\Repository\Repository as RepositoryRepository;
+use App\Orchid\Screens\Contingent\ContingentScreen;
+use App\Orchid\Screens\Contingent\Person\AddEditScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
@@ -136,3 +138,20 @@ foreach (RepositoryRepository::all() as $entity) {
                 -> push($entity['name'], route($entity['path']));
         });
 }
+
+// System > Org > Contingent
+Route::screen('/org/contingent', ContingentScreen::class)
+    -> name('org.contingent')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Организация')
+            -> push('Контингент', route('org.contingent'));
+    });
+
+// System > Org > Contingent > Person
+Route::screen('/org/contingent/person/{id?}', AddEditScreen::class)
+    -> name('org.contingent.person')
+    -> breadcrumbs(function (Trail $trail) {
+        return $trail -> parent('org.contingent')
+            -> push('Персона');
+    });
