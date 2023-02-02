@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Contingent\Person;
 
+use App\Models\Org\Contingent\Person;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
@@ -46,10 +47,7 @@ class CreateRows extends Rows
                     -> format('d.m.Y'),
                 Select::make('person.sex')
                     -> title('Пол')
-                    -> options([
-                        0 => 'Мужской',
-                        1 => 'Женский',
-                    ])
+                    -> options(Person::$sexs)
                     -> empty('Выберите пол...'),
             ]),
             Group::make([

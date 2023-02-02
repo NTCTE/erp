@@ -5,10 +5,11 @@ namespace App\Models\Org\Contingent;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 use Illuminate\Support\Str;
+use Orchid\Attachment\Attachable;
 
 class Person extends Model
 {
-    use AsSource;
+    use AsSource, Attachable;
 
     protected $table = 'persons';
 
@@ -28,6 +29,12 @@ class Person extends Model
         'sex',
         'workplace_id',
         'position_id',
+        'photo_id',
+    ];
+
+    static $sexs = [
+        1 => 'Мужской',
+        2 => 'Женский',
     ];
 
     // Блок аксессоров
