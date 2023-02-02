@@ -12,6 +12,7 @@ use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\System\Repository;
+use App\Orchid\Screens\System\Repository\NewDocumentSchemaScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -138,6 +139,14 @@ foreach (RepositoryRepository::all() as $entity) {
                 -> push($entity['name'], route($entity['path']));
         });
 }
+
+// System > Repository > Documents Schema > Add Item
+Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen::class)
+    -> name('system.repository.documentSchemas.add')
+    -> breadcrumbs(function (Trail $trail) {
+        return $trail -> parent('system.repository.documentSchemas')
+            -> push('Добавить схему', route('system.repository.documentSchemas.add'));
+    });
 
 // System > Org > Contingent
 Route::screen('/org/contingent', ContingentScreen::class)

@@ -44,8 +44,8 @@ return new class extends Migration
             $table -> char('hin', 20)
                 -> unique()
                 -> nullable();
-            $table -> boolean('sex')
-                -> default(false);
+            $table -> unsignedTinyInteger('sex')
+                -> default(1);
             $table -> foreignId('workplace_id')
                 -> nullable()
                 -> references('id')

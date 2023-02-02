@@ -2,18 +2,24 @@
 
 namespace App\Orchid\Screens\System\Repository;
 
+use App\Models\System\Repository\DocumentSchema;
+use App\Orchid\Layouts\System\Repository\DocumentsTable;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class DocumentSchemaScreen extends Screen
 {
+    public $documents;
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(DocumentSchema $documents): iterable
     {
-        return [];
+        return [
+            'documents' => $documents::paginate(),
+        ];
     }
 
     /**
@@ -38,7 +44,11 @@ class DocumentSchemaScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Создать новый документ')
+                -> icon('doc')
+                -> route('system.repository.documentSchemas.add'),
+        ];
     }
 
     /**
@@ -48,6 +58,8 @@ class DocumentSchemaScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            DocumentsTable::class,
+        ];
     }
 }
