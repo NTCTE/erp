@@ -2,6 +2,9 @@
 
 namespace App\Orchid\Layouts\System\Repository;
 
+use App\Models\System\Repository\DocumentSchema;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -24,6 +27,22 @@ class DocumentsTable extends Table
      */
     protected function columns(): iterable
     {
-        return [];
+        return [
+            TD::make('fullname', 'Название документа'),
+            TD::make('readonly', 'В режиме чтения'),
+            TD::make('actions', 'Действия')
+                -> render(function(DocumentSchema $document) {
+                    return DropDown::make()
+                        -> icon('options-vertical')
+                        -> list([
+                            Button::make('Изменить режим использования')
+                                -> icon(boolval($document -> readonly) ? 'lock-open' : 'lock')
+                                -> confirm(boolval($document -> readonly) ?
+                                'Если вы сейчас это сделаете, то нельзя будет добавить этот документ к персоне. Продолжить?' :
+                                'В данном случае, вы даете возможность использовать этот документ. Продолжить?')
+                                -> method('readonlyDoc', [$document -> id]),  
+                        ]);
+                }),
+        ];
     }
 }

@@ -16,7 +16,7 @@ class DocumentSchema extends Model
     ];
 
     protected $casts = [
-        'schema' => 'array',
+        'schema' => 'array'
     ];
 
     static $types = [
@@ -30,4 +30,8 @@ class DocumentSchema extends Model
         'week' => 'Неделя',
         'time' => 'Время',
     ];
+
+    public function getReadonlyAttribute($value) {
+        return boolval($value) ? 'Да' : 'Нет';
+    }
 }

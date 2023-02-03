@@ -6,6 +6,7 @@ use App\Models\System\Repository\DocumentSchema;
 use App\Orchid\Layouts\System\Repository\DocumentsTable;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Toast;
 
 class DocumentSchemaScreen extends Screen
 {
@@ -61,5 +62,14 @@ class DocumentSchemaScreen extends Screen
         return [
             DocumentsTable::class,
         ];
+    }
+
+    public function readonlyDoc(DocumentSchema $document) {
+        $document -> fill([
+            'readonly' => !boolval($document -> getAttributes()['readonly']),
+        ])
+            -> save();
+
+        Toast::success("Статус \"{$document -> fullname}\" изменен");
     }
 }
