@@ -109,7 +109,9 @@ return [
     */
 
     'resource' => [
-        'stylesheets' => [],
+        'stylesheets' => [
+            '/assets/custom/css/rebase.css'
+        ],
         'scripts'     => [],
     ],
 

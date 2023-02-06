@@ -7,6 +7,7 @@ use App\Orchid\Layouts\Contingent\Person\CreateRows;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\DateTimer;
@@ -178,8 +179,12 @@ class AddEditScreen extends Screen
                         ])
                     ],
                     'Родственные связи' => [
-                        Layout::rows([
-                            
+                        Layout::wrapper('system.wrappers.forTabs', [
+                            'entities' => [
+                                Layout::rows([
+                                    
+                                ]),
+                            ],
                         ]),
                     ],
                     'Данные о документах' => [
