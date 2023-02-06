@@ -2,6 +2,7 @@
 
 namespace App\Models\Org\Contingent;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 use Illuminate\Support\Str;
@@ -47,19 +48,6 @@ class Person extends Model
     }
 
     public function getBirthdateAttribute($value) {
-        if (!empty($value)) {
-            $date = explode('-', $value);
-            return "{$date[2]}.{$date[1]}.{$date[0]}";
-        } else return '';
-    }
-
-    // Блок мутаторов
-    public function setBirthdateAttribute($value) {
-        $date = explode('.', $value);
-        return "{$date[2]}-{$date[1]}-{$date[0]}";
-    }
-
-    public function setUuidAttribute() {
-        return Str::uuid();
+        return !empty($value) ? Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y') : 'Не указана';
     }
 }

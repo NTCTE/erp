@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\Contingent\Person;
 
 use App\Models\Org\Contingent\Person;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
@@ -18,6 +19,7 @@ use Orchid\Screen\Layouts\Rows;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
+use Illuminate\Support\Str;
 
 class AddEditScreen extends Screen
 {
@@ -182,19 +184,19 @@ class AddEditScreen extends Screen
                         Layout::wrapper('system.wrappers.forTabs', [
                             'entities' => [
                                 Layout::rows([
-                                    
+
                                 ]),
                             ],
                         ]),
                     ],
                     'Данные о документах' => [
                         Layout::rows([
-                            
+
                         ]),
                     ],
                     'Работа' => [
                         Layout::rows([
-                            
+
                         ]),
                     ],
                 ]),
@@ -210,8 +212,11 @@ class AddEditScreen extends Screen
         // ]);
 
         // @ega22a: Не забудь сделать валидацию данных!
-
-        $person -> fill($request -> input('person'))
+        $input = $request -> input('person');
+        $input['uuid'] = Str::uuid();
+        $input['birthdate'] = Carbon::createFromFormat('d.m.Y', $input['birthdate'])
+            -> format('Y-m-d');
+        $person -> fill($input)
             -> save();
 
         Toast::success('Персона успешно сохранена');
