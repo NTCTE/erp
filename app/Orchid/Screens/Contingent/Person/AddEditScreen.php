@@ -6,6 +6,12 @@ use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
 use App\Models\System\Repository\RelationType;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
+use App\Orchid\Layouts\Contingent\Person\Modals\AddRelative;
+use App\Orchid\Layouts\Contingent\Person\Modals\AddRelativeExisting;
+use App\Orchid\Layouts\Contingent\Person\Modals\EditRelative;
+use App\Orchid\Layouts\Contingent\Person\Personal\Contacts;
+use App\Orchid\Layouts\Contingent\Person\Personal\Government;
+use App\Orchid\Layouts\Contingent\Person\Personal\Personal;
 use App\Orchid\Layouts\Contingent\Person\RelativesTable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -92,64 +98,18 @@ class AddEditScreen extends Screen
         if ($this -> person -> exists) {
             return [
                 Layout::modal('addRelativeExistingModal', [
-                    Layout::rows([
-                        Relation::make('relative.relative_id')
-                            -> title('Персона')
-                            -> fromModel(Person::class, 'lastname', 'id')
-                            -> searchColumns('firstname', 'patronymic')
-                            -> displayAppend('fullname')
-                            -> empty('Выберите персону...')
-                            -> required(),
-                        Select::make('relative.relation_type_id')
-                            -> title('Тип родства')
-                            -> class('form-control rebase')
-                            -> fromModel(RelationType::class, 'fullname')
-                            -> empty('Выберите тип родства...'),
-                        Input::make('relative.person_id')
-                            -> type('hidden')
-                            -> value($this -> person -> id),
-                    ]),
+                    new AddRelativeExisting($this -> person -> id),
                 ])
                     -> withoutCloseButton()
                     -> applyButton('Связать'),
                 Layout::modal('addRelativeModal', [
-                    Layout::rows([
-                        Input::make('relative.lastname')
-                            -> class('form-control rebase')
-                            -> title('Фамилия')
-                            -> placeholder('Введите фамилию...')
-                            -> required(),
-                        Input::make('relative.firstname')
-                            -> class('form-control rebase')
-                            -> title('Имя')
-                            -> placeholder('Введите имя...')
-                            -> required(),
-                        Input::make('relative.patronymic')
-                            -> class('form-control rebase')
-                            -> title('Отчество')
-                            -> placeholder('Введите отчество...'),
-                        Select::make('rel_type')
-                            -> title('Тип родства')
-                            -> class('form-control rebase')
-                            -> fromModel(RelationType::class, 'fullname')
-                            -> empty('Выберите тип родства...'),
-                        Input::make('person_id')
-                            -> type('hidden')
-                            -> value($this -> person -> id),
-                    ]),
+                    new AddRelative($this -> person -> id),
                 ])
                     -> size(Modal::SIZE_LG)
                     -> withoutCloseButton()
                     -> applyButton('Добавить'),
                 Layout::modal('editRelationModal', [
-                    Layout::rows([
-                        Select::make('rel_type')
-                            -> title('Тип родства')
-                            -> class('form-control rebase')
-                            -> fromModel(RelationType::class, 'fullname')
-                            -> empty('Выберите тип родства...')
-                            -> required(),
-                    ]),
+                    EditRelative::class,
                 ])
                     -> title('Редактировать родственную связь')
                     -> withoutCloseButton()
@@ -159,89 +119,15 @@ class AddEditScreen extends Screen
                         Layout::wrapper('system.wrappers.forTabs', [
                             'entities' => [
                                 Layout::block([
-                                    Layout::rows([
-                                        Input::make('person.lastname')
-                                            -> title('Фамилия')
-                                            -> placeholder('Введите фамилию...')
-                                            -> required()
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        Input::make('person.firstname')
-                                            -> title('Имя')
-                                            -> placeholder('Введите имя...')
-                                            -> required()
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        Input::make('person.patronymic')
-                                            -> title('Отчество')
-                                            -> placeholder('Введите отчество...')
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        DateTimer::make('person.birthdate')
-                                            -> title('Дата рождения')
-                                            -> placeholder('Введите дату рождения...')
-                                            -> format('d.m.Y')
-                                            -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
-                                        Input::make('person.birthdate')
-                                            -> title('Дата рождения')
-                                            -> placeholder('Введите дату рождения...')
-                                            -> readonly()
-                                            -> canSee(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        Select::make('person.sex')
-                                            -> title('Пол')
-                                            -> options(Person::$sexs)
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                    ]),
+                                    Personal::class,
                                 ])
                                     -> title('Персональные данные'),
                                 Layout::block([
-                                    Layout::rows([
-                                        Input::make('person.email')
-                                            -> title('Личный адрес электронной почты')
-                                            -> placeholder('Введите адрес электронной почты...')
-                                            -> type('email')
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        Input::make('person.corp_email')
-                                            -> title('Корпоративный адрес электронной почты')
-                                            -> placeholder('Введите адрес электронной почты...')
-                                            -> help('Назначается самой системой при выдаче корпоративных учетных данных.')
-                                            -> type('email')
-                                            -> readonly(),
-                                        Input::make('person.tel')
-                                            -> title('Номер телефона')
-                                            -> placeholder('Введите номер телефона...')
-                                            -> type('tel')
-                                            -> mask([
-                                                'mask' => '+7 (999) 999 99-99',
-                                            ])
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                    ]),
+                                    Contacts::class,
                                 ])
                                     -> title('Контактные данные'),
                                 Layout::block([
-                                    Layout::rows([
-                                        Input::make('person.snils')
-                                            -> title('СНИЛС')
-                                            -> placeholder('Введите СНИЛС...')
-                                            -> mask([
-                                                'numericInput' => true,
-                                                'mask' => '999-999-999 99',
-                                            ])
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        Input::make('person.inn')
-                                            -> title('ИНН')
-                                            -> placeholder('Введите ИНН...')
-                                            -> mask([
-                                                'numericInput' => true,
-                                                'mask' => '999999999999',
-                                            ])
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                        Input::make('person.hin')
-                                            -> title('Полис ОМС')
-                                            -> placeholder('Введите номер полиса ОМС...')
-                                            -> mask([
-                                                'numericInput' => true,
-                                                'mask' => '9999-9999-9999-9999',
-                                            ])
-                                            -> readonly(!Auth::user() -> hasAccess('org.contingent.write')),
-                                    ]),
+                                    Government::class,
                                 ])
                                     -> title('Государственные данные'),
                             ]
