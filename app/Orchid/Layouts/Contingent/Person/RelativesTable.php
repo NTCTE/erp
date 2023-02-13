@@ -15,7 +15,7 @@ class RelativesTable extends Table
      *
      * @var string
      */
-    protected $target = '';
+    protected $target = 'relatives';
 
     /**
      * Get the table cells to be displayed.

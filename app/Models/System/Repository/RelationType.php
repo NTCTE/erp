@@ -8,4 +8,8 @@ use Orchid\Screen\AsSource;
 class RelationType extends Model
 {
     use AsSource;
+
+    protected $fillable = [
+        'fullname',
+    ];
 }

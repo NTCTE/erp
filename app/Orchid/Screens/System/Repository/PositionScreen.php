@@ -4,7 +4,11 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\Position;
 use App\Orchid\Layouts\System\Repository\PositionTable;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class PositionScreen extends Screen
 {
@@ -44,7 +48,12 @@ class PositionScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            ModalToggle::make('Добавить')
+            -> modal('positionCreate')
+            -> method('create')
+            -> icon('plus'),
+        ];
     }
 
     /**
@@ -55,7 +64,25 @@ class PositionScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('positionCreate', [
+                Layout::rows([
+                    Input::make('fullname')
+                        -> title('Должность')
+                        -> placeholder('Введите должность')
+                        -> required(),
+                ]),
+            ])
+                -> title('Добавить должность')
+                -> applyButton('Добавить')
+                -> withoutCloseButton(),
             PositionTable::class,
         ];
+    }
+
+    public function create(Position $position) {
+        $position -> fill(request() -> all())
+            -> save();
+
+        Toast::success('Должность успешно добавлена.');
     }
 }

@@ -4,7 +4,11 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\RelationType;
 use App\Orchid\Layouts\System\Repository\RelationTypeTable;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class RelationTypeScreen extends Screen
 {
@@ -44,7 +48,12 @@ class RelationTypeScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            ModalToggle::make('Добавить')
+                -> modal('relationTypeCreate')
+                -> method('create')
+                -> icon('plus'),
+        ];
     }
 
     /**
@@ -55,7 +64,26 @@ class RelationTypeScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('relationTypeCreate', [
+                Layout::rows([
+                    Input::make('fullname')
+                        -> title('Название родственной связи')
+                        -> required()
+                        -> placeholder('Например: "Супруг"'),
+                ]),
+            ])
+                -> title('Добавить родственную связь')
+                -> applyButton('Добавить')
+                -> withoutCloseButton(),
             RelationTypeTable::class,
         ];
+    }
+
+    public function create(RelationType $rel_type)
+    {
+        $rel_type -> fill(request() -> all());
+        $rel_type -> save();
+
+        Toast::success('Родственная связь успешно добавлена.');
     }
 }

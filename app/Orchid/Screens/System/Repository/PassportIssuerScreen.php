@@ -4,7 +4,11 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\PassportIssuer;
 use App\Orchid\Layouts\System\Repository\PassportIssuerTable;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class PassportIssuerScreen extends Screen
 {
@@ -44,7 +48,12 @@ class PassportIssuerScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            ModalToggle::make('Добавить')
+                -> modal('passportIssuerCreate')
+                -> method('create')
+                -> icon('plus'),
+        ];
     }
 
     /**
@@ -55,7 +64,33 @@ class PassportIssuerScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('passportIssuerCreate', [
+                Layout::rows([
+                    Input::make('issuer.name')
+                        ->title('Название места выдачи паспорта')
+                        ->placeholder('Название места выдачи паспорта')
+                        ->required(),
+                    Input::make('issuer.code')
+                        -> title('Код места выдачи паспорта')
+                        -> placeholder('Код места выдачи паспорта')
+                        -> help('Необязательный к заполнению (если паспорт не РФ).')
+                        -> mask([
+                            'mask' => '999-999',
+                        ]),
+                ]),
+            ])
+                -> title('Добавить место выдачи паспорта')
+                -> applyButton('Добавить')
+                -> withoutCloseButton(),
             PassportIssuerTable::class,
         ];
+    }
+
+    public function create(PassportIssuer $issuer)
+    {
+        $issuer -> fill(request() -> get('issuer'))
+            -> save();
+
+        Toast::success('Место выдачи паспорта успешно добавлено.');
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Models\Org\Contingent;
 
+use App\Models\System\Repository\DocumentSchema;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
-use Illuminate\Support\Str;
 use Orchid\Attachment\Attachable;
 
 class Person extends Model
@@ -37,6 +37,16 @@ class Person extends Model
         1 => 'Мужской',
         2 => 'Женский',
     ];
+
+    // Блок отношений
+
+    public function documentsSchemas() {
+        return $this -> belongsToMany(DocumentSchema::class, 'documents', 'person_id', 'document_schema_id');
+    }
+
+    public function relatives() {
+        return $this -> belongsToMany(Person::class, 'relation_links', 'person_id', 'relative_id');
+    }
 
     // Блок аксессоров
     public function getFullnameAttribute() {

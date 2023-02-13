@@ -8,4 +8,12 @@ use Orchid\Screen\AsSource;
 class Workplace extends Model
 {
     use AsSource;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'fullname',
+        'tel',
+        'email',
+    ];
 }

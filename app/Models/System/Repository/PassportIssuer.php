@@ -8,4 +8,9 @@ use Orchid\Screen\AsSource;
 class PassportIssuer extends Model
 {
     use AsSource;
+
+    protected $fillable = [
+        'fullname',
+        'code',
+    ];
 }

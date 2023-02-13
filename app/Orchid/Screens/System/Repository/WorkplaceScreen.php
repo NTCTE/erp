@@ -4,7 +4,11 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\Workplace;
 use App\Orchid\Layouts\System\Repository\WorkplaceTable;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class WorkplaceScreen extends Screen
 {
@@ -44,7 +48,12 @@ class WorkplaceScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            ModalToggle::make('Добавить')
+                -> modal('workplaceCreate')
+                -> method('create')
+                -> icon('plus'),
+        ];
     }
 
     /**
@@ -55,7 +64,37 @@ class WorkplaceScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('workplaceCreate', [
+                Layout::rows([
+                    Input::make('wp.fullname')
+                        -> title('Наименование')
+                        -> placeholder('Введите наименование...')
+                        -> required(),
+                    Input::make('wp.tel')
+                        -> title('Телефон')
+                        -> placeholder('Введите телефон...')
+                        -> type('tel')
+                        -> mask([
+                            'mask' => '+7 (999) 999 99-99'
+                        ]),
+                    Input::make('wp.email')
+                        -> title('Адрес электронной почты')
+                        -> placeholder('Введите адрес электронной почты...')
+                        -> type('email'),
+
+                ]),
+            ])
+                -> title('Добавить рабочее место')
+                -> applyButton('Добавить')
+                -> withoutCloseButton(),
             WorkplaceTable::class,
         ];
+    }
+
+    public function create(Workplace $wp) {
+        $wp -> fill(request() -> input('wp'))
+            -> save();
+
+        Toast::success('Рабочее место успешно добавлено.');
     }
 }

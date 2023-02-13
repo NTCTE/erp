@@ -3,27 +3,27 @@
 namespace App\Orchid\Screens\Contingent\Person;
 
 use App\Models\Org\Contingent\Person;
+use App\Models\System\Repository\RelationType;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
+use App\Orchid\Layouts\Contingent\Person\RelativesTable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\Cropper;
 use Orchid\Screen\Fields\DateTimer;
-use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Layouts\Rows;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Str;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Layouts\Modal;
 
 class AddEditScreen extends Screen
 {
     public $person;
+    public $documentsSchemas;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -36,6 +36,8 @@ class AddEditScreen extends Screen
 
         return [
             'person' => $person,
+            'documentsSchemas' => $person -> documentsSchemas,
+            'relatives' => $person -> relatives,
         ];
     }
 
@@ -87,6 +89,32 @@ class AddEditScreen extends Screen
     {
         if ($this -> person -> exists) {
             return [
+                Layout::modal('addRelativeModal', [
+                    Layout::rows([
+                        Input::make('relative.lastname')
+                            -> class('form-control rebase')
+                            -> title('Фамилия')
+                            -> placeholder('Введите фамилию...')
+                            -> required(),
+                        Input::make('relative.firstname')
+                            -> class('form-control rebase')
+                            -> title('Имя')
+                            -> placeholder('Введите имя...')
+                            -> required(),
+                        Input::make('relative.patronymic')
+                            -> class('form-control rebase')
+                            -> title('Отчество')
+                            -> placeholder('Введите отчество...'),
+                        Select::make('rel_type')
+                            -> title('Тип родства')
+                            -> class('form-control rebase')
+                            -> fromModel(RelationType::class, 'fullname')
+                            -> empty('Выберите тип родства...'),
+                    ]),
+                ])
+                    -> size(Modal::SIZE_LG)
+                    -> withoutCloseButton()
+                    -> applyButton('Добавить'),
                 Layout::tabs([
                     'Персональные данные' => [
                         Layout::wrapper('system.wrappers.forTabs', [
@@ -184,10 +212,17 @@ class AddEditScreen extends Screen
                         Layout::wrapper('system.wrappers.forTabs', [
                             'entities' => [
                                 Layout::rows([
-
+                                    ModalToggle::make('Добавить родственную связь')
+                                        -> modal('addRelativeModal')
+                                        -> modalTitle('Добавить родственную связь')
+                                        -> method('modalRelAdd')
+                                        -> icon('plus')
+                                        -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
+                                        -> class('btn btn-link rebase'),
                                 ]),
                             ],
                         ]),
+                        RelativesTable::class,
                     ],
                     'Данные о документах' => [
                         Layout::rows([
@@ -225,5 +260,12 @@ class AddEditScreen extends Screen
 
     public function updatePerson(Request $request, Person $person) {
 
+    }
+
+    public function modalRelAdd(Request $request, Person $person, RelationType $type) {
+        // $request -> validate([
+
+        // ]);
+        // @ega22a: Не забудь сделать валидацию данных!
     }
 }
