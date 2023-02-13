@@ -157,8 +157,18 @@ class AddEditScreen extends Screen
                         RelativesTable::class,
                     ],
                     'Данные о документах' => [
-                        Layout::rows([
-
+                        Layout::wrapper('system.wrappers.forTabs', [
+                            'entities' => [
+                                Layout::rows([
+                                    ModalToggle::make('Добавить новый документ')
+                                        -> modal('addDocumentModal')
+                                        -> modalTitle('Добавить новый документ')
+                                        -> method('modalDocAdd')
+                                        -> icon('plus')
+                                        -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
+                                        -> class('btn btn-link rebase'),
+                                ]),
+                            ],
                         ]),
                     ],
                     'Работа' => [
