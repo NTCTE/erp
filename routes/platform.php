@@ -17,6 +17,7 @@ use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
 
 /*
@@ -129,16 +130,16 @@ Route::screen('/system/repository', Repository::class)
             -> push('Система')
             -> push('Репозиторий', 'system.repository');
     });
-
 // System > Repository > Entities
-foreach (RepositoryRepository::all() as $entity) {
-    Route::screen("/system/repository/{$entity['uri']}", $entity['class_type'])
-        -> name($entity['path'])
-        -> breadcrumbs(function(Trail $trail) use ($entity) {
-            return $trail -> parent('system.repository')
-                -> push($entity['name'], route($entity['path']));
-        });
-}
+if (Schema::hasTable('repository'))
+    foreach (RepositoryRepository::all() as $entity) {
+        Route::screen("/system/repository/{$entity['uri']}", $entity['class_type'])
+            -> name($entity['path'])
+            -> breadcrumbs(function(Trail $trail) use ($entity) {
+                return $trail -> parent('system.repository')
+                    -> push($entity['name'], route($entity['path']));
+            });
+    }
 
 // System > Repository > Documents Schema > Add Item
 Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen::class)

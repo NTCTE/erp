@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens\Contingent\Person;
 
 use App\Models\Org\Contingent\Person;
+use App\Models\Org\Contingent\RelationLink;
 use App\Models\System\Repository\RelationType;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
 use App\Orchid\Layouts\Contingent\Person\RelativesTable;
@@ -18,6 +19,7 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Layouts\Modal;
 
 class AddEditScreen extends Screen
@@ -89,6 +91,27 @@ class AddEditScreen extends Screen
     {
         if ($this -> person -> exists) {
             return [
+                Layout::modal('addRelativeExistingModal', [
+                    Layout::rows([
+                        Relation::make('relative.relative_id')
+                            -> title('Персона')
+                            -> fromModel(Person::class, 'lastname', 'id')
+                            -> searchColumns('firstname', 'patronymic')
+                            -> displayAppend('fullname')
+                            -> empty('Выберите персону...')
+                            -> required(),
+                        Select::make('relative.relation_type_id')
+                            -> title('Тип родства')
+                            -> class('form-control rebase')
+                            -> fromModel(RelationType::class, 'fullname')
+                            -> empty('Выберите тип родства...'),
+                        Input::make('relative.person_id')
+                            -> type('hidden')
+                            -> value($this -> person -> id),
+                    ]),
+                ])
+                    -> withoutCloseButton()
+                    -> applyButton('Связать'),
                 Layout::modal('addRelativeModal', [
                     Layout::rows([
                         Input::make('relative.lastname')
@@ -110,11 +133,27 @@ class AddEditScreen extends Screen
                             -> class('form-control rebase')
                             -> fromModel(RelationType::class, 'fullname')
                             -> empty('Выберите тип родства...'),
+                        Input::make('person_id')
+                            -> type('hidden')
+                            -> value($this -> person -> id),
                     ]),
                 ])
                     -> size(Modal::SIZE_LG)
                     -> withoutCloseButton()
                     -> applyButton('Добавить'),
+                Layout::modal('editRelationModal', [
+                    Layout::rows([
+                        Select::make('rel_type')
+                            -> title('Тип родства')
+                            -> class('form-control rebase')
+                            -> fromModel(RelationType::class, 'fullname')
+                            -> empty('Выберите тип родства...')
+                            -> required(),
+                    ]),
+                ])
+                    -> title('Редактировать родственную связь')
+                    -> withoutCloseButton()
+                    -> applyButton('Обновить'),
                 Layout::tabs([
                     'Персональные данные' => [
                         Layout::wrapper('system.wrappers.forTabs', [
@@ -212,10 +251,17 @@ class AddEditScreen extends Screen
                         Layout::wrapper('system.wrappers.forTabs', [
                             'entities' => [
                                 Layout::rows([
-                                    ModalToggle::make('Добавить родственную связь')
+                                    ModalToggle::make('Добавить новую родственную связь')
                                         -> modal('addRelativeModal')
-                                        -> modalTitle('Добавить родственную связь')
+                                        -> modalTitle('Добавить новую родственную связь')
                                         -> method('modalRelAdd')
+                                        -> icon('plus')
+                                        -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
+                                        -> class('btn btn-link rebase'),
+                                    ModalToggle::make('Добавить связь с имеющейся персоной')
+                                        -> modal('addRelativeExistingModal')
+                                        -> modalTitle('Добавить связь с имеющейся персоной')
+                                        -> method('modalRelAddExisting')
                                         -> icon('plus')
                                         -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                         -> class('btn btn-link rebase'),
@@ -262,10 +308,54 @@ class AddEditScreen extends Screen
 
     }
 
-    public function modalRelAdd(Request $request, Person $person, RelationType $type) {
+    public function modalRelAdd(Request $request) {
+        $type = new RelationLink();
+        $person = new Person();
         // $request -> validate([
 
         // ]);
         // @ega22a: Не забудь сделать валидацию данных!
+
+        $input = $request -> input('relative');
+        $input['uuid'] = Str::uuid();
+        $person -> fill($input)
+            -> save();
+        $person_id = $person -> id;
+        $type -> fill([
+            'person_id' => $request -> input('person_id'),
+            'relative_id' => $person_id,
+            'relation_type_id' => $request -> input('rel_type'),
+        ])
+            -> save();
+    }
+
+    public function modalRelAddExisting(Request $request) {
+        $type = new RelationLink();
+
+        $type -> fill($request -> input('relative'))
+            -> save();
+
+        Toast::success('Родственная связь успешно добавлена');
+    }
+
+    public function editRelation() {
+        $link = RelationLink::find(request() -> input('rel_id'));
+        $link -> fill([
+            'relation_type_id' => request() -> input('rel_type'),
+        ])
+            -> save();
+
+        Toast::success('Родственная связь успешно изменена');
+    }
+
+    public function deleteRelation() {
+        $link = RelationLink::find(request() -> input('rel_id'));
+        $link -> delete();
+        if (request() -> input('purge')) {
+            $person = Person::find($link -> relative_id);
+            $person -> delete();
+        }
+
+        Toast::success('Родственная связь успешно удалена');
     }
 }

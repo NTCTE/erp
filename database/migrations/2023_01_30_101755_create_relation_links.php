@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('relation_links', function (Blueprint $table) {
+            $table -> id();
             $table -> foreignId('person_id')
                 -> references('id')
                 -> on('persons');
