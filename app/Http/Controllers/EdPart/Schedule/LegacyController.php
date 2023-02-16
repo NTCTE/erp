@@ -133,7 +133,7 @@ class LegacyController extends Controller
                             if (!empty($sheet[$cursor['row'] + $cntLesson][$cursor['col'] + 1])) {
                                 if ($onlySchedule) {
                                     $group['schedule'][] = [
-                                        'lesson' => intval($sheet[$cursor['row'] + $cntLesson][$cursor['col']]),
+                                        'lesson' => $sheet[$cursor['row'] + $cntLesson][$cursor['col']],
                                         'name' => explode(' (', $sheet[$cursor['row'] + $cntLesson][$cursor['col'] + 1])[0],
                                         'teachers' => (function() use ($sheet, $cursor, $cntLesson) {
                                             $raw = explode(' (', $sheet[$cursor['row'] + $cntLesson][$cursor['col'] + 1]);
@@ -199,7 +199,7 @@ class LegacyController extends Controller
                                         'name' => $lesson['name'],
                                         'rooms' => $lesson['rooms'],
                                     ];
-            ksort($ret);
+            ksort($ret, SORT_NUMERIC);
             return $ret;
         } else return false;
     }
