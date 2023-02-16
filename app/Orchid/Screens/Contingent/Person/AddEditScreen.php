@@ -2,12 +2,15 @@
 
 namespace App\Orchid\Screens\Contingent\Person;
 
+use App\Models\Org\Contingent\Document;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
-use App\Models\System\Repository\RelationType;
+use App\Models\System\Repository\DocumentSchema;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
+use App\Orchid\Layouts\Contingent\Person\Modals\AddDocumentModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelative;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelativeExisting;
+use App\Orchid\Layouts\Contingent\Person\Modals\ChooseDocumentModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\EditRelative;
 use App\Orchid\Layouts\Contingent\Person\Personal\Contacts;
 use App\Orchid\Layouts\Contingent\Person\Personal\Government;
@@ -17,15 +20,12 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\DateTimer;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\Relation;
+use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Layouts\Modal;
 
 class AddEditScreen extends Screen
@@ -114,6 +114,11 @@ class AddEditScreen extends Screen
                     -> title('Редактировать родственную связь')
                     -> withoutCloseButton()
                     -> applyButton('Обновить'),
+                Layout::modal('chooseDocumentModal', [
+                   new ChooseDocumentModal($this -> person -> id),
+                ])
+                    -> withoutCloseButton()
+                    -> applyButton('Далее'),
                 Layout::tabs([
                     'Персональные данные' => [
                         Layout::wrapper('system.wrappers.forTabs', [
@@ -161,9 +166,16 @@ class AddEditScreen extends Screen
                             'entities' => [
                                 Layout::rows([
                                     ModalToggle::make('Добавить новый документ')
-                                        -> modal('addDocumentModal')
-                                        -> modalTitle('Добавить новый документ')
-                                        -> method('modalDocAdd')
+                                        -> modal('chooseDocumentModal')
+                                        -> modalTitle('Выберите тип документа')
+                                        -> method('modalDocChoose')
+                                        -> icon('plus')
+                                        -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
+                                        -> class('btn btn-link rebase'),
+                                    ModalToggle::make('Добавить паспорт')
+                                        -> modal('addPassportModal')
+                                        -> modalTitle('Добавить паспорт')
+                                        -> method('modalPassportAdd')
                                         -> icon('plus')
                                         -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                         -> class('btn btn-link rebase'),
@@ -216,10 +228,9 @@ class AddEditScreen extends Screen
         $input['uuid'] = Str::uuid();
         $person -> fill($input)
             -> save();
-        $person_id = $person -> id;
         $type -> fill([
             'person_id' => $request -> input('person_id'),
-            'relative_id' => $person_id,
+            'relative_id' => $person -> id,
             'relation_type_id' => $request -> input('rel_type'),
         ])
             -> save();
@@ -253,5 +264,14 @@ class AddEditScreen extends Screen
         }
 
         Toast::success('Родственная связь успешно удалена');
+    }
+
+    public function modalDocChoose() {
+        $get = request() -> input('doc');
+        return redirect()
+            -> route('org.contingent.person', [
+                'id' => $get['person_id'],
+                'doc_id' => $get['choose'],
+            ]);
     }
 }
