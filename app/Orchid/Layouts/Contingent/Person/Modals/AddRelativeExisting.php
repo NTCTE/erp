@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Contingent\Person\Modals;
 
+use App\Models\Org\Contingent\Person;
 use App\Models\System\Repository\RelationType;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Input;
