@@ -7,6 +7,8 @@ use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
 use App\Models\System\Repository\DocumentSchema;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
+use App\Orchid\Layouts\Contingent\Person\DocumentsTable;
+use App\Orchid\Layouts\Contingent\Person\Listeners\DocumentListener;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddDocumentModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelative;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelativeExisting;
@@ -31,7 +33,8 @@ use Orchid\Screen\Layouts\Modal;
 class AddEditScreen extends Screen
 {
     public $person;
-    public $documentsSchemas;
+    public $relatives;
+    public $documents;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -41,11 +44,10 @@ class AddEditScreen extends Screen
     public function query(Person $person): iterable
     {
         $person -> load('attachment');
-
         return [
             'person' => $person,
-            'documentsSchemas' => $person -> documentsSchemas,
-            'relatives' => $person -> relatives,
+            'relatives' => $person -> relatives() -> paginate(),
+            'documents' => $person -> documents() -> paginate(),
         ];
     }
 
@@ -182,6 +184,7 @@ class AddEditScreen extends Screen
                                 ]),
                             ],
                         ]),
+                        DocumentsTable::class,
                     ],
                     'Работа' => [
                         Layout::rows([
@@ -269,9 +272,9 @@ class AddEditScreen extends Screen
     public function modalDocChoose() {
         $get = request() -> input('doc');
         return redirect()
-            -> route('org.contingent.person', [
+            -> route('org.contingent.person.document', [
                 'id' => $get['person_id'],
-                'doc_id' => $get['choose'],
+                'type' => $get['choose'],
             ]);
     }
 }

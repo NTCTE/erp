@@ -40,11 +40,12 @@ class Person extends Model
 
     // Блок отношений
 
-    public function documentsSchemas(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
-        return $this -> belongsToMany(DocumentSchema::class, 'documents', 'person_id', 'document_schema_id');
+    public function documents() {
+        // return $this -> belongsToMany(DocumentSchema::class, 'documents', 'person_id', 'document_schema_id');
+        return $this -> hasMany(Document::class);
     }
 
-    public function relatives(): \Illuminate\Database\Eloquent\Relations\BelongsToMany {
+    public function relatives() {
         return $this -> belongsToMany(Person::class, 'relation_links', 'person_id', 'relative_id');
     }
 

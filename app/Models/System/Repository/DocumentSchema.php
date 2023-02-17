@@ -54,7 +54,8 @@ class DocumentSchema extends Model
                         -> placeholder(!is_null($value['placeholder']) ? $value['placeholder'] : '')
                         -> help(!is_null($value['help']) ? $value['help'] : '')
                         -> type($value['type'])
-                        -> required($value['required']);
+                        -> required($value['required'])
+                        -> horizontal();
                 break;
                 case 'date':
                 case 'datetime-local':
@@ -67,6 +68,7 @@ class DocumentSchema extends Model
                         -> placeholder(!is_null($value['placeholder']) ? $value['placeholder'] : '')
                         -> help(!is_null($value['help']) ? $value['help'] : '')
                         -> required($value['required'])
+                        -> horizontal()
                         -> format((function () use ($format) {
                             switch ($format) {
                                 case 'date':

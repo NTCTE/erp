@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\System\Repository\Repository as RepositoryRepository;
 use App\Orchid\Screens\Contingent\ContingentScreen;
 use App\Orchid\Screens\Contingent\Person\AddEditScreen;
+use App\Orchid\Screens\Contingent\Person\Documents\AddRelationScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
@@ -164,4 +165,11 @@ Route::screen('/org/contingent/person/{id?}', AddEditScreen::class)
     -> breadcrumbs(function (Trail $trail) {
         return $trail -> parent('org.contingent')
             -> push('Персона');
+    });
+
+Route::screen('/org/contingent/person/{id}/document/{type}/{doc_id?}', AddRelationScreen::class)
+    -> name('org.contingent.person.document')
+    -> breadcrumbs(function (Trail $trail) {
+        return $trail -> parent('org.contingent.person')
+            -> push('Добавить новый документ');
     });
