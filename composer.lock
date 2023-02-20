@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "907f84fd7226e786c6cf93808131e5ba",
+    "content-hash": "aaef45c229452faf05cd781a98035c39",
     "packages": [
         {
             "name": "brick/math",
@@ -979,6 +979,57 @@
                 }
             ],
             "time": "2021-10-07T12:57:01+00:00"
+        },
+        {
+            "name": "hflabs/dadata",
+            "version": "22.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hflabs/dadata-php.git",
+                "reference": "cc85a59487d1391fa78369d0d3913da0f97b720b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hflabs/dadata-php/zipball/cc85a59487d1391fa78369d0d3913da0f97b720b",
+                "reference": "cc85a59487d1391fa78369d0d3913da0f97b720b",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.0|^7.0",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dadata\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "HFLabs and contributors",
+                    "homepage": "https://github.com/hflabs/dadata-php/contributors"
+                }
+            ],
+            "description": "Data cleansing, enrichment and suggestions via Dadata API",
+            "homepage": "https://github.com/nalgeon/dadata-php",
+            "keywords": [
+                "DaData",
+                "api",
+                "php",
+                "suggestions"
+            ],
+            "support": {
+                "issues": "https://github.com/hflabs/dadata-php/issues",
+                "source": "https://github.com/hflabs/dadata-php/tree/22.3.0"
+            },
+            "time": "2022-03-23T10:50:26+00:00"
         },
         {
             "name": "laravel/framework",
