@@ -37,7 +37,7 @@ class DocumentSchema extends Model
         return boolval($value) ? 'Да' : 'Нет';
     }
 
-    public function orchidSchema() {
+    public function orchidSchema(mixed $existing = null) {
         $fields = [
             Input::make('doc.document_schema_id')
                 -> type('hidden')
@@ -55,7 +55,8 @@ class DocumentSchema extends Model
                         -> help(!is_null($value['help']) ? $value['help'] : '')
                         -> type($value['type'])
                         -> required($value['required'])
-                        -> horizontal();
+                        -> horizontal()
+                        -> value($existing ? $existing[$key] : '');
                 break;
                 case 'date':
                 case 'datetime-local':
@@ -82,7 +83,8 @@ class DocumentSchema extends Model
                                 case 'time':
                                     return 'H:i';
                             }
-                        })());
+                        })())
+                        -> value($existing ? $existing[$key] : '');
                 break;
             }
         }

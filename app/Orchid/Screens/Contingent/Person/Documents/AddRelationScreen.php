@@ -15,18 +15,21 @@ class AddRelationScreen extends Screen
 {
     public $person;
     public $schema;
+    public $document;
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(Person $person, DocumentSchema $schema): iterable
+    public function query(Person $person, DocumentSchema $schema, Document $document): iterable
     {
         return [
             'person' => $person -> find(request() -> route()
                 -> parameter('id')),
             'schema' => $schema -> find(request() -> route()
                 -> parameter('type')),
+            'document' => $document -> find(request() -> route()
+                -> parameter('doc_id')),
         ];
     }
 
@@ -73,19 +76,20 @@ class AddRelationScreen extends Screen
     {
         return [
             Layout::rows(
-                $this -> schema -> orchidSchema()
+                $this -> schema -> orchidSchema($this -> document -> document),
             ),
         ];
     }
 
-    public function saveDoc()
+    public function saveDoc(Document $document)
     {
         $input = request() -> get('doc');
         $input['person_id'] = request()
             -> route()
             -> parameter('id');
 
-        Document::create($input);
+        $document -> fill($input)
+            -> save();
 
         Toast::success('Документ добавлен');
         return redirect()

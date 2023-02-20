@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\Contingent\Person;
 
 use App\Models\Org\Contingent\Document;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -28,7 +29,7 @@ class DocumentsTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('fullname'),
+            TD::make('fullname', 'Наименование'),
             TD::make('actions', 'Действия')
                 -> render(function (Document $document) {
                     return DropDown::make()
@@ -40,6 +41,13 @@ class DocumentsTable extends Table
                                     'type' => $document -> document_schema_id,
                                     'doc_id' => $document -> id,
                                 ]),
+                            Button::make('Удалить документ')
+                                -> confirm('Вы уверены, что хотите удалить документ? Это действие необратимо.')
+                                -> method('removeDoc',
+                                    [
+                                        'doc_id' => $document -> id,
+                                    ]
+                                ),
                         ]);
                 }),
         ];

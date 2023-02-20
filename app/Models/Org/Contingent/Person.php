@@ -2,7 +2,6 @@
 
 namespace App\Models\Org\Contingent;
 
-use App\Models\System\Repository\DocumentSchema;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;

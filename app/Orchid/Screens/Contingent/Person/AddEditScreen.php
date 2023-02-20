@@ -277,4 +277,11 @@ class AddEditScreen extends Screen
                 'type' => $get['choose'],
             ]);
     }
+
+    public function removeDoc() {
+        $doc = Document::find(request() -> input('doc_id'));
+        $doc -> delete();
+
+        Toast::success('Документ успешно удален');
+    }
 }
