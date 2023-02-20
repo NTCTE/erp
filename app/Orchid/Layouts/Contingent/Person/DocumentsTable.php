@@ -22,6 +22,7 @@ class DocumentsTable extends Table
      */
     protected $target = 'documents';
 
+
     /**
      * Get the table cells to be displayed.
      *
@@ -29,6 +30,8 @@ class DocumentsTable extends Table
      */
     protected function columns(): iterable
     {
+        $this -> title('Общие документы');
+
         return [
             TD::make('fullname', 'Наименование'),
             TD::make('actions', 'Действия')

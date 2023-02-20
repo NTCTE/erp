@@ -13,4 +13,9 @@ class PassportIssuer extends Model
         'fullname',
         'code',
     ];
+
+    public function getFormattedAttribute()
+    {
+        return "{$this -> fullname} ({$this -> code})";
+    }
 }
