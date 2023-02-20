@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\Contingent\Person;
 
 use App\Models\Org\Contingent\Document;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
@@ -49,7 +50,8 @@ class DocumentsTable extends Table
                                     ]
                                 ),
                         ]);
-                }),
+                })
+                    -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
         ];
     }
 }

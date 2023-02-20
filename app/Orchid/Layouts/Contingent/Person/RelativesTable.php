@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts\Contingent\Person;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
 use App\Models\System\Repository\RelationType;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
@@ -84,7 +85,8 @@ class RelativesTable extends Table
                                 ])
                                 -> icon('trash'),
                         ]);
-                }),
+                })
+                    -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
         ];
     }
 }
