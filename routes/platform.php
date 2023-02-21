@@ -20,6 +20,7 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
+use App\Http\Controllers\System\AddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -173,3 +174,6 @@ Route::screen('/org/contingent/person/{id}/document/{type}/{doc_id?}', AddRelati
         return $trail -> parent('org.contingent.person')
             -> push('Добавить новый документ');
     });
+
+// API for ERP system
+Route::get('/api/system/address', [AddressController::class, 'getAddressFromQuery']);

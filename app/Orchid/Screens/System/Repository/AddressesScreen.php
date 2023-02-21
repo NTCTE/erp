@@ -2,18 +2,26 @@
 
 namespace App\Orchid\Screens\System\Repository;
 
+use App\Models\System\Repository\Address;
+use App\Orchid\Layouts\System\AddressListener;
+use App\Orchid\Layouts\System\Repository\AddressesTable;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
 class AddressesScreen extends Screen
 {
+    public $addresses;
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Address $address): iterable
     {
-        return [];
+        return [
+            'addresses' => $address -> paginate(),
+        ];
     }
 
     /**
@@ -48,6 +56,15 @@ class AddressesScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            AddressesTable::class,
+        ];
+    }
+
+    public function asyncAddressPromt(string $address) {
+
+        return [
+            'address_promt' => $address,
+        ];
     }
 }
