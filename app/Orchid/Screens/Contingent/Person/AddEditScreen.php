@@ -91,11 +91,6 @@ class AddEditScreen extends Screen
                 -> method('saveNewPerson')
                 -> permission('org.contingent.write')
                 -> canSee(!$this -> person -> exists),
-            Button::make('Обновить')
-                -> icon('save')
-                -> method('updatePerson')
-                -> permission('org.contingent.write')
-                -> canSee($this -> person -> exists),
         ];
     }
 
@@ -165,20 +160,19 @@ class AddEditScreen extends Screen
                                             -> modalTitle('Добавить новую родственную связь')
                                             -> method('modalRelAdd')
                                             -> icon('plus')
-                                            -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                             -> class('btn btn-link rebase'),
                                         ModalToggle::make('Добавить связь с имеющейся персоной')
                                             -> modal('addRelativeExistingModal')
                                             -> modalTitle('Добавить связь с имеющейся персоной')
                                             -> method('modalRelAddExisting')
                                             -> icon('plus')
-                                            -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                             -> class('btn btn-link rebase'),
                                     ])
                                         -> autoWidth(),
                                 ]),
                             ],
-                        ]),
+                        ])
+                            -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
                         RelativesTable::class,
                     ],
                     'Данные о документах' => [
@@ -191,27 +185,25 @@ class AddEditScreen extends Screen
                                             -> modalTitle('Выберите тип документа')
                                             -> method('modalDocChoose')
                                             -> icon('plus')
-                                            -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                             -> class('btn btn-link rebase'),
                                         ModalToggle::make('Добавить паспорт')
                                             -> modal('addPassportModal')
                                             -> modalTitle('Добавить паспорт')
                                             -> method('modalPassportAdd')
                                             -> icon('plus')
-                                            -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                             -> class('btn btn-link rebase'),
                                         ModalToggle::make('Добавить документ об образовании')
                                             -> modal('addEducationModal')
                                             -> modalTitle('Добавить документ об образовании')
                                             -> method('modalEducationAdd')
                                             -> icon('plus')
-                                            -> canSee(Auth::user() -> hasAccess('org.contingent.write'))
                                             -> class('btn btn-link rebase'),
                                     ])
                                         -> autoWidth(),
                                 ]),
                             ],
-                        ]),
+                        ])
+                            -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
                         DocumentsTable::class,
                         PassportsTable::class,
                     ],

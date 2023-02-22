@@ -64,6 +64,12 @@ class EditPassportScreen extends Screen
         ];
     }
 
+    public function permission(): iterable {
+        return [
+            'org.contingent.write',
+        ];
+    }
+
     /**
      * The screen's layout elements.
      *

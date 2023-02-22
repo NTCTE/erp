@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\Contingent\Person;
 
 use App\Models\Org\Contingent\Passport;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Layouts\Table;
@@ -35,7 +36,7 @@ class PassportsTable extends Table
             TD::make('date_of_issue', 'Дата выдачи'),
             TD::make('birthplace', 'Место рождения'),
             TD::make('is_main', 'Основной'),
-            TD::make('actino', 'Действия')
+            TD::make('actions', 'Действия')
                 -> render(function(Passport $passport) {
                     return DropDown::make()
                         -> icon('options-vertical')
@@ -54,7 +55,8 @@ class PassportsTable extends Table
                                     'passport_id' => $passport -> id,
                                 ]),
                         ]);
-                }),
+                })
+                -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
         ];
     }
 }
