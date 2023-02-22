@@ -348,4 +348,11 @@ class AddEditScreen extends Screen
 
         Toast::success('Паспорт успешно удален');
     }
+
+    public function editPassport() {
+        return redirect() -> route('org.contingent.person.passport', [
+            'id' => request() -> route() -> parameter('id'),
+            'passport_id' => request() -> input('passport_id'),
+        ]);
+    }
 }

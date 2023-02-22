@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Contingent\Person\Modals;
 
+use App\Models\Org\Contingent\Passport;
 use App\Models\System\Repository\PassportIssuer;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\DateTimer;
@@ -31,7 +32,7 @@ class AddPassportModal extends Rows
      */
     protected function fields(): iterable
     {
-        return [
+        $returned = [
             Input::make('passport.series')
                 -> title('Серия паспорта')
                 -> placeholder('Введите серию паспорта...')
@@ -59,5 +60,9 @@ class AddPassportModal extends Rows
                 -> value($this -> person)
                 -> type('hidden'),
         ];
+        if ($this -> query -> has('passport'))
+            foreach ($returned as $field)
+                $field -> horizontal();
+        return $returned;
     }
 }

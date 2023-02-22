@@ -6,6 +6,7 @@ use App\Models\System\Repository\Repository as RepositoryRepository;
 use App\Orchid\Screens\Contingent\ContingentScreen;
 use App\Orchid\Screens\Contingent\Person\AddEditScreen;
 use App\Orchid\Screens\Contingent\Person\Documents\AddRelationScreen;
+use App\Orchid\Screens\Contingent\Person\Documents\EditPassportScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
@@ -20,7 +21,6 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
-use App\Http\Controllers\System\AddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -168,6 +168,7 @@ Route::screen('/org/contingent/person/{id?}', AddEditScreen::class)
             -> push('Персона');
     });
 
+// System > Org > Contingent > Person > Add New Document
 Route::screen('/org/contingent/person/{id}/document/{type}/{doc_id?}', AddRelationScreen::class)
     -> name('org.contingent.person.document')
     -> breadcrumbs(function (Trail $trail) {
@@ -175,5 +176,10 @@ Route::screen('/org/contingent/person/{id}/document/{type}/{doc_id?}', AddRelati
             -> push('Добавить новый документ');
     });
 
-// API for ERP system
-Route::get('/api/system/address', [AddressController::class, 'getAddressFromQuery']);
+// System > Org > Contingent > Person > Edit Passport
+Route::screen('/org/contingent/person/{id}/passport/{passport_id}', EditPassportScreen::class)
+    -> name('org.contingent.person.passport')
+    -> breadcrumbs(function (Trail $trail) {
+        return $trail -> parent('org.contingent.person')
+            -> push('Редактировать паспорт');
+    });

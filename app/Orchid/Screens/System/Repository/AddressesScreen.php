@@ -3,11 +3,8 @@
 namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\Address;
-use App\Orchid\Layouts\System\AddressListener;
 use App\Orchid\Layouts\System\Repository\AddressesTable;
-use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Layout;
 
 class AddressesScreen extends Screen
 {
@@ -58,13 +55,6 @@ class AddressesScreen extends Screen
     {
         return [
             AddressesTable::class,
-        ];
-    }
-
-    public function asyncAddressPromt(string $address) {
-
-        return [
-            'address_promt' => $address,
         ];
     }
 }

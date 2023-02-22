@@ -40,6 +40,16 @@ class AddRelationScreen extends Screen
      */
     public function name(): ?string
     {
+        return $this -> schema -> fullname;
+    }
+
+    /**
+     * The description of the screen displayed in the header.
+     *
+     * @return string|null
+     */
+    public function description(): ?string
+    {
         return $this -> person -> fullname;
     }
 
