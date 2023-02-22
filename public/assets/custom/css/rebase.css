@@ -24,3 +24,7 @@
 .form-control.rebase {
     max-width: 100% !important;
 }
+
+.table tbody tr td {
+    word-wrap: normal !important;
+}

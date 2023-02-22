@@ -3,12 +3,15 @@
 namespace App\Orchid\Screens\Contingent\Person;
 
 use App\Models\Org\Contingent\Document;
+use App\Models\Org\Contingent\EducationalDocument;
 use App\Models\Org\Contingent\Passport;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
 use App\Models\System\Repository\PassportIssuer;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
 use App\Orchid\Layouts\Contingent\Person\DocumentsTable;
+use App\Orchid\Layouts\Contingent\Person\EdDocsTable;
+use App\Orchid\Layouts\Contingent\Person\Modals\AddEdDoc;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddPassportModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelative;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelativeExisting;
@@ -42,6 +45,7 @@ class AddEditScreen extends Screen
     public $person;
     public $relatives;
     public $documents;
+    public $edDocs;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -56,6 +60,7 @@ class AddEditScreen extends Screen
             'relatives' => $person -> relatives() -> paginate(),
             'documents' => $person -> documents() -> paginate(),
             'passports' => $person -> passports() -> paginate(),
+            'edDocs' => $person -> edDocs() -> paginate(),
         ];
 
     }
@@ -131,6 +136,11 @@ class AddEditScreen extends Screen
                 ])
                     -> withoutCloseButton()
                     -> applyButton('Добавить'),
+                Layout::modal('addEdDocumentModal', [
+                    new AddEdDoc($this -> person -> id),
+                ])
+                    -> withoutCloseButton()
+                    -> applyButton('Добавить'),
                 Layout::tabs([
                     'Персональные данные' => [
                         Layout::wrapper('system.wrappers.forTabs', [
@@ -193,7 +203,7 @@ class AddEditScreen extends Screen
                                             -> icon('plus')
                                             -> class('btn btn-link rebase'),
                                         ModalToggle::make('Добавить документ об образовании')
-                                            -> modal('addEducationModal')
+                                            -> modal('addEdDocumentModal')
                                             -> modalTitle('Добавить документ об образовании')
                                             -> method('modalEducationAdd')
                                             -> icon('plus')
@@ -206,6 +216,7 @@ class AddEditScreen extends Screen
                             -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
                         DocumentsTable::class,
                         PassportsTable::class,
+                        EdDocsTable::class,
                     ],
                     'Работа' => [
                         Layout::rows([
@@ -346,5 +357,16 @@ class AddEditScreen extends Screen
             'id' => request() -> route() -> parameter('id'),
             'passport_id' => request() -> input('passport_id'),
         ]);
+    }
+
+    public function modalEducationAdd() {
+        $edDoc = new EducationalDocument();
+        $edDocData = request() -> input('edDoc');
+        $edDocData['date_of_issue'] = Carbon::createFromFormat('d.m.Y', $edDocData['date_of_issue'])
+            -> format('Y-m-d');
+        $edDoc -> fill($edDocData)
+            -> save();
+
+        Toast::success('Документ об образовании успешно добавлен');
     }
 }

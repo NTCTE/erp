@@ -51,6 +51,10 @@ class Person extends Model
         return $this -> hasMany(Passport::class) -> orderByDesc('is_main');
     }
 
+    public function edDocs() {
+        return $this -> hasMany(EducationalDocument::class) -> orderByDesc('is_main');
+    }
+
     // Блок аксессоров
     public function getFullnameAttribute(): string {
         return "{$this -> lastname} {$this -> firstname} {$this -> patronymic}";
