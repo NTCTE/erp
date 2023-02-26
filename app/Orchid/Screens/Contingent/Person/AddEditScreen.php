@@ -7,7 +7,6 @@ use App\Models\Org\Contingent\EducationalDocument;
 use App\Models\Org\Contingent\Passport;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
-use App\Models\System\Repository\PassportIssuer;
 use App\Orchid\Layouts\Contingent\Person\CreateRows;
 use App\Orchid\Layouts\Contingent\Person\DocumentsTable;
 use App\Orchid\Layouts\Contingent\Person\EdDocsTable;
@@ -31,13 +30,7 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\CheckBox;
-use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Relation;
-use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Modal;
 
 class AddEditScreen extends Screen
@@ -368,5 +361,25 @@ class AddEditScreen extends Screen
             -> save();
 
         Toast::success('Документ об образовании успешно добавлен');
+    }
+
+    public function makeMainEdDoc() {
+        EducationalDocument::where('person_id', '=', request() -> route() -> parameter('id'))
+            -> update([
+                'is_main' => false,
+            ]);
+        EducationalDocument::where('id', '=', request() -> input('edDoc_id'))
+            -> update([
+                'is_main' => true,
+            ]);
+
+        Toast::success('Документ об образовании успешно сделан основным');
+    }
+
+    public function removeEdDoc() {
+        EducationalDocument::where('id', '=', request() -> input('edDoc_id'))
+            -> delete();
+
+        Toast::success('Документ об образовании успешно удален');
     }
 }

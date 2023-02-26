@@ -3,6 +3,9 @@
 namespace App\Orchid\Layouts\Contingent\Person;
 
 use App\Models\Org\Contingent\EducationalDocument;
+use Illuminate\Support\Facades\Auth;
+use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -47,6 +50,27 @@ class EdDocsTable extends Table
                     return $edDoc -> is_main ? 'Да' : 'Нет';
                 })
                 -> width('10%'),
+            TD::make('actions', 'Действия')
+                -> render(function (EducationalDocument $edDoc) {
+                    return DropDown::make()
+                        -> icon('options-vertical')
+                        -> list([
+                            Button::make('Сделать основным')
+                                -> method('makeMainEdDoc', [
+                                    'edDoc_id' => $edDoc -> id,
+                                ]),
+                            Button::make('Удалить документ об образовании')
+                                -> method('removeEdDoc', [
+                                    'edDoc_id' => $edDoc -> id,
+                                ])
+                                -> confirm('Вы уверены, что хотите удалить документ об образовании? После удаления его нельзя будет восстановить.'),
+                            Button::make('Редактировать')
+                                -> method('editEdDoc', [
+                                    'edDoc_id' => $edDoc -> id,
+                                ]),
+                        ]);
+                })
+                -> canSee(Auth::user() -> hasAccess('org.contingent.write')),
         ];
     }
 }

@@ -30,7 +30,7 @@ return new class extends Migration
             $table -> float('average_mark', 8, 3)
                 -> nullable();
             $table -> boolean('is_main')
-                -> default(true);
+                -> default(false);
             $table -> timestamps();
         });
     }
