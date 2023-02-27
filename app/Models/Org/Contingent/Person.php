@@ -2,6 +2,8 @@
 
 namespace App\Models\Org\Contingent;
 
+use App\Models\System\Repository\Position;
+use App\Models\System\Repository\Workplace;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -53,6 +55,14 @@ class Person extends Model
 
     public function edDocs() {
         return $this -> hasMany(EducationalDocument::class) -> orderByDesc('is_main');
+    }
+
+    public function workplace() {
+        return $this -> belongsTo(Workplace::class);
+    }
+
+    public function position() {
+        return $this -> belongsTo(Position::class);
     }
 
     // Блок аксессоров

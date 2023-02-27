@@ -7,13 +7,15 @@ use App\Models\Org\Contingent\EducationalDocument;
 use App\Models\Org\Contingent\Passport;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\Contingent\RelationLink;
-use App\Orchid\Layouts\Contingent\Person\CreateRows;
+use App\Models\System\Repository\Position;
+use App\Models\System\Repository\Workplace;
 use App\Orchid\Layouts\Contingent\Person\DocumentsTable;
 use App\Orchid\Layouts\Contingent\Person\EdDocsTable;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddEdDoc;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddPassportModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelative;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddRelativeExisting;
+use App\Orchid\Layouts\Contingent\Person\Modals\AddWorkplaceModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\ChooseDocumentModal;
 use App\Orchid\Layouts\Contingent\Person\Modals\EditRelative;
 use App\Orchid\Layouts\Contingent\Person\PassportsTable;
@@ -32,6 +34,7 @@ use Illuminate\Support\Str;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Layouts\Modal;
+use Orchid\Screen\Sight;
 
 class AddEditScreen extends Screen
 {
@@ -39,6 +42,8 @@ class AddEditScreen extends Screen
     public $relatives;
     public $documents;
     public $edDocs;
+    public $workplace;
+    public $position;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -54,6 +59,8 @@ class AddEditScreen extends Screen
             'documents' => $person -> documents() -> paginate(),
             'passports' => $person -> passports() -> paginate(),
             'edDocs' => $person -> edDocs() -> paginate(),
+            'workplace' => $person -> workplace,
+            'position' => $person -> position,
         ];
 
     }
@@ -134,10 +141,20 @@ class AddEditScreen extends Screen
                 ])
                     -> withoutCloseButton()
                     -> applyButton('Добавить'),
+                Layout::modal('addWorkplaceModal', [
+                    new AddWorkplaceModal($this -> person -> id),
+                ])
+                    -> withoutCloseButton()
+                    -> applyButton('Изменить'),
                 Layout::tabs([
                     'Персональные данные' => [
                         Layout::wrapper('system.wrappers.forTabs', [
                             'entities' => [
+                                Layout::rows([
+                                    Button::make('Сохранить')
+                                        -> icon('save')
+                                        -> class('btn rebase'),
+                                ]),
                                 Layout::block([
                                     Personal::class,
                                 ])
@@ -212,14 +229,54 @@ class AddEditScreen extends Screen
                         EdDocsTable::class,
                     ],
                     'Работа' => [
-                        Layout::rows([
-
+                        Layout::wrapper('system.wrappers.forTabs', [
+                            'entities' => [
+                                Layout::rows([
+                                    Group::make([
+                                        ModalToggle::make('Изменить место работы')
+                                            -> modal('addWorkplaceModal')
+                                            -> modalTitle('Изменить место работы')
+                                            -> method('modalWorkplaceAdd')
+                                            -> icon('plus')
+                                            -> class('btn btn-link rebase'),
+                                    ]),
+                                ]),
+                            ],
+                        ]),
+                        Layout::legend('dummy_target', [
+                            Sight::make('workplace.fullname', 'Место работы')
+                                -> render(function () {
+                                    return !is_null($this -> workplace) ? $this -> workplace -> fullname : 'Не указано';
+                                }),
+                            Sight::make('position', 'Должность')
+                                -> render(function() {
+                                    return !is_null($this -> position) ? $this -> position -> fullname : 'Не указано';
+                                }),
+                            Sight::make('workplace.tel', 'Рабочий номер телефона')
+                                -> render(function () {
+                                    return !is_null($this -> workplace) ? $this -> workplace -> tel : 'Не указано';
+                                }),
+                            Sight::make('workplace.email', 'Рабочий адрес электронной почты')
+                                -> render(function () {
+                                    return !is_null($this -> workplace) ? $this -> workplace -> email : 'Не указано';
+                                }),
                         ]),
                     ],
                 ]),
             ];
         } else return [
-            CreateRows::class,
+            Layout::block([
+                Personal::class,
+            ])
+                -> title('Персональные данные'),
+            Layout::block([
+                Contacts::class,
+            ])
+                -> title('Контактные данные'),
+            Layout::block([
+                Government::class,
+            ])
+                -> title('Государственные данные'),
         ];
     }
 
@@ -381,5 +438,31 @@ class AddEditScreen extends Screen
             -> delete();
 
         Toast::success('Документ об образовании успешно удален');
+    }
+
+    public function modalWorkplaceAdd() {
+        $workplace = Workplace::firstWhere('fullname', request() -> input('workplace')['fullname']);
+        $raw = request() -> input('workplace');
+        if (is_null($raw['tel']))
+            unset($raw['tel']);
+        if (is_null($raw['email']))
+            unset($raw['email']);
+        $workplace
+            -> fill($raw)
+            -> save();
+
+        $position = Position::firstWhere('fullname', request() -> input('position')['fullname']);
+        $position
+            -> fill(request() -> input('position'))
+            -> save();
+
+        Person::find(request() -> route() -> parameter('id'))
+            -> fill([
+                'workplace_id' => $workplace -> id,
+                'position_id' => $position -> id,
+            ])
+            -> save();
+
+        Toast::success('Место работы успешно обновлено');
     }
 }
