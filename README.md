@@ -25,19 +25,37 @@ NTTEK ERP&ID - From student for student and college
 Copyright (C) 2023 Repiev George Denisovitch <egor.repiev@gmail.com>,
 				   SAPEI SR "Nizhny Tagil College of Trade and Economics" <info@nttek.ru>
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
 ```
 
 ### Русский вариант (неофициальный)
 
 ```
-This is an unofficial translation of the GNU General Public License into Russian language. It was not published by the Free Software Foundation, and does not legally state the distribution terms for software that uses the GNU GPL—only the original English text of the GNU GPL does that. However, we hope that this translation will help language speakers understand the GNU GPL better. You may publish this translation, modified or unmodified, only under the terms at http://www.gnu.org/licenses/translations.html.
+This is an unofficial translation of the GNU General Public License into
+Russian language. It was not published by the Free Software Foundation, and
+does not legally state the distribution terms for software that uses the GNU
+GPL—only the original English text of the GNU GPL does that. However, we hope
+that this translation will help language speakers understand the GNU GPL
+better. You may publish this translation, modified or unmodified, only under
+the terms at http://www.gnu.org/licenses/translations.html.
 
-Это неофициальный перевод GNU General Public License на русский язык. Он был опубликован не Фондом свободного программного обеспечения и не содержит условий распространения программ, которые используют GNU GPL -- для этого пригоден только ее исходный английский текст. Тем не менее мы надеемся, что этот перевод поможет лучше понять ее текст. Вы можете распространять перевод, с изменениями или без, только с соблюдением условий, описанных по адресу: http://www.gnu.org/licenses/translations.html.
+Это неофициальный перевод GNU General Public License на русский язык. Он был
+опубликован не Фондом свободного программного обеспечения и не содержит условий
+распространения программ, которые используют GNU GPL -- для этого пригоден
+только ее исходный английский текст. Тем не менее мы надеемся, что этот перевод
+поможет лучше понять ее текст. Вы можете распространять перевод, с изменениями
+или без, только с соблюдением условий, описанных по адресу:
+http://www.gnu.org/licenses/translations.html.
 
 Перевод доступен по адресу: https://www.gnu.org/licenses/translations.html
 
@@ -45,9 +63,17 @@ NTTEK ERP&ID - От студентов для студентов и коллед
 Copyright (С) 2023 Репьев Егор Денисович <egor.repiev@gmail.com>
                    ГАПОУ СО "Нижнетагильский торгово-экономический колледж" <info@nttek.ru>
 
-Эта программа является свободным программным обеспечением: Вы можете распространять ее и (или) изменять, соблюдая условия Генеральной публичной лицензии GNU, опубликованной Фондом свободного программного обеспечения; либо редакции 3 Лицензии, либо (на Ваше усмотрение) любой редакции, выпущенной позже.
+Эта программа является свободным программным обеспечением: Вы можете
+распространять ее и (или) изменять, соблюдая условия Генеральной публичной
+лицензии GNU, опубликованной Фондом свободного программного обеспечения; либо
+редакции 3 Лицензии, либо (на Ваше усмотрение) любой редакции, выпущенной позже.
 
-Эта программа распространяется в расчете на то, что она окажется полезной, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, включая подразумеваемую гарантию КАЧЕСТВА либо ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Ознакомьтесь с Генеральной публичной лицензией GNU для получения более подробной информации. Вы должны были получить копию Генеральной публичной лицензии GNU вместе с этой программой. Если Вы ее не получили, то перейдите по адресу: <https://www.gnu.org/licenses/>.
+Эта программа распространяется в расчете на то, что она окажется полезной, но
+БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, включая подразумеваемую гарантию КАЧЕСТВА либо
+ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ. Ознакомьтесь с Генеральной публичной
+лицензией GNU для получения более подробной информации. Вы должны были получить
+копию Генеральной публичной лицензии GNU вместе с этой программой. Если Вы ее
+не получили, то перейдите по адресу: <https://www.gnu.org/licenses/>.
 ```
 
 
