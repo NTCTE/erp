@@ -35,7 +35,11 @@ class GroupsTable extends Table
         return [
             TD::make('name', 'Название группы')
                 -> render(function(Group $group) {
-                    return $group -> name();
+                    return Link::make($group -> name())
+                        -> route('org.departments.group', [
+                            'department' => $group -> department_id,
+                            'group' => $group -> id,
+                        ]);
                 }),
             TD::make('enrollment_date', 'Дата зачисления'),
             TD::make('training_period', 'Срок обучения (полных лет)'),

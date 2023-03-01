@@ -153,7 +153,8 @@ class AddEditScreen extends Screen
                                 Layout::rows([
                                     Button::make('Сохранить')
                                         -> icon('save')
-                                        -> class('btn rebase'),
+                                        -> class('btn rebase')
+                                        -> method('savePerson'),
                                 ]),
                                 Layout::block([
                                     Personal::class,
@@ -295,6 +296,18 @@ class AddEditScreen extends Screen
 
         Toast::success('Персона успешно сохранена');
         return redirect() -> route('org.contingent.person', $person);
+    }
+
+    public function savePerson() {
+        $person = request() -> input('person');
+        $person['birthdate'] = Carbon::createFromFormat('d.m.Y', $person['birthdate'])
+            -> format('Y-m-d');
+        $person['corp_email'] = $person['corp_email'] != 'Не выдан' ?? null;
+        Person::find(request() -> route() -> parameter('id'))
+            -> fill($person)
+            -> save();
+
+        Toast::success('Персона успешно сохранена');
     }
 
     public function updatePerson(Request $request, Person $person) {

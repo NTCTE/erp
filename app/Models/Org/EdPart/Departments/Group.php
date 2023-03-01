@@ -2,9 +2,12 @@
 
 namespace App\Models\Org\EdPart\Departments;
 
+use App\Models\Org\Contingent\Person;
+use App\Models\System\Relations\StudentsLink;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
+use Illuminate\Support\Str;
 
 class Group extends Model
 {
@@ -21,10 +24,26 @@ class Group extends Model
     ];
 
     public function name() {
-        return '(добавить правильное отображение группы)';
+        $period = $this -> getActualPeriod();
+        $period = $period <= $this -> training_period ? $period : $this -> training_period;
+        
+        return Str::replace('#', $period, $this -> shortname);
+    }
+
+    public function getActualPeriod() {
+        return Carbon::createFromFormat(
+            'd.m.Y',
+            $this
+                -> enrollment_date
+            )
+        -> diffInYears(Carbon::now()) + 1;
     }
 
     public function getEnrollmentDateAttribute($value) {
         return Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y');
+    }
+
+    public function students() {
+        return $this -> hasManyThrough(Person::class, StudentsLink::class, 'group_id', 'id', 'id', 'person_id');
     }
 }
