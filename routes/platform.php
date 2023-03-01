@@ -7,6 +7,8 @@ use App\Orchid\Screens\Contingent\ContingentScreen;
 use App\Orchid\Screens\Contingent\Person\AddEditScreen;
 use App\Orchid\Screens\Contingent\Person\Documents\AddRelationScreen;
 use App\Orchid\Screens\Contingent\Person\Documents\EditPassportScreen;
+use App\Orchid\Screens\EdPart\Departments\DepartmentScreen;
+use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
@@ -21,6 +23,8 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
+use App\Orchid\Screens\EdPart\Departments\Groups\GroupScreen;
+use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,7 +154,8 @@ Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen
         return $trail -> parent('system.repository.documentSchemas')
             -> push('Добавить схему', route('system.repository.documentSchemas.add'));
     });
-
+    
+// CONTINGENT
 // System > Org > Contingent
 Route::screen('/org/contingent', ContingentScreen::class)
     -> name('org.contingent')
@@ -182,4 +187,30 @@ Route::screen('/org/contingent/person/{id}/passport/{passport_id}', EditPassport
     -> breadcrumbs(function (Trail $trail) {
         return $trail -> parent('org.contingent.person')
             -> push('Редактировать паспорт');
+    });
+
+// DEPARTMENTS
+//System > Org > Departments
+Route::screen('/org/departments', MainScreen::class)
+    -> name('org.departments')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Организация')
+            -> push('Отделения', route('org.departments'));
+    });
+
+// System > Org > Departments > Entity
+Route::screen('/org/departments/entity/{id?}', DepartmentScreen::class)
+    -> name('org.departments.entity')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('org.departments')
+            -> push('Отделение');
+    });
+
+// System > Org > Departments > Groups > Entity
+Route::screen('/org/departments/{department}/group/{group?}', GroupsMainScreen::class)
+    -> name('org.departments.group')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('org.departments')
+            -> push('Группа');
     });
