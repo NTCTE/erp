@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Layouts\EdPart\Departments\Groups\Tables;
 
+use App\Models\Org\Contingent\Person;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -24,6 +26,15 @@ class StudentsTable extends Table
      */
     protected function columns(): iterable
     {
-        return [];
+        return [
+            TD::make('fullname', 'ФИО')
+                -> render(function(Person $person) {
+                    return Link::make($person -> fullname)
+                        -> route('org.contingent.person', $person);
+                }),
+            TD::make('email', 'Адрес электронной почты'),
+            TD::make('tel', 'Номер телефона'),
+            TD::make('additionals', 'Дополнительная информация'),
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\EdPart\Departments\Groups;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\EdPart\Departments\Department;
 use App\Models\Org\EdPart\Departments\Group;
+use App\Models\System\Relations\StudentsLink;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class MainScreen extends Screen
         return [
             'department' => Department::find(request() -> route() -> parameter('department')),
             'group' => $group,
-            'students' => !is_null($group) ? $group -> students : null,
+            'students' => !is_null($group) ? $group -> students() -> paginate() : null,
         ];
     }
 
@@ -140,5 +141,24 @@ class MainScreen extends Screen
             'department' => $group['department_id'],
             'group' => request() -> route() -> parameter('group'),
         ]);
+    }
+
+    public function addStudents() {
+        $students = request() -> input('students');
+        $group = Group::find(request() -> route() -> parameter('group'));
+        foreach ($students as $student) {
+            $person = Person::create([
+                'lastname' => $student['lastname'],
+                'firstname' => $student['firstname'],
+                'patronymic' => $student['patronymic'],
+                'uuid' => Str::uuid(),
+            ]);
+            StudentsLink::create([
+                'person_id' => $person -> id,
+                'group_id' => $group -> id,
+            ]);
+        }
+
+        Toast::success('Студенты успешно добавлены в группу!');
     }
 }

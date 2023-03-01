@@ -300,9 +300,10 @@ class AddEditScreen extends Screen
 
     public function savePerson() {
         $person = request() -> input('person');
-        $person['birthdate'] = Carbon::createFromFormat('d.m.Y', $person['birthdate'])
-            -> format('Y-m-d');
-        $person['corp_email'] = $person['corp_email'] != 'Не выдан' ?? null;
+        $person['birthdate'] = !empty($person['birthdate']) && $person['birthdate'] != 'Не указана' ? Carbon::createFromFormat('d.m.Y', $person['birthdate'])
+            -> format('Y-m-d') : null;
+        if ($person['corp_email'] == 'Не выдан')
+            unset($person['corp_email']);
         Person::find(request() -> route() -> parameter('id'))
             -> fill($person)
             -> save();
