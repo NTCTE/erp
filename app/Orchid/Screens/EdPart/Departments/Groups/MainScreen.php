@@ -161,4 +161,13 @@ class MainScreen extends Screen
 
         Toast::success('Студенты успешно добавлены в группу!');
     }
+
+    public function studentRemove() {
+        StudentsLink::where('person_id', request() -> input('person'))
+            -> where('group_id', request() -> route() -> parameter('group'))
+            -> delete();
+        if (request() -> input('permanent'))
+            Person::find(request() -> input('person'))
+                -> delete();
+    }
 }

@@ -151,10 +151,18 @@ class AddEditScreen extends Screen
                         Layout::wrapper('system.wrappers.forTabs', [
                             'entities' => [
                                 Layout::rows([
-                                    Button::make('Сохранить')
-                                        -> icon('save')
-                                        -> class('btn rebase')
-                                        -> method('savePerson'),
+                                    Group::make([
+                                        Button::make('Сохранить')
+                                            -> icon('save')
+                                            -> class('btn rebase')
+                                            -> method('savePerson'),
+                                        Button::make('Удалить')
+                                            -> icon('trash')
+                                            -> confirm('Вы уверены, что хотите удалить персону?')
+                                            -> method('deletePerson')
+                                            -> class('btn rebase'),
+                                    ])
+                                        -> autoWidth(),
                                 ]),
                                 Layout::block([
                                     Personal::class,
@@ -309,6 +317,15 @@ class AddEditScreen extends Screen
             -> save();
 
         Toast::success('Персона успешно сохранена');
+    }
+
+    public function deletePerson() {
+        Person::find(request() -> route() -> parameter('id'))
+            -> delete();
+
+        Toast::success('Персона успешно удалена');
+        return redirect()
+            -> route('org.contingent');
     }
 
     public function updatePerson(Request $request, Person $person) {
