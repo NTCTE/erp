@@ -94,8 +94,8 @@ class DepartmentScreen extends Screen
                     -> required()
                     -> horizontal(),
             ]),
-            new GroupsTable('Активные группы', 'groups'),
-            new GroupsTable('Архивные группы', 'archived_groups'),
+            new GroupsTable('Активные группы', 'groups', $this -> department -> exists),
+            new GroupsTable('Архивные группы', 'archived_groups', $this -> department -> exists),
         ];
     }
 
@@ -105,5 +105,8 @@ class DepartmentScreen extends Screen
             -> save();
 
         Toast::success('Отделение успешно сохранено!');
+
+        return redirect()
+            -> route('org.departments.entity', $department);
     }
 }

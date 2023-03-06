@@ -2,18 +2,27 @@
 
 namespace App\Orchid\Screens\System\Repository;
 
+use App\Models\System\Repository\SocialStatus;
+use App\Orchid\Layouts\System\Repository\SocialStatusesTable;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class SocialStatuses extends Screen
 {
+    public $statuses;
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(SocialStatus $statuses): iterable
     {
-        return [];
+        return [
+            'statuses' => $statuses::paginate(),
+        ];
     }
 
     /**
@@ -23,7 +32,11 @@ class SocialStatuses extends Screen
      */
     public function name(): ?string
     {
-        return 'SocialStatuses';
+        return 'Социальные статусы персон';
+    }
+
+    public function description():? string {
+        return 'Список социальных статусов, используемых в системе. Добавляются и редактируются только на этом экране.';
     }
 
     /**
@@ -33,7 +46,13 @@ class SocialStatuses extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            ModalToggle::make('Добавить')
+                -> modal('socialStatusModal')
+                -> method('create')
+                -> icon('plus')
+                -> modalTitle('Создание социального статуса'),
+        ];
     }
 
     /**
@@ -43,6 +62,46 @@ class SocialStatuses extends Screen
      */
     public function layout(): iterable
     {
-        return [];
+        return [
+            Layout::modal('socialStatusModal', [
+                Layout::rows([
+                    Input::make('status.fullname')
+                        -> title('Название')
+                        -> placeholder('Введите название социального статуса')
+                        -> required(),
+                    Input::make('status.id')
+                        -> type('hidden'),
+                ]),
+            ])
+                -> withoutCloseButton()
+                -> applyButton('Создать')
+                -> async('asyncModalSave'),
+            SocialStatusesTable::class,
+        ];
+    }
+
+    public function asyncModalSave(int $id = null, string $fullname = null): array {
+        return [
+            'status' => [
+                'id' => $id,
+                'fullname' => $fullname,
+            ]
+        ];
+    }
+
+    public function create() {
+        $get = request() -> get('status');
+        if ($status = SocialStatus::find($get['id']))
+            $status -> update($get);
+        else
+            SocialStatus::create($get);
+
+        Toast::info('Социальный статус успешно создан');
+    }
+
+    public function delete() {
+        SocialStatus::find(request() -> get('id')) -> delete();
+
+        Toast::info('Социальный статус успешно удален');
     }
 }

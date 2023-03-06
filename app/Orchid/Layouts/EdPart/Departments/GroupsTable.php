@@ -20,9 +20,10 @@ class GroupsTable extends Table
      */
     public $target;
 
-    public function __construct(string $title, string $target) {
+    public function __construct(string $title, string $target, bool $show) {
         $this -> target = $target;
         $this -> title($title);
+        $this -> canSee($show);
     }
 
     /**

@@ -70,10 +70,6 @@ class Person extends Model
         return "{$this -> lastname} {$this -> firstname} {$this -> patronymic}";
     }
 
-    public function getCorpEmailAttribute($value): string {
-        return !empty($value) ? $this -> value : 'Не выдан';
-    }
-
     public function getBirthdateAttribute($value): string {
         return !empty($value) ? Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y') : 'Не указана';
     }

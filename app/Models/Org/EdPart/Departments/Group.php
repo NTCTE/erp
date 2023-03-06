@@ -14,9 +14,8 @@ class Group extends Model
     use AsSource;
 
     protected $fillable = [
-        'uuid',
-        'enrollment_date',
         'training_period',
+        'specialty_id',
         'shortname',
         'department_id',
         'curator_id',
@@ -37,10 +36,6 @@ class Group extends Model
                 -> enrollment_date
             )
         -> diffInYears(Carbon::now()) + 1;
-    }
-
-    public function getEnrollmentDateAttribute($value) {
-        return Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y');
     }
 
     public function students() {
