@@ -13,8 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('groups_persons', function(Blueprint $table) {
+        Schema::create('administrative_documents', function (Blueprint $table) {
             $table -> id();
+            $table -> unsignedInteger('type');
+            $table -> text('fullname');
+            $table -> char('number', 20);
+            $table -> date('date_at');
+            $table -> timestamps();
         });
     }
 
@@ -25,8 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('groups_persons', function(Blueprint $table) {
-            $table -> dropColumn('id');
-        });
+        Schema::dropIfExists('administrative_documents');
     }
 };

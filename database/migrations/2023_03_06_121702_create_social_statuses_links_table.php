@@ -13,17 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('groups_persons', function (Blueprint $table) {
-            $table -> foreignId('group_id')
+        Schema::create('social_statuses_links', function (Blueprint $table) {
+            $table -> id();
+            $table -> foreignId('social_status_id')
                 -> references('id')
-                -> on('groups');
+                -> on('social_statuses');
             $table -> foreignId('person_id')
                 -> references('id')
                 -> on('persons');
-            $table -> date('enrollment_date')
-                -> nullable();
-            $table -> date('expillied_date')
-                -> nullable();
             $table -> timestamps();
         });
     }
@@ -35,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groups_persons');
+        Schema::dropIfExists('social_statuses_links');
     }
 };

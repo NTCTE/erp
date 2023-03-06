@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('positions', function (Blueprint $table) {
+        Schema::create('poly_administrative_documents', function (Blueprint $table) {
             $table -> id();
-            $table -> char('fullname', 200);
+            $table -> foreignId('administrative_document_id')
+                -> references('id')
+                -> on('administrative_documents');
+            $table -> morphs('signed');
             $table -> timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('positions');
+        Schema::dropIfExists('poly_administrative_documents');
     }
 };

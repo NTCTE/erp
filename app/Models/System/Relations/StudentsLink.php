@@ -16,6 +16,10 @@ class StudentsLink extends Model
         'person_id',
         'enrollment_date',
         'expilled_date',
+        'number_of_order',
+        'is_academic_leave',
+        'steps_counter',
+        'additionals',
     ];
 
 }

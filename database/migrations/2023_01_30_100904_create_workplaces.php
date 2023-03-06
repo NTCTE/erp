@@ -20,6 +20,7 @@ return new class extends Migration
                 -> nullable();
             $table -> char('email', 150)
                 -> nullable();
+            $table -> timestamps();
         });
     }
 

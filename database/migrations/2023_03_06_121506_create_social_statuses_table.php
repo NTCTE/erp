@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('educational_documents', function (Blueprint $table) {
-            $table -> date('date_of_issue');
+        Schema::create('social_statuses', function (Blueprint $table) {
+            $table -> id();
+            $table -> char('fullname', 200);
+            $table -> timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('educational_documents', function (Blueprint $table) {
-            $table -> dropColumn('date_of_issue');
-        });
+        Schema::dropIfExists('social_statuses');
     }
 };

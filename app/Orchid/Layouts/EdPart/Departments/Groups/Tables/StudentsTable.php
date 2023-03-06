@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\EdPart\Departments\Groups\Tables;
 
 use App\Models\Org\Contingent\Person;
+use App\Models\System\Relations\StudentsLink;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
@@ -20,7 +21,13 @@ class StudentsTable extends Table
      *
      * @var string
      */
-    protected $target = 'students';
+    protected $target;
+
+    public function __construct(string $target, ?string $title = null)
+    {
+        $this -> target = $target;
+        $this -> title($title);
+    }
 
     /**
      * Get the table cells to be displayed.
@@ -38,12 +45,28 @@ class StudentsTable extends Table
             TD::make('email', 'Адрес электронной почты'),
             TD::make('tel', 'Номер телефона'),
             TD::make('birthdate', 'Дата рождения'),
-            TD::make('additionals', 'Дополнительная информация'),
+            TD::make('additionals', 'Дополнительная информация')
+                -> render(function(Person $person) {
+                    return StudentsLink::firstWhere('person_id', $person -> id)
+                        -> additionals;
+                })
+                -> width('20%'),
             TD::make('actions', 'Действия')
                 -> render(function(Person $person) {
                     return DropDown::make()
                         -> icon('options-vertical')
                         -> list([
+                            ModalToggle::make('Редактировать студента')
+                                -> icon('pencil')
+                                -> modal('studentEditModal')
+                                -> modalTitle('Редактирование студента')
+                                -> method('studentEdit')
+                                -> asyncParameters([
+                                    StudentsLink::where('person_id', $person -> id)
+                                        -> where('group_id', request() -> route() -> parameter('group'))
+                                        -> first() -> additionals,
+                                    $person -> id,
+                                ]),
                             Button::make('Отчислить')
                                 -> icon('user-unfollow')
                                 -> method('studentRemove', [
@@ -61,18 +84,17 @@ class StudentsTable extends Table
                                 -> confirm('ВНИМАНИЕ! Вы собираетесь отчислить студенты с удалением персоны из системы. Это означает, что никаких записей о персоне не останется в системе. Продолжить?'),
                             ModalToggle::make('Перевести в другую группу')
                                 -> icon('anchor')
-                                -> modal('studentTransfer')
+                                -> modal('studentTransferModal')
                                 -> modalTitle('Перевод студента в другую группу')
                                 -> method('studentTransfer', [
                                     'person' => $person -> id,
                                 ])
                                 -> confirm('Вы собираетесь перевести студента в другую группу. Продолжить?'),
-                            ModalToggle::make('Перевести студента в академический отпуск')
+                            Button::make('Перевести студента в академический отпуск')
                                 -> icon('control-pause')
-                                -> modal('studentAcademicLeave')
-                                -> modalTitle('Перевод студента в академический отпуск')
                                 -> method('studentAcademicLeave', [
                                     'person' => $person -> id,
+                                    'status' => true,
                                 ])
                                 -> confirm('Вы собираетесь перевести студента в академический отпуск. Продолжить?'),
                         ]);

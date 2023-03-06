@@ -10,16 +10,16 @@ use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Illuminate\Support\Str;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Group as FieldsGroup;
 use Orchid\Screen\Fields\Matrix;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Support\Facades\Toast;
 
 class MainScreen extends Screen
@@ -38,7 +38,14 @@ class MainScreen extends Screen
         return [
             'department' => Department::find(request() -> route() -> parameter('department')),
             'group' => $group,
-            'students' => !is_null($group) ? $group -> students() -> paginate() : null,
+            'students' => !is_null($group) ? $group
+                -> students()
+                -> where('is_academic_leave', false)
+                -> paginate() : null,
+            'academic_leave' => !is_null($group) ? $group
+                -> students()
+                -> where('is_academic_leave', true)
+                -> paginate() : null,
         ];
     }
 
@@ -80,7 +87,21 @@ class MainScreen extends Screen
     public function layout(): iterable
     {
         $layouts = [
-            InformationRows::class,
+            Layout::modal('studentEditModal', [
+                Layout::rows([
+                    TextArea::make('additionals')
+                        -> title('Дополнительная информация')
+                        -> placeholder('Введите дополнительную информацию...')
+                        -> required()
+                        -> rows(5),
+                    Input::make('student_id')
+                        -> type('hidden'),
+                ]),
+            ])
+                -> withoutCloseButton()
+                -> applyButton('Сохранить')
+                -> async('asyncStudentEditModal'),
+            InformationRows::class
         ];
         if (!is_null($this -> group))
             $layouts = array_merge($layouts, [
@@ -93,6 +114,14 @@ class MainScreen extends Screen
                                 'Фамилия' => 'lastname',
                                 'Имя' => 'firstname',
                                 'Отчество' => 'patronymic',
+                                'Дата рождения' => 'birthdate',
+                                'Дополнительная информация' => 'additionals',
+                            ])
+                            -> fields([
+                                'birthdate' => DateTimer::make()
+                                    -> format('d.m.Y')
+                                    -> required()
+                                    -> placeholder('Введите...'),
                             ]),
                     ]),
                 ])
@@ -101,18 +130,32 @@ class MainScreen extends Screen
                     -> staticBackdrop()
                     -> size(Modal::SIZE_LG),
                 Layout::rows([
-                    ModalToggle::make('Добавить студентов')
-                        -> modalTitle('Добавление студентов в группу')
-                        -> modal('addStudentsModal')
-                        -> method('addStudents')
-                        -> icon('user-follow')
-                        -> class('btn rebase'),
+                    FieldsGroup::make([
+                        ModalToggle::make('Добавить студентов')
+                            -> modalTitle('Добавление студентов в группу')
+                            -> modal('addStudentsModal')
+                            -> method('addStudents')
+                            -> icon('user-follow')
+                            -> class('btn rebase'),
+                        Button::make('Регистрация студентов в системах')
+                            -> icon('cloud-upload')
+                            -> class('btn rebase'),
+                    ])
+                        -> autoWidth(),
                 ])
                     -> title('Контингент группы'),
-                StudentsTable::class,
+                new StudentsTable('students'),
+                new StudentsTable('academic_leave', 'Академический отпуск'),
             ]);
 
         return $layouts;
+    }
+
+    public function asyncStudentEditModal(string $additionals, int $student_id) {
+        return [
+            'additionals' => $additionals,
+            'student_id' => $student_id,
+        ];
     }
 
     public function save() {
@@ -169,5 +212,29 @@ class MainScreen extends Screen
         if (request() -> input('permanent'))
             Person::find(request() -> input('person'))
                 -> delete();
+    }
+
+    public function studentEdit() {
+        StudentsLink::where('person_id', request() -> input('student_id'))
+            -> where('group_id', request() -> route() -> parameter('group'))
+            -> first()
+            -> update([
+                'additionals' => request() -> input('additionals'),
+            ]);
+
+        Toast::success('Данные студента успешно обновлены!');
+    }
+
+    public function studentAcademicLeave() {
+        $student = StudentsLink::where('person_id', request() -> input('person'))
+            -> where('group_id', request() -> route() -> parameter('group'))
+            -> first();
+        $student -> fill([
+            'is_academic_leave' => request() -> input('status'),
+            'steps_counter' => $student -> steps_counter + 1,
+        ])
+            -> save();
+
+        Toast::success('Данные студента успешно обновлены!');
     }
 }

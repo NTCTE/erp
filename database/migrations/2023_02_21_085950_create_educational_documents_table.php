@@ -27,6 +27,7 @@ return new class extends Migration
             $table -> foreignId('person_id')
                 -> references('id')
                 -> on('persons');
+            $table -> date('date_of_issue');
             $table -> float('average_mark', 8, 3)
                 -> nullable();
             $table -> boolean('is_main')

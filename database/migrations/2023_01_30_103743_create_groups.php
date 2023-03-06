@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table -> id();
-            $table -> uuid();
-            $table -> date('enrollment_date');
             $table -> unsignedSmallInteger('training_period');
+            $table -> foreignId('specialty_id')
+                -> references('id')
+                -> on('specialties');
             $table -> char('shortname', 10);
             $table -> foreignId('department_id')
                 -> references('id')
