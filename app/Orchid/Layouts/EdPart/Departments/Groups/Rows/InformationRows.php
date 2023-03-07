@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts\EdPart\Departments\Groups\Rows;
 
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\EdPart\Departments\Department;
+use App\Models\System\Repository\Specialty;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
@@ -27,6 +28,15 @@ class InformationRows extends Rows
     protected function fields(): iterable
     {
         return [
+            Relation::make('group.specialty_id')
+                -> title('Специальность')
+                -> placeholder('Выберите специальность...')
+                -> help('Если специальности нет в данном списке, то вы можете ее добавить в репозитории специальностей (если у вас есть соответствующие права).')
+                -> fromModel(Specialty::class, 'fullname', 'id')
+                -> searchColumns('code', 'fullname')
+                -> displayAppend('formatted')
+                -> horizontal()
+                -> required(),
             Input::make('group.shortname')
                 -> title('Каноничное название')
                 -> placeholder('Введите каноничное название группы')
@@ -35,7 +45,7 @@ class InformationRows extends Rows
                 -> required(),
             Input::make('group.training_period')
                 -> title('Срок обучения')
-                -> placeholder('Введите срок обучения')
+                -> placeholder('Введите срок обучения...')
                 -> help('Вам нужно ввести срок обучения в полных годах. Если срок обучения 3 года 10 месяцев, то введите 4.')
                 -> horizontal()
                 -> mask([
@@ -45,7 +55,7 @@ class InformationRows extends Rows
                 -> required(),
             Relation::make('group.department_id')
                 -> title('Отделение')
-                -> placeholder('Выберите отделение')
+                -> placeholder('Выберите отделение...')
                 -> fromModel(Department::class, 'fullname', 'id')
                 -> value(request() 
                     -> route()
@@ -55,7 +65,7 @@ class InformationRows extends Rows
                 -> required(),
             Relation::make('group.curator_id')
                 -> title('Куратор')
-                -> placeholder('Выберите куратора')
+                -> placeholder('Выберите куратора...')
                 -> fromModel(Person::class, 'lastname', 'id')
                 -> searchColumns('lastname', 'firstname', 'patronymic')
                 -> displayAppend('fullname')

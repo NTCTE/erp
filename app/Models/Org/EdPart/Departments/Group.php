@@ -3,7 +3,9 @@
 namespace App\Models\Org\EdPart\Departments;
 
 use App\Models\Org\Contingent\Person;
+use App\Models\System\Relations\AdministativeDocumentsLinks;
 use App\Models\System\Relations\StudentsLink;
+use App\Models\System\Repository\AdministrativeDocument;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -21,6 +23,14 @@ class Group extends Model
         'curator_id',
         'archived',
     ];
+
+    public function orders() {
+        return $this -> morphToMany(AdministrativeDocument::class, 'signed', 'poly_administrative_documents', 'signed_id', 'administrative_document_id');
+    }
+
+    public function order() {
+        return $this -> orders() -> orderBy('date_at', 'desc') -> limit(1);
+    }
 
     public function name() {
         $period = $this -> getActualPeriod();
@@ -40,5 +50,9 @@ class Group extends Model
 
     public function students() {
         return $this -> hasManyThrough(Person::class, StudentsLink::class, 'group_id', 'id', 'id', 'person_id');
+    }
+
+    public function getEnrollmentDateAttribute() {
+        return Carbon::createFromFormat('d.m.Y', $this -> order -> first() -> date_at) -> format('d.m.Y');
     }
 }

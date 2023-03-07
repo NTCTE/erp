@@ -4,10 +4,13 @@ namespace App\Orchid\Screens\EdPart\Departments\Groups;
 
 use App\Models\Org\EdPart\Departments\Department;
 use App\Models\Org\EdPart\Departments\Group;
+use App\Models\System\Relations\AdministativeDocumentsLinks;
+use App\Models\System\Repository\AdministrativeDocument;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\OrderListener;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Toast;
 
 class MainScreen extends Screen
 {
@@ -90,5 +93,30 @@ class MainScreen extends Screen
         ];
 
         return $layout;
+    }
+
+    public function save() {
+        $group = Group::create(request() -> input('group'));
+
+        if (request() -> input('async.existing_order_cb')) {
+            AdministativeDocumentsLinks::create([
+                'administrative_document_id' => request() -> input('order.existing_order_id'),
+                'signed_id' => $group -> id,
+                'signed_type' => Group::class,
+            ]);
+        } else {
+            AdministativeDocumentsLinks::create([
+                'administrative_document_id' => AdministrativeDocument::create(request() -> input('order')) -> id,
+                'signed_id' => $group -> id,
+                'signed_type' => Group::class,
+            ]);
+        }
+
+        Toast::success('Группа успешно создана');
+
+        return redirect() -> route('org.departments.group', [
+            'department' => request() -> route() -> parameter('department'),
+            'group' => $group -> id,
+        ]);
     }
 }
