@@ -2,10 +2,19 @@
 
 namespace App\Models\System\Repository;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Screen\AsSource;
 
 class Specialty extends Model
 {
-    use HasFactory;
+    use AsSource;
+
+    protected $fillable = [
+        'code',
+        'fullname',
+    ];
+
+    public function getFormattedAttribute() {
+        return "{$this -> code} \"{$this -> fullname}\"";
+    }
 }
