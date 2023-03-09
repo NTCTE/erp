@@ -296,7 +296,6 @@ class AddEditScreen extends Screen
 
         // @ega22a: Не забудь сделать валидацию данных!
         $input = $request -> input('person');
-        $input['uuid'] = Str::uuid();
         $input['birthdate'] = Carbon::createFromFormat('d.m.Y', $input['birthdate'])
             -> format('Y-m-d');
         $person -> fill($input)
@@ -341,7 +340,6 @@ class AddEditScreen extends Screen
         // @ega22a: Не забудь сделать валидацию данных!
 
         $input = $request -> input('relative');
-        $input['uuid'] = Str::uuid();
         $person -> fill($input)
             -> save();
         $type -> fill([

@@ -4,6 +4,7 @@ namespace App\Models\Org\Contingent;
 
 use App\Models\System\Repository\Position;
 use App\Models\System\Repository\Workplace;
+use App\Traits\Org\Contingent\UuidSetter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -11,7 +12,7 @@ use Orchid\Attachment\Attachable;
 
 class Person extends Model
 {
-    use AsSource, Attachable;
+    use AsSource, Attachable, UuidSetter;
 
     protected $table = 'persons';
 
@@ -40,7 +41,6 @@ class Person extends Model
     ];
 
     // Блок отношений
-
     public function documents() {
         return $this -> hasMany(Document::class);
     }

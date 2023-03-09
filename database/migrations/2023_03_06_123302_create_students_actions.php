@@ -23,7 +23,8 @@ return new class extends Migration
                 -> on('groups');
             $table -> char('vanilla_name', 10);
             $table -> unsignedTinyInteger('type');
-            $table -> text('additionals');
+            $table -> text('additionals')
+                -> nullable();
             $table -> timestamps();
         });
     }

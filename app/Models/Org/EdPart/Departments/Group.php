@@ -3,7 +3,6 @@
 namespace App\Models\Org\EdPart\Departments;
 
 use App\Models\Org\Contingent\Person;
-use App\Models\System\Relations\AdministativeDocumentsLinks;
 use App\Models\System\Relations\StudentsLink;
 use App\Models\System\Repository\AdministrativeDocument;
 use Carbon\Carbon;
