@@ -3,8 +3,7 @@
 namespace App\Orchid\Layouts\EdPart\Departments\Groups\Tables;
 
 use App\Models\Org\Contingent\Person;
-use App\Models\System\Relations\StudentsLink;
-use Orchid\Screen\Actions\Button;
+use App\Models\System\Repository\AdministrativeDocument;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
@@ -37,6 +36,69 @@ class StudentsTable extends Table
      */
     protected function columns(): iterable
     {
-        return [];
+        return [
+            TD::make('fullname', 'ФИО')
+                -> render(function(Person $student) {
+                    return Link::make($student -> fullname)
+                        -> route('org.contingent.person', $student);
+                })
+                -> width('10%'),
+            TD::make('birthdate', 'Дата рождения')
+                -> render(function (Person $student) {
+                    return !empty($student -> birthdate) ? "{$student -> birthdate} (" . ($student -> is_adult() ? 'совершеннолетний' : 'несовершеннолетний') . ")" : 'Не указана';
+                }),
+            TD::make('student', 'Бюджет')
+                -> render(function (Person $student) {
+                    return $student -> student -> budget ? 'Да' : 'Нет';
+                }),
+            TD::make('student', 'Приказ о зачислении')
+                -> render(function (Person $student) {
+                    return !empty($student -> student -> enrollment_order_id) ?
+                        AdministrativeDocument::find($student -> student -> enrollment_order_id) -> formatted :
+                        'Групповой';
+                })
+                -> width('20%'),
+            TD::make('student', 'Дополнительные сведения')
+                -> render(function(Person $student) {
+                    return !empty($student -> student -> additionals) ?
+                        $student -> student -> additionals :
+                        'Не указаны';
+                })
+                -> width('30%'),
+            TD::make('additionals', 'Действия')
+                -> render(function(Person $person) {
+                    return DropDown::make()
+                        -> icon('options-vertical')
+                        -> list([
+                            ModalToggle::make('Изменить дополнительные сведения')
+                                -> icon('note')
+                                -> modal('editAdditionalInfoModal')
+                                -> method('editAdditionalInfo')
+                                -> asyncParameters([
+                                    'student' => $person -> student,
+                                ]),
+                            ModalToggle::make('Перевести в другую группу')
+                                -> icon('control-forward')
+                                -> modal('moveStudentModal')
+                                -> method('moveStudent')
+                                -> asyncParameters([
+                                    'student' => $person -> student -> id,
+                                ])
+                                -> confirm('Перед тем, как переводить студента в другую группу, нужно убедиться, что в системе имеется соответсвтующий Приказ. Если его нет, то необходимо сперва добавить Приказ о зачислении в систему.'),
+                            ModalToggle::make('Перевести в академический отпуск')
+                                -> icon('control-pause')
+                                -> modal('moveStudentToAcademicLeaveModal')
+                                -> method('moveStudentToAcademicLeave')
+                                -> asyncParameters([
+                                    'student' => $person -> student -> id,
+                                ])
+                                -> confirm('Перед тем, как переводить студента в академический отпуск, нужно убедиться, что в системе имеется соответсвтующий Приказ. Если его нет, то необходимо сперва добавить Приказ в систему.')
+                                -> canSee(is_null($person -> student -> academic_leave)),
+                            ModalToggle::make('Просмотреть историю движения')
+                                -> icon('info')
+                                -> modal('studentMovementHistoryModal'),
+                        ]);
+                }),
+        ];
     }
 }

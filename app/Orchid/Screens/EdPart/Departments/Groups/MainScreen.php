@@ -14,6 +14,7 @@ use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\OrderListener;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\AddStudentsModal;
+use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\EditAdditionalInfoModal;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\ModalToggle;
@@ -93,6 +94,15 @@ class MainScreen extends Screen
         return $ret;
     }
 
+    public function asyncEditAdditionalInfo($async): array {
+        return [
+            'additionals' => request() -> input('additionals'),
+            'order' => request() -> input('order'),
+            'budget' => request() -> input('budget'),
+            'student' => request() -> input('student'),
+        ];
+    }
+
     /**
      * The screen's layout elements.
      *
@@ -106,7 +116,14 @@ class MainScreen extends Screen
                 -> withoutCloseButton()
                 -> applyButton('Добавить')
                 -> staticBackdrop()
-                -> size(Modal::SIZE_LG),
+                -> size(Modal::SIZE_LG)
+                -> canSee(!empty(request() -> route() -> parameter('group'))),
+            Layout::modal('editAdditionalInfoModal', EditAdditionalInfoModal::class)
+                -> title('Редактирование дополнительной информации')
+                -> withoutCloseButton()
+                -> applyButton('Сохранить')
+                -> staticBackdrop()
+                -> async('asyncEditAdditionalInfo'),
             InformationRows::class,
             OrderListener::class,
             Layout::rows([
@@ -156,18 +173,13 @@ class MainScreen extends Screen
             $notAdded = [];
             foreach (request() -> input('newStudents') as $key => $student) {
                 if (!empty($student['lastname']) && !empty($student['firstname'])) {
-                    $group = Group::find(request() -> route() -> parameter('group'));
-                    $person = Person::create($student);
-                    $student = StudentsLink::create([
-                        'person_id' => $person -> id,
-                        'group_id' => $group -> id,
-                    ]);
-                    StudentsAction::create([
-                        'persons_groups_link_id' => $student -> id,
-                        'group_id' => $group -> id,
-                        'vanilla_name' => $group -> name(),
-                        'type' => 1,
-                    ]);
+                    (new StudentsLink)
+                        -> fill([
+                            'person_id' => Person::create($student) -> id,
+                            'group_id' => request() -> route() -> parameter('group'),
+                        ])
+                        -> setActions(1)
+                        -> save();
                 } else $notAdded[] = [
                     'key' => $key,
                     'student' => $student,
@@ -184,5 +196,15 @@ class MainScreen extends Screen
         } else {
             Toast::warning('Не было передано ни одного студента!');
         }
+    }
+
+    public function editAdditionalInfo() {
+        $student = request() -> input('student');
+
+        StudentsLink::find($student['id'])
+            -> setActions()
+            -> update($student);
+
+        Toast::info('Дополнительная информация успешно обновлена');
     }
 }

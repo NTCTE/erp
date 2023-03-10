@@ -26,5 +26,5 @@
 }
 
 .table tbody tr td {
-    word-wrap: normal !important;
+    word-break: normal !important;
 }

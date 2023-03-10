@@ -2,6 +2,7 @@
 
 namespace App\Models\Org\Contingent;
 
+use App\Models\System\Relations\StudentsLink;
 use App\Models\System\Repository\Position;
 use App\Models\System\Repository\Workplace;
 use App\Traits\Org\Contingent\UuidSetter;
@@ -40,6 +41,8 @@ class Person extends Model
         2 => 'Женский',
     ];
 
+    static $adult_age = 18;
+
     // Блок отношений
     public function documents() {
         return $this -> hasMany(Document::class);
@@ -65,12 +68,20 @@ class Person extends Model
         return $this -> belongsTo(Position::class);
     }
 
+    public function student() {
+        return $this -> hasOne(StudentsLink::class);
+    }
+
+    public function is_adult() {
+        return !empty($this -> birthdate) ? Carbon::now() -> diffInYears(Carbon::createFromFormat('d.m.Y', $this -> birthdate)) >= self::$adult_age : null;
+    }
+
     // Блок аксессоров
     public function getFullnameAttribute(): string {
         return "{$this -> lastname} {$this -> firstname} {$this -> patronymic}";
     }
 
-    public function getBirthdateAttribute($value): string {
-        return !empty($value) ? Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y') : 'Не указана';
+    public function getBirthdateAttribute($value):? string {
+        return !empty($value) ? Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y') : null;
     }
 }
