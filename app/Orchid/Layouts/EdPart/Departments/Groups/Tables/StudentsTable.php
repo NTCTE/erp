@@ -92,7 +92,6 @@ class StudentsTable extends Table
                                 -> asyncParameters([
                                     'student' => $person -> student -> id,
                                 ])
-                                -> confirm('Перед тем, как переводить студента в академический отпуск, нужно убедиться, что в системе имеется соответсвтующий Приказ. Если его нет, то необходимо сперва добавить Приказ в систему.')
                                 -> canSee(is_null($person -> student -> academic_leave)),
                             ModalToggle::make('Просмотреть историю движения')
                                 -> icon('info')

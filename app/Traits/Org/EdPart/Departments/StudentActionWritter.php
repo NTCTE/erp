@@ -26,8 +26,8 @@ trait StudentActionWritter {
         static::created(function ($model) {
             self::writeAction(
                 $model -> id,
-                $model -> group_id,
-                Group::find($model -> group_id) -> name(),
+                $model -> last_group_id,
+                Group::find($model -> last_group_id) -> name(),
                 $model -> actionType,
                 $model -> actionAdditionals
             );
@@ -35,8 +35,8 @@ trait StudentActionWritter {
         static::updated(function ($model) {
             self::writeAction(
                 $model -> id,
-                $model -> group_id,
-                Group::find($model -> group_id) -> name(),
+                $model -> last_group_id,
+                Group::find($model -> last_group_id) -> name(),
                 $model -> actionType,
                 $model -> actionAdditionals
             );

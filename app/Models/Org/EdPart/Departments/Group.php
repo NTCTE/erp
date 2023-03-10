@@ -6,6 +6,7 @@ use App\Models\Org\Contingent\Person;
 use App\Models\System\Relations\StudentsLink;
 use App\Models\System\Repository\AdministrativeDocument;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 use Illuminate\Support\Str;
@@ -31,6 +32,10 @@ class Group extends Model
         return $this -> orders() -> orderBy('date_at', 'desc') -> limit(1);
     }
 
+    public function students() {
+        return $this -> hasManyThrough(Person::class, StudentsLink::class, 'group_id', 'id', 'id', 'person_id');
+    }
+
     public function name() {
         $period = $this -> getActualPeriod();
         $period = $period <= $this -> training_period ? $period : $this -> training_period;
@@ -47,11 +52,15 @@ class Group extends Model
         -> diffInYears(Carbon::now()) + 1;
     }
 
-    public function students() {
-        return $this -> hasManyThrough(Person::class, StudentsLink::class, 'group_id', 'id', 'id', 'person_id');
-    }
-
     public function getEnrollmentDateAttribute() {
         return Carbon::createFromFormat('d.m.Y', $this -> order -> first() -> date_at) -> format('d.m.Y');
+    }
+
+    public function getNameAttribute() {
+        return $this -> name();
+    }
+
+    public function scopeArchived(Builder $query, bool $archived) {
+        return $query -> where('archived', $archived);
     }
 }

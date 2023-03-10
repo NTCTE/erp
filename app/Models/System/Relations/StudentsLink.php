@@ -24,14 +24,16 @@ class StudentsLink extends Model
 
     public $actionType = 8;
     public $actionAdditionals = null;
+    public $last_group_id = null;
 
     public function group() {
         return $this -> belongsTo(Group::class);
     }
 
-    public function setActions(int $type = 8, string $additionals = null) {
+    public function setActions(int $type = 8, string $additionals = null, int $group_id = null) {
         $this -> actionType = $type;
         $this -> actionAdditionals = $additionals;
+        $this -> last_group_id = $group_id ?? $this -> group_id;
 
         return $this;
     }

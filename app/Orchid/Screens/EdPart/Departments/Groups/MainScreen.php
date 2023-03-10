@@ -10,6 +10,7 @@ use App\Models\System\Relations\AdministativeDocumentsLinks;
 use App\Models\System\Relations\StudentsLink;
 use App\Models\System\Repository\AdministrativeDocument;
 use App\Notifications\EdPart\Departments\Groups\NotAddedStudentsNotification;
+use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\MoveStudentModal;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\OrderListener;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
@@ -94,12 +95,18 @@ class MainScreen extends Screen
         return $ret;
     }
 
-    public function asyncEditAdditionalInfo($async): array {
+    public function asyncEditAdditionalInfo(): array {
         return [
             'additionals' => request() -> input('additionals'),
             'order' => request() -> input('order'),
             'budget' => request() -> input('budget'),
             'student' => request() -> input('student'),
+        ];
+    }
+
+    public function asyncMoveStudent(int $id): array {
+        return [
+            'student.id' => $id,
         ];
     }
 
@@ -124,6 +131,12 @@ class MainScreen extends Screen
                 -> applyButton('Сохранить')
                 -> staticBackdrop()
                 -> async('asyncEditAdditionalInfo'),
+            Layout::modal('moveStudentModal', MoveStudentModal::class)
+                -> title('Перевод студента в другую группу')
+                -> withoutCloseButton()
+                -> applyButton('Перевести')
+                -> staticBackdrop()
+                -> async('asyncMoveStudent'),
             InformationRows::class,
             OrderListener::class,
             Layout::rows([
@@ -154,7 +167,7 @@ class MainScreen extends Screen
             ]);
         } else {
             AdministativeDocumentsLinks::create([
-                'administrative_document_id' => AdministrativeDocument::create(request() -> input('order')) -> id,
+                'administrative_document_id' => AdministrativeDocument::create(array_merge(request() -> input('order'), ['type' => 1])) -> id,
                 'signed_id' => $group -> id,
                 'signed_type' => Group::class,
             ]);
@@ -206,5 +219,22 @@ class MainScreen extends Screen
             -> update($student);
 
         Toast::info('Дополнительная информация успешно обновлена');
+    }
+
+    public function moveStudent() {
+        $student = request() -> input('student');
+        AdministativeDocumentsLinks::create([
+            'administrative_document_id' => $student['move_order_id'],
+            'signed_id' => request() -> input('student.id'),
+            'signed_type' => StudentsLink::class,
+        ]);
+        $link = StudentsLink::find($student['id']);
+        $link
+            -> setActions(2, $student['additionals'], $link['group_id'])
+            -> fill([
+                'group_id' => $student['group_id'],
+                'enrollment_order_id' => !empty($link['enrollment_order_id']) ? $link['enrollment_order_id'] : $student['move_order_id'],
+            ])
+            -> save();
     }
 }
