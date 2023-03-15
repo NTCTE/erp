@@ -5,7 +5,6 @@ namespace App\Orchid\Screens\EdPart\Departments\Groups;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\EdPart\Departments\Department;
 use App\Models\Org\EdPart\Departments\Group;
-use App\Models\Org\EdPart\Departments\StudentsAction;
 use App\Models\System\Relations\AdministativeDocumentsLinks;
 use App\Models\System\Relations\StudentsLink;
 use App\Models\System\Repository\AdministrativeDocument;
@@ -16,6 +15,7 @@ use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\AddStudentsModal;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\EditAdditionalInfoModal;
+use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\MoveToAcademicLeaveModal;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\ModalToggle;
@@ -137,6 +137,12 @@ class MainScreen extends Screen
                 -> applyButton('Перевести')
                 -> staticBackdrop()
                 -> async('asyncMoveStudent'),
+            Layout::modal('moveStudentToAcademicLeaveModal', MoveToAcademicLeaveModal::class)
+                -> title('Перевод студента в академический отпуск')
+                -> withoutCloseButton()
+                -> applyButton('Перевести')
+                -> staticBackdrop()
+                -> async('asyncMoveStudent'),
             InformationRows::class,
             OrderListener::class,
             Layout::rows([
@@ -236,5 +242,26 @@ class MainScreen extends Screen
                 'enrollment_order_id' => !empty($link['enrollment_order_id']) ? $link['enrollment_order_id'] : $student['move_order_id'],
             ])
             -> save();
+    }
+
+    public function moveStudentToAcademicLeave() {
+        $student = request() -> input('student');
+        AdministativeDocumentsLinks::create([
+            'administrative_document_id' => $student['order_id'],
+            'signed_id' => request() -> input('student.id'),
+            'signed_type' => StudentsLink::class,
+        ]);
+        $link = StudentsLink::find($student['id']);
+        $link -> setActions(6, $student['additionals'])
+            -> fill([
+                'academic_leave' => [
+                    'order_id' => $student['order_id'],
+                    'expires' => $student['expires'],
+                    'reason' => $student['reason'],
+                ],
+            ])
+            -> save();
+
+        Toast::info('Студент успешно переведен в академический отпуск');
     }
 }

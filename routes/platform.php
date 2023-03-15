@@ -23,8 +23,8 @@ use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
-use App\Orchid\Screens\EdPart\Departments\Groups\GroupScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
+use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -200,17 +200,29 @@ Route::screen('/org/departments', MainScreen::class)
     });
 
 // System > Org > Departments > Entity
-Route::screen('/org/departments/entity/{id?}', DepartmentScreen::class)
+Route::screen('/org/departments/entity/{department?}', DepartmentScreen::class)
     -> name('org.departments.entity')
     -> breadcrumbs(function(Trail $trail) {
         return $trail -> parent('org.departments')
-            -> push('Отделение');
+            -> push('Отделение', route('org.departments.entity', request() -> route() -> parameter('department')));
     });
 
 // System > Org > Departments > Groups > Entity
 Route::screen('/org/departments/{department}/group/{group?}', GroupsMainScreen::class)
     -> name('org.departments.group')
     -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('org.departments')
-            -> push('Группа');
+        return $trail -> parent('org.departments.entity')
+            -> push('Группа', route('org.departments.group', [
+                'department' => request() -> route('department'),
+                'group' => request() -> route('group')
+            ]));
+    });
+
+// System > Org > Departments > Groups > Entity > Student > Actions
+Route::screen('/org/departments/{department}/group/{group}/student/{student}/actions', ActionsScreen::class)
+    -> name('org.departments.group.student.actions')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('org.departments.group')
+            -> push('Студент')
+            -> push('Действия');
     });

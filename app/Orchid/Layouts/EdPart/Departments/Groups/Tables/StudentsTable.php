@@ -75,14 +75,14 @@ class StudentsTable extends Table
                                 -> modal('editAdditionalInfoModal')
                                 -> method('editAdditionalInfo')
                                 -> asyncParameters([
-                                    'student' => $person -> student,
+                                    'student' => $person -> student -> id,
                                 ]),
                             ModalToggle::make('Перевести в другую группу')
                                 -> icon('control-forward')
                                 -> modal('moveStudentModal')
                                 -> method('moveStudent')
                                 -> asyncParameters([
-                                    'student' => $person -> student -> id,
+                                    'id' => $person -> student -> id,
                                 ])
                                 -> confirm('Перед тем, как переводить студента в другую группу, нужно убедиться, что в системе имеется соответсвтующий Приказ. Если его нет, то необходимо сперва добавить Приказ о зачислении в систему.'),
                             ModalToggle::make('Перевести в академический отпуск')
@@ -90,12 +90,16 @@ class StudentsTable extends Table
                                 -> modal('moveStudentToAcademicLeaveModal')
                                 -> method('moveStudentToAcademicLeave')
                                 -> asyncParameters([
-                                    'student' => $person -> student -> id,
+                                    'id' => $person -> student -> id,
                                 ])
                                 -> canSee(is_null($person -> student -> academic_leave)),
-                            ModalToggle::make('Просмотреть историю движения')
+                            Link::make('Просмотреть историю движения')
                                 -> icon('info')
-                                -> modal('studentMovementHistoryModal'),
+                                -> route('org.departments.group.student.actions', [
+                                    'department' => request() -> route() -> parameter('department'),
+                                    'group' => request() -> route() -> parameter('group'),
+                                    'student' => $person -> student,
+                                ]),
                         ]);
                 }),
         ];

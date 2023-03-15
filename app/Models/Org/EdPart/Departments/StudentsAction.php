@@ -3,12 +3,13 @@
 namespace App\Models\Org\EdPart\Departments;
 
 use App\Models\System\Relations\StudentsLink;
+use App\Traits\System\Dates;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
 class StudentsAction extends Model
 {
-    use AsSource;
+    use AsSource, Dates;
 
     protected $fillable = [
         'persons_groups_link_id',
@@ -35,5 +36,13 @@ class StudentsAction extends Model
 
     public function student() {
         return $this -> belongsTo(StudentsLink::class);
+    }
+
+    public function getTypeAttribute($value) {
+        return self::$types[$value];
+    }
+
+    public function getAdditionalsAttribute($value) {
+        return !empty($value) ? $value : 'Нет дополнительной информации';
     }
 }
