@@ -25,6 +25,10 @@ return new class extends Migration
             $table -> unsignedTinyInteger('type');
             $table -> text('additionals')
                 -> nullable();
+            $table -> foreignId('administrative_document_id')
+                -> nullable()
+                -> references('id')
+                -> on('administrative_documents');
             $table -> timestamps();
         });
     }

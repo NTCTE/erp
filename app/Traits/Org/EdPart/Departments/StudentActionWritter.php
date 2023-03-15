@@ -11,7 +11,8 @@ trait StudentActionWritter {
         int $group_id,
         string $vanilla_name,
         int $type = 8,
-        string $additionals = null
+        string $additionals = null,
+        int $administrative_document_id = null
     ) {
         StudentsAction::create([
             'persons_groups_link_id' => $persons_groups_link_id,
@@ -19,6 +20,7 @@ trait StudentActionWritter {
             'vanilla_name' => $vanilla_name,
             'type' => $type,
             'additionals' => $additionals,
+            'administrative_document_id' => $administrative_document_id,
         ]);
     }
 
@@ -29,7 +31,8 @@ trait StudentActionWritter {
                 $model -> last_group_id,
                 Group::find($model -> last_group_id) -> name(),
                 $model -> actionType,
-                $model -> actionAdditionals
+                $model -> actionAdditionals,
+                $model -> administrative_document_id
             );
         });
         static::updated(function ($model) {
@@ -38,7 +41,8 @@ trait StudentActionWritter {
                 $model -> last_group_id,
                 Group::find($model -> last_group_id) -> name(),
                 $model -> actionType,
-                $model -> actionAdditionals
+                $model -> actionAdditionals,
+                $model -> administrative_document_id
             );
         });
     }

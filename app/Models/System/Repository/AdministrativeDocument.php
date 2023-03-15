@@ -28,6 +28,10 @@ class AdministrativeDocument extends Model
         return self::$types[$this -> type] . " № {$this -> number} от {$this -> date_at} г. «{$this -> fullname}»";
     }
 
+    public function getShortAttribute() {
+        return self::$types[$this -> type] . " № {$this -> number} от {$this -> date_at} г.";
+    }
+
     public function getDateAtAttribute($value) {
         return Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y');
     }

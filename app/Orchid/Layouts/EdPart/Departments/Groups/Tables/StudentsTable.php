@@ -58,6 +58,13 @@ class StudentsTable extends Table
                         'Групповой';
                 })
                 -> width('20%'),
+            TD::make('student', 'Академический отпуск')
+                -> render(function (Person $student) {
+                    $order = AdministrativeDocument::find($student -> student -> academic_leave['order_id']);
+                    return "{$student -> student -> academic_leave['reason']}<br>{$order -> short}";
+                })
+                -> width('30%')
+                -> canSee($this -> target == 'academic_leave'),
             TD::make('student', 'Дополнительные сведения')
                 -> render(function(Person $student) {
                     return !empty($student -> student -> additionals) ?

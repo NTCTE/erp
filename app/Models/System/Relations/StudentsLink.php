@@ -33,6 +33,7 @@ class StudentsLink extends Model
     public $actionType = 8;
     public $actionAdditionals = null;
     public $last_group_id = null;
+    public $administrative_document_id = null;
 
     public function group() {
         return $this -> belongsTo(Group::class);
@@ -46,10 +47,11 @@ class StudentsLink extends Model
         return $this -> hasMany(StudentsAction::class, 'persons_groups_link_id');
     }
 
-    public function setActions(int $type = 8, string $additionals = null, int $group_id = null) {
+    public function setActions(int $type = 8, string $additionals = null, int $group_id = null, int $administrative_document_id = null) {
         $this -> actionType = $type;
         $this -> actionAdditionals = $additionals;
         $this -> last_group_id = $group_id ?? $this -> group_id;
+        $this -> administrative_document_id = $administrative_document_id;
 
         return $this;
     }
