@@ -54,8 +54,8 @@ class StudentsTable extends Table
             TD::make('student', 'Приказ о зачислении')
                 -> render(function (Person $student) {
                     return !empty($student -> student -> enrollment_order_id) ?
-                        AdministrativeDocument::find($student -> student -> enrollment_order_id) -> formatted :
-                        'Групповой';
+                        AdministrativeDocument::find($student -> student -> enrollment_order_id) -> short :
+                        'Не указан';
                 })
                 -> width('20%'),
             TD::make('student', 'Академический отпуск')
@@ -82,30 +82,44 @@ class StudentsTable extends Table
                                 -> modal('editAdditionalInfoModal')
                                 -> method('editAdditionalInfo')
                                 -> asyncParameters([
-                                    'student' => $person -> student -> id,
+                                    'id' => $person -> student -> id,
+                                    'additionals' => $person -> student -> additionals,
+                                    'enrollment_order_id' => $person -> student -> enrollment_order_id,
+                                    'budget' => $person -> student -> budget,
                                 ]),
-                            ModalToggle::make('Перевести в другую группу')
+                            Link::make('Перевести в другую группу')
                                 -> icon('control-forward')
-                                -> modal('moveStudentModal')
-                                -> method('moveStudent')
-                                -> asyncParameters([
-                                    'id' => $person -> student -> id,
-                                ])
-                                -> confirm('Перед тем, как переводить студента в другую группу, нужно убедиться, что в системе имеется соответсвтующий Приказ. Если его нет, то необходимо сперва добавить Приказ о зачислении в систему.'),
-                            ModalToggle::make('Перевести в академический отпуск')
-                                -> icon('control-pause')
-                                -> modal('moveStudentToAcademicLeaveModal')
-                                -> method('moveStudentToAcademicLeave')
-                                -> asyncParameters([
-                                    'id' => $person -> student -> id,
-                                ])
-                                -> canSee(is_null($person -> student -> academic_leave)),
-                            Link::make('Просмотреть историю движения')
-                                -> icon('info')
-                                -> route('org.departments.group.student.actions', [
+                                -> route('org.departments.group.student.jobs', [
                                     'department' => request() -> route() -> parameter('department'),
                                     'group' => request() -> route() -> parameter('group'),
                                     'student' => $person -> student,
+                                    'jobs' => 'move',
+                                ]),
+                            Link::make('Перевести в академический отпуск')
+                                -> icon('control-pause')
+                                -> route('org.departments.group.student.jobs', [
+                                    'department' => request() -> route() -> parameter('department'),
+                                    'group' => request() -> route() -> parameter('group'),
+                                    'student' => $person -> student,
+                                    'jobs' => 'leave',
+                                ])
+                                -> canSee(is_null($person -> student -> academic_leave)),
+                            Link::make('Вернуть из академического отпуска')
+                                -> icon('control-play')
+                                -> route('org.departments.group.student.jobs', [
+                                    'department' => request() -> route() -> parameter('department'),
+                                    'group' => request() -> route() -> parameter('group'),
+                                    'student' => $person -> student,
+                                    'jobs' => 'return',
+                                ])
+                                -> canSee(!is_null($person -> student -> academic_leave)),
+                            Link::make('Просмотреть историю движения')
+                                -> icon('info')
+                                -> route('org.departments.group.student.jobs', [
+                                    'department' => request() -> route() -> parameter('department'),
+                                    'group' => request() -> route() -> parameter('group'),
+                                    'student' => $person -> student,
+                                    'jobs' => 'history',
                                 ]),
                         ]);
                 }),

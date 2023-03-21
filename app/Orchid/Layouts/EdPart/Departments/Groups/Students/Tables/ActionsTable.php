@@ -16,7 +16,7 @@ class ActionsTable extends Table
      *
      * @var string
      */
-    protected $target = 'actions';
+    protected $target = 'student.actions';
 
     /**
      * Get the table cells to be displayed.

@@ -16,6 +16,7 @@ use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\AddStudentsModal;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\EditAdditionalInfoModal;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\MoveToAcademicLeaveModal;
+use App\Traits\System\Listeners\Order;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\ModalToggle;
@@ -27,6 +28,8 @@ use Orchid\Support\Facades\Toast;
 
 class MainScreen extends Screen
 {
+    use Order;
+    
     public $group;
     public $department;
     public $students;
@@ -44,13 +47,13 @@ class MainScreen extends Screen
             'group' => $group,
             'students' => !is_null($group) ? $group
                 -> students()
-                -> where('academic_leave', null)
+                -> where('is_academic_leave', false)
                 -> paginate() : null,
             'academic_leave' => !is_null($group) ? $group
                 -> students()
-                -> where('academic_leave', '!=', null)
+                -> where('is_academic_leave', true)
                 -> paginate() : null,
-            'order' => !is_null($group) ? $group -> order() -> first() : null,
+            'orders' => !is_null($group) ? $group -> orders() -> paginate() : null,
         ];
     }
 
@@ -84,29 +87,14 @@ class MainScreen extends Screen
         ];
     }
 
-    public function asyncUpdateAppendGroup($async): array {
-        $ret = [
-            'async.existing_order_cb' => $async['existing_order_cb'],
-        ];
-
-        if (!empty($async['existing_order']))
-            $ret['async.existing_order'] = $async['existing_order'];
-
-        return $ret;
-    }
-
     public function asyncEditAdditionalInfo(): array {
         return [
-            'additionals' => request() -> input('additionals'),
-            'order' => request() -> input('order'),
-            'budget' => request() -> input('budget'),
-            'student' => request() -> input('student'),
-        ];
-    }
-
-    public function asyncMoveStudent(int $id): array {
-        return [
-            'student.id' => $id,
+            'student' => [
+                'additionals' => request() -> input('additionals'),
+                'enrollment_order_id' => request() -> input('enrollment_order_id'),
+                'budget' => request() -> input('budget'),
+                'id' => request() -> input('id'),
+            ],
         ];
     }
 
@@ -131,12 +119,6 @@ class MainScreen extends Screen
                 -> applyButton('Сохранить')
                 -> staticBackdrop()
                 -> async('asyncEditAdditionalInfo'),
-            Layout::modal('moveStudentModal', MoveStudentModal::class)
-                -> title('Перевод студента в другую группу')
-                -> withoutCloseButton()
-                -> applyButton('Перевести')
-                -> staticBackdrop()
-                -> async('asyncMoveStudent'),
             Layout::modal('moveStudentToAcademicLeaveModal', MoveToAcademicLeaveModal::class)
                 -> title('Перевод студента в академический отпуск')
                 -> withoutCloseButton()
@@ -165,18 +147,22 @@ class MainScreen extends Screen
     public function save() {
         $group = Group::create(request() -> input('group'));
 
-        if (request() -> input('async.existing_order_cb')) {
-            AdministativeDocumentsLinks::create([
-                'administrative_document_id' => request() -> input('order.existing_order_id'),
-                'signed_id' => $group -> id,
-                'signed_type' => Group::class,
-            ]);
-        } else {
-            AdministativeDocumentsLinks::create([
-                'administrative_document_id' => AdministrativeDocument::create(array_merge(request() -> input('order'), ['type' => 1])) -> id,
-                'signed_id' => $group -> id,
-                'signed_type' => Group::class,
-            ]);
+        foreach (request() -> orders as $order) {
+            if (request() -> input('async.existing_order_cb')) {
+                AdministativeDocumentsLinks::create([
+                    'administrative_document_id' => $order['id'],
+                    'signed_id' => $group -> id,
+                    'signed_type' => Group::class,
+                    'description' => $order['description'],
+                ]);
+            } else {
+                AdministativeDocumentsLinks::create([
+                    'administrative_document_id' => AdministrativeDocument::create(array_merge($order, ['type' => 1])) -> id,
+                    'signed_id' => $group -> id,
+                    'signed_type' => Group::class,
+                    'description' => $order['description'],
+                ]);
+            }
         }
 
         Toast::success('Группа успешно создана');
@@ -188,14 +174,15 @@ class MainScreen extends Screen
     }
 
     public function addStudents() {
-        if (!empty(request() -> input('newStudents'))) {
+        if (!empty(request() -> newStudents)) {
             $notAdded = [];
-            foreach (request() -> input('newStudents') as $key => $student) {
+            foreach (request() -> newStudents as $key => $student) {
                 if (!empty($student['lastname']) && !empty($student['firstname'])) {
                     (new StudentsLink)
                         -> fill([
                             'person_id' => Person::create($student) -> id,
                             'group_id' => request() -> route() -> parameter('group'),
+                            'enrollment_order_id' => $student['order'],
                         ])
                         -> setActions(1)
                         -> save();
@@ -212,9 +199,7 @@ class MainScreen extends Screen
                 Auth::user() -> notify(new NotAddedStudentsNotification($message));
                 Toast::info('Не все студенты были добавлены, так как не были указаны фамилия и имя. Дополнительную информацию вы можете узнать в уведомлениях.');
             } else Toast::success('Студенты успешно добавлены');
-        } else {
-            Toast::warning('Не было передано ни одного студента!');
-        }
+        } else Toast::warning('Не было передано ни одного студента!');
     }
 
     public function editAdditionalInfo() {
@@ -225,43 +210,5 @@ class MainScreen extends Screen
             -> update($student);
 
         Toast::info('Дополнительная информация успешно обновлена');
-    }
-
-    public function moveStudent() {
-        $student = request() -> input('student');
-        AdministativeDocumentsLinks::create([
-            'administrative_document_id' => $student['move_order_id'],
-            'signed_id' => request() -> input('student.id'),
-            'signed_type' => StudentsLink::class,
-        ]);
-        $link = StudentsLink::find($student['id']);
-        $link
-            -> setActions(2, $student['additionals'], $link['group_id'])
-            -> fill([
-                'group_id' => $student['group_id'],
-                'enrollment_order_id' => !empty($link['enrollment_order_id']) ? $link['enrollment_order_id'] : $student['move_order_id'],
-            ])
-            -> save();
-    }
-
-    public function moveStudentToAcademicLeave() {
-        $student = request() -> input('student');
-        AdministativeDocumentsLinks::create([
-            'administrative_document_id' => $student['order_id'],
-            'signed_id' => request() -> input('student.id'),
-            'signed_type' => StudentsLink::class,
-        ]);
-        $link = StudentsLink::find($student['id']);
-        $link -> setActions(6, $student['additionals'])
-            -> fill([
-                'academic_leave' => [
-                    'order_id' => $student['order_id'],
-                    'expires' => $student['expires'],
-                    'reason' => $student['reason'],
-                ],
-            ])
-            -> save();
-
-        Toast::info('Студент успешно переведен в академический отпуск');
     }
 }

@@ -28,12 +28,12 @@ class Group extends Model
         return $this -> morphToMany(AdministrativeDocument::class, 'signed', 'poly_administrative_documents', 'signed_id', 'administrative_document_id');
     }
 
-    public function order() {
-        return $this -> orders() -> orderBy('date_at', 'desc') -> limit(1);
-    }
-
     public function students() {
         return $this -> hasManyThrough(Person::class, StudentsLink::class, 'group_id', 'id', 'id', 'person_id');
+    }
+
+    public function academicLeaves() {
+        return $this -> hasManyThrough(AcademicLeave::class, StudentsLink::class, 'group_id', 'persons_groups_link_id', 'id', 'id');
     }
 
     public function name() {
@@ -53,7 +53,7 @@ class Group extends Model
     }
 
     public function getEnrollmentDateAttribute() {
-        return Carbon::createFromFormat('d.m.Y', $this -> order -> first() -> date_at) -> format('d.m.Y');
+        return Carbon::createFromFormat('d.m.Y', $this -> orders -> first() -> date_at) -> format('d.m.Y');
     }
 
     public function getNameAttribute() {

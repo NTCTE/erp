@@ -17,6 +17,7 @@ class AdministativeDocumentsLinks extends Model
         'administrative_document_id',
         'signed_id',
         'signed_type',
+        'description',
     ];
 
     public function document() {
@@ -25,5 +26,9 @@ class AdministativeDocumentsLinks extends Model
 
     public function groups() {
         return $this -> morphedByMany(Group::class, 'signed');
+    }
+
+    public function getDocNameAttribute() {
+        return $this -> document -> short;
     }
 }

@@ -13,14 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('poly_administrative_documents', function (Blueprint $table) {
+        Schema::create('academic_leaves', function (Blueprint $table) {
             $table -> id();
             $table -> foreignId('administrative_document_id')
                 -> references('id')
                 -> on('administrative_documents');
-            $table -> morphs('signed');
-            $table -> text('description')
-                -> nullable();
+            $table -> text('reason');
+            $table -> date('expired_at');
+            $table -> char('vanilla_group_name', 10);
+            $table -> foreignId('persons_groups_link_id')
+                -> references('id')
+                -> on('persons_groups_links');
+            $table -> boolean('is_active')
+                -> default(true);
             $table -> timestamps();
         });
     }
@@ -32,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('poly_administrative_documents');
+        Schema::dropIfExists('academic_leaves');
     }
 };

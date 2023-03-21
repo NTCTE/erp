@@ -25,8 +25,8 @@ return new class extends Migration
                 -> nullable()
                 -> references('id')
                 -> on('administrative_documents');
-            $table -> jsonb('academic_leave')
-                -> nullable();
+            $table -> boolean('is_academic_leave')
+                -> default(false);
             $table -> boolean('budget')
                 -> default(true);
             $table -> text('additionals')

@@ -17,6 +17,10 @@ class AdministrativeDocument extends Model
         'date_at',
     ];
 
+    protected $casts = [
+        'date_at' => 'date:d.m.Y',
+    ];
+
     static $types = [
         1 => 'Приказ',
         2 => 'Распоряжение',
@@ -33,7 +37,10 @@ class AdministrativeDocument extends Model
     }
 
     public function getDateAtAttribute($value) {
-        return Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y');
+        return Carbon::parse($value) -> format('d.m.Y');
     }
 
+    public function setDateAtAttribute($value) {
+        $this -> attributes['date_at'] = Carbon::createFromFormat('d.m.Y', $value);
+    }
 }

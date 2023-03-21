@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
+use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -218,11 +219,11 @@ Route::screen('/org/departments/{department}/group/{group?}', GroupsMainScreen::
             ]));
     });
 
-// System > Org > Departments > Groups > Entity > Student > Actions
-Route::screen('/org/departments/{department}/group/{group}/student/{student}/actions', ActionsScreen::class)
-    -> name('org.departments.group.student.actions')
+// System > Org > Departments > Groups > Entity > Student > Jobs
+Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}', JobScreen::class)
+    -> name('org.departments.group.student.jobs')
     -> breadcrumbs(function(Trail $trail) {
         return $trail -> parent('org.departments.group')
             -> push('Студент')
-            -> push('Действия');
+            -> push('Действия над студентом');
     });
