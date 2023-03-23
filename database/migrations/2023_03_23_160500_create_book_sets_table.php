@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('book_sets', function (Blueprint $table) {
             $table->id();
             $table->text('title');
-            $table->foreign('cover_id')
+            $table->foreignId('cover_id')
                 ->nullable()
                 ->references('id')
                 ->on('attachments');
