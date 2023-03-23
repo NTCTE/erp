@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\EdPart\Departments;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\EdPart\Departments\Department;
 use App\Orchid\Layouts\EdPart\Departments\GroupsTable;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
@@ -53,12 +54,12 @@ class DepartmentScreen extends Screen
             Button::make('Сохранить')
                 -> icon('save')
                 -> method('save')
-                -> canSee(!$this -> department -> exists),
+                -> canSee(!$this -> department -> exists && Auth::user() -> hasAccess('org.departments.write')),
             Button::make('Обновить')
                 -> icon('refresh')
                 -> method('save')
                 -> confirm('Вы уверены, что хотите обновить данные отделения?')
-                -> canSee($this -> department -> exists),
+                -> canSee($this -> department -> exists && Auth::user() -> hasAccess('org.departments.write')),
         ];
 
         if ($this -> department -> exists)
@@ -66,7 +67,8 @@ class DepartmentScreen extends Screen
                 -> icon('plus')
                 -> route('org.departments.group', [
                     'department' => $this -> department,
-                ]);
+                ])
+                -> canSee(Auth::user() -> hasAccess('org.departments.write'));
         
         return $ret;
     }
@@ -84,7 +86,8 @@ class DepartmentScreen extends Screen
                     -> title('Наименование отделения')
                     -> placeholder('Введите наименование отделения...')
                     -> required()
-                    -> horizontal(),
+                    -> horizontal()
+                    -> readonly(!Auth::user() -> hasAccess('org.departments.write')),
                 Relation::make('department.manager_id')
                     -> title('Заведующий отделением')
                     -> fromModel(Person::class, 'lastname', 'id')
@@ -92,7 +95,8 @@ class DepartmentScreen extends Screen
                     -> displayAppend('fullname')
                     -> placeholder('Выберите заведующего отделением...')
                     -> required()
-                    -> horizontal(),
+                    -> horizontal()
+                    -> disabled(!Auth::user() -> hasAccess('org.departments.write')),
             ]),
             new GroupsTable('Активные группы', 'groups', $this -> department -> exists),
             new GroupsTable('Архивные группы', 'archived_groups', $this -> department -> exists),

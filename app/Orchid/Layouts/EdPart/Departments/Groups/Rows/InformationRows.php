@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts\EdPart\Departments\Groups\Rows;
 use App\Models\Org\Contingent\Person;
 use App\Models\Org\EdPart\Departments\Department;
 use App\Models\System\Repository\Specialty;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
@@ -36,13 +37,15 @@ class InformationRows extends Rows
                 -> searchColumns('code', 'fullname')
                 -> displayAppend('formatted')
                 -> horizontal()
-                -> required(),
+                -> required()
+                -> disabled(!Auth::user() -> hasAccess('org.departments.write')),
             Input::make('group.shortname')
                 -> title('Каноничное название')
                 -> placeholder('Введите каноничное название группы')
                 -> help('Вам нужно ввести каноничное название группы, без номера курса. Вместо номера курса введите #. Например, "#ИС-3".')
                 -> horizontal()
-                -> required(),
+                -> required()
+                -> readonly(!Auth::user() -> hasAccess('org.departments.write')),
             Input::make('group.training_period')
                 -> title('Срок обучения')
                 -> placeholder('Введите срок обучения...')
@@ -52,7 +55,8 @@ class InformationRows extends Rows
                     'alias' => 'integer',
                     'numericInput' => true,
                 ])
-                -> required(),
+                -> required()
+                -> readonly(!Auth::user() -> hasAccess('org.departments.write')),
             Relation::make('group.department_id')
                 -> title('Отделение')
                 -> placeholder('Выберите отделение...')
@@ -62,7 +66,8 @@ class InformationRows extends Rows
                     -> parameter('department')
                 )
                 -> horizontal()
-                -> required(),
+                -> required()
+                -> disabled(!Auth::user() -> hasAccess('org.departments.write')),
             Relation::make('group.curator_id')
                 -> title('Куратор')
                 -> placeholder('Выберите куратора...')
@@ -70,9 +75,11 @@ class InformationRows extends Rows
                 -> searchColumns('lastname', 'firstname', 'patronymic')
                 -> displayAppend('fullname')
                 -> horizontal()
-                -> required(),
+                -> required()
+                -> disabled(!Auth::user() -> hasAccess('org.departments.write')),
             CheckBox::make('group.archived')
                 -> title('Архивная группа')
+                -> readonly(!Auth::user() -> hasAccess('org.departments.write'))
                 -> help('Если группа является архивной, то она не будет отображаться в списке активных групп. Все архивные группы можно посмотреть в разделе "Архив групп" на экране соответствующего отделения. Архивация группы происходит автоматически, когда группа заканчивает свой срок обучения.')
                 -> sendTrueOrFalse()
                 -> horizontal(),

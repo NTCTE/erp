@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts\EdPart\Departments\Groups\Tables;
 
 use App\Models\Org\Contingent\Person;
 use App\Models\System\Repository\AdministrativeDocument;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
@@ -121,7 +122,8 @@ class StudentsTable extends Table
                                     'jobs' => 'history',
                                 ]),
                         ]);
-                }),
+                })
+                -> canSee(Auth::user() -> hasAccess('org.departments.write')),
         ];
     }
 }
