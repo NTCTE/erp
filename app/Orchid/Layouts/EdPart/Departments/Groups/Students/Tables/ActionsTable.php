@@ -29,6 +29,10 @@ class ActionsTable extends Table
             TD::make('type', 'Тип действия'),
             TD::make('vanilla_name', 'Наименование группы при действии'),
             TD::make('additionals', 'Дополнительная информация'),
+            TD::make('document', 'Административный документ')
+                -> render(function (StudentsAction $action) {
+                    return $action -> document ? $action -> document -> short : 'Нет документа';
+                }),
             TD::make('created_at', 'Дата создания действия'),
             TD::make('updated_at', 'Дата изменения действия'),
         ];

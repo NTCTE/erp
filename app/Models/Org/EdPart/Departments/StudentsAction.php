@@ -3,6 +3,7 @@
 namespace App\Models\Org\EdPart\Departments;
 
 use App\Models\System\Relations\StudentsLink;
+use App\Models\System\Repository\AdministrativeDocument;
 use App\Traits\System\Dates;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -17,6 +18,7 @@ class StudentsAction extends Model
         'vanilla_name',
         'type',
         'additionals',
+        'administrative_document_id',
     ];
 
     static $types = [
@@ -36,6 +38,10 @@ class StudentsAction extends Model
 
     public function student() {
         return $this -> belongsTo(StudentsLink::class);
+    }
+
+    public function document() {
+        return $this -> belongsTo(AdministrativeDocument::class, 'administrative_document_id');
     }
 
     public function getTypeAttribute($value) {

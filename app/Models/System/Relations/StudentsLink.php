@@ -3,6 +3,7 @@
 namespace App\Models\System\Relations;
 
 use App\Models\Org\Contingent\Person;
+use App\Models\Org\EdPart\Departments\AcademicLeave;
 use App\Models\Org\EdPart\Departments\Group;
 use App\Models\Org\EdPart\Departments\StudentsAction;
 use App\Traits\Org\EdPart\Departments\StudentActionWritter;
@@ -20,7 +21,7 @@ class StudentsLink extends Model
         'person_id',
         'group_id',
         'enrollment_order_id',
-        'academic_leave',
+        'is_academic_leave',
         'budget',
         'additionals',
     ];
@@ -41,6 +42,14 @@ class StudentsLink extends Model
 
     public function person() {
         return $this -> belongsTo(Person::class);
+    }
+
+    public function academic_leaves() {
+        return $this -> hasMany(AcademicLeave::class, 'persons_groups_link_id');
+    }
+
+    public function getLastAcademicLeaveAttribute() {
+        return $this -> academic_leaves() -> orderBy('id', 'desc') -> first();
     }
 
     public function actions() {

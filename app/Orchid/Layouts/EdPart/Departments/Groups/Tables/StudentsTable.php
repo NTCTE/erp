@@ -60,8 +60,7 @@ class StudentsTable extends Table
                 -> width('20%'),
             TD::make('student', 'Академический отпуск')
                 -> render(function (Person $student) {
-                    $order = AdministrativeDocument::find($student -> student -> academic_leave['order_id']);
-                    return "{$student -> student -> academic_leave['reason']}<br>{$order -> short}";
+                    return "Причина: {$student -> student -> last_academic_leave -> reason}. {$student -> student -> last_academic_leave -> administrativeDocument -> short}";
                 })
                 -> width('30%')
                 -> canSee($this -> target == 'academic_leave'),
@@ -103,7 +102,7 @@ class StudentsTable extends Table
                                     'student' => $person -> student,
                                     'jobs' => 'leave',
                                 ])
-                                -> canSee(is_null($person -> student -> academic_leave)),
+                                -> canSee(!$person -> student -> is_academic_leave),
                             Link::make('Вернуть из академического отпуска')
                                 -> icon('control-play')
                                 -> route('org.departments.group.student.jobs', [
@@ -112,7 +111,7 @@ class StudentsTable extends Table
                                     'student' => $person -> student,
                                     'jobs' => 'return',
                                 ])
-                                -> canSee(!is_null($person -> student -> academic_leave)),
+                                -> canSee($person -> student -> is_academic_leave),
                             Link::make('Просмотреть историю движения')
                                 -> icon('info')
                                 -> route('org.departments.group.student.jobs', [

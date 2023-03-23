@@ -20,6 +20,8 @@ return new class extends Migration
                 -> on('administrative_documents');
             $table -> text('reason');
             $table -> date('expired_at');
+            $table -> date('returned_at')
+                -> nullable();
             $table -> char('vanilla_group_name', 10);
             $table -> foreignId('persons_groups_link_id')
                 -> references('id')
