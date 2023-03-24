@@ -10,7 +10,6 @@
         "ferdirn/laravel-id-cities": "dev-master",
         "guzzlehttp/guzzle": "^7.2",
         "hflabs/dadata": "^22.3",
-        "ichtrojan/laravel-location": "dev-dev",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",

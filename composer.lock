@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "290266faf20d1a98b777d085bbfb3ce9",
+    "content-hash": "5a50dbdaa3564b0503d6c001616ce674",
     "packages": [
         {
             "name": "brick/math",
@@ -1082,49 +1082,6 @@
                 "source": "https://github.com/hflabs/dadata-php/tree/22.3.0"
             },
             "time": "2022-03-23T10:50:26+00:00"
-        },
-        {
-            "name": "ichtrojan/laravel-location",
-            "version": "dev-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ichtrojan/laravel-location.git",
-                "reference": "c9c66748a615dcc30494caf1da43be27bfec6da9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ichtrojan/laravel-location/zipball/c9c66748a615dcc30494caf1da43be27bfec6da9",
-                "reference": "c9c66748a615dcc30494caf1da43be27bfec6da9",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Ichtrojan\\Location\\LocationServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Ichtrojan\\Location\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Okoh",
-                    "email": "michael@okoh.co.uk"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/ichtrojan/laravel-location/issues",
-                "source": "https://github.com/ichtrojan/laravel-location/tree/dev"
-            },
-            "time": "2019-05-11T22:13:28+00:00"
         },
         {
             "name": "laravel/framework",

@@ -25,9 +25,6 @@ class DatabaseSeeder extends Seeder
     {
         // Сидер всех языков
         $this->call([
-                CountriesTableSeeder::class,
-                StatesTableSeeder::class,
-                CitiesTableSeeder::class,
                 LanguageTableSeeder::class]
         );
 
