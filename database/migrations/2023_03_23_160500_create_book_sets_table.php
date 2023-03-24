@@ -16,14 +16,17 @@ return new class extends Migration
         Schema::create('book_sets', function (Blueprint $table) {
             $table->id();
             $table->text('title');
-            $table->foreignId('cover_id')
-                ->nullable()
+
+            $table->unsignedInteger('cover_id')->nullable();
+            $table->foreign('cover_id')
                 ->references('id')
                 ->on('attachments');
-            $table->foreignId('digitized_id')
-                ->nullable()
+
+            $table->unsignedInteger('digitized_id')->nullable();
+            $table->foreign('digitized_id')
                 ->references('id')
                 ->on('attachments');
+
             $table->unsignedInteger('cost');
             $table->foreignId('book_set_type_id')
                 ->references('id')
@@ -45,7 +48,8 @@ return new class extends Migration
                 ->nullable()
                 ->references('id')
                 ->on('subject_headlines');
-            $table->foreignId('language_id')
+            $table->unsignedInteger('language_id');
+            $table->foreign('language_id')
                 ->references('id')
                 ->on('languages');
             $table->foreignId('basic_doc_id')

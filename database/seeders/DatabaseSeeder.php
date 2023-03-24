@@ -23,6 +23,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Сидер всех языков
+        $this->call([
+                CountriesTableSeeder::class,
+                StatesTableSeeder::class,
+                CitiesTableSeeder::class,
+                LanguageTableSeeder::class]
+        );
+
         DB::table('repository') -> insert([
             [
                 'name' => 'Схемы документов',

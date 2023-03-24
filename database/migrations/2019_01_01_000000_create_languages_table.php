@@ -2,9 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateLanguagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +12,26 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('publication_informations', function (Blueprint $table) {
-            $table->id();
-            $table->char('fullname', 150);
+        Schema::create('languages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('code', 2);
+            $table->string('name', 50);
             $table->timestamps();
-        });
-    }
 
+            //Forign key contraints
+
+        });
+
+    }
     /**
      * Reverse the migrations.
      *
      * @return void
      */
+
     public function down()
     {
-        Schema::dropIfExists('publication_informations');
+        Schema::drop('languages');
     }
-};
+
+}
