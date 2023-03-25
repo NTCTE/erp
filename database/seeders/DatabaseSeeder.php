@@ -25,10 +25,11 @@ class DatabaseSeeder extends Seeder
     {
         // Сидер всех языков
         $this->call([
-                LanguageTableSeeder::class]
+                LanguageTableSeeder::class
+            ]
         );
 
-        DB::table('repository') -> insert([
+        DB::table('repository')->insert([
             [
                 'name' => 'Схемы документов',
                 'class_type' => DocumentSchemaScreen::class,
@@ -100,18 +101,18 @@ class DatabaseSeeder extends Seeder
         /**
          * Экспорт паспортных данных от Dadata.ru.
          * Экспорт данных идет с этой CSV-таблицы: https://raw.githubusercontent.com/hflabs/fms-unit/master/fms_unit.csv
-        */
+         */
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://raw.githubusercontent.com/hflabs/fms-unit/master/fms_unit.csv',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_URL => 'https://raw.githubusercontent.com/hflabs/fms-unit/master/fms_unit.csv',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
         ));
         $csv = [];
         $first_line = true;
@@ -133,9 +134,9 @@ class DatabaseSeeder extends Seeder
             }
         }
         curl_close($curl);
-        DB::table('passport_issuers') -> insert($csv);
+        DB::table('passport_issuers')->insert($csv);
 
-        DB::table('relation_types') -> insert([
+        DB::table('relation_types')->insert([
             [
                 'fullname' => 'Мать',
             ],
@@ -165,7 +166,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        DB::table('educational_doc_types') -> insert([
+        DB::table('educational_doc_types')->insert([
             [
                 'fullname' => 'Свидетельство о неполном среднем образовании',
             ],

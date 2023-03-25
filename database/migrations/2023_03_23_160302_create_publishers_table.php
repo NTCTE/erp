@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('publishers', function (Blueprint $table) {
             $table->id();
             $table->char('fullname', 200);
-            $table->unsignedInteger('city_id');
-            $table->foreign('city_id')
+            $table->foreignId('city_id')
                 ->references('id')
                 ->on('cities');
             $table->timestamps();

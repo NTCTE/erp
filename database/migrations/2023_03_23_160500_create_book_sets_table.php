@@ -48,8 +48,7 @@ return new class extends Migration
                     ->nullable()
                     ->references('id')
                     ->on('subject_headlines');
-                $table->unsignedInteger('language_id');
-                $table->foreign('language_id')
+                $table->foreignId('language_id')
                     ->references('id')
                     ->on('languages');
                 $table->foreignId('basic_doc_id')
