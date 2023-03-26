@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Orchid\Screens\System\Repository\DocumentSchemaScreen;
+use App\Orchid\Screens\System\Repository\LanguageScreen;
 use App\Orchid\Screens\System\Repository\PassportIssuerScreen;
 use App\Orchid\Screens\System\Repository\PositionScreen;
 use App\Orchid\Screens\System\Repository\RelationTypeScreen;
@@ -13,6 +14,10 @@ use App\Orchid\Screens\System\Repository\EducationalDocsIssuersScreen;
 use App\Orchid\Screens\System\Repository\EducationalDocsTypesScreen;
 use App\Orchid\Screens\System\Repository\SocialStatuses;
 use App\Orchid\Screens\System\Repository\SpecialtiesScreen;
+use App\Orchid\Screens\System\Repository\LanguagesScreen;
+use App\Orchid\Screens\System\Repository\CountriesScreen;
+use App\Orchid\Screens\System\Repository\RegionsScreen;
+use App\Orchid\Screens\System\Repository\CitiesScreen;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +28,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Сидер всех языков
+        // Сидер языков
         $this->call([
                 LanguageTableSeeder::class
             ]
@@ -95,6 +100,35 @@ class DatabaseSeeder extends Seeder
                 'class_type' => SpecialtiesScreen::class,
                 'path' => 'system.repository.specialties',
                 'uri' => 'students/specialties'
+
+            ],
+            [
+                'name' => 'Языки',
+                'class_type' => LanguagesScreen::class,
+                'path' => 'system.repository.languages',
+                'uri' => 'languages'
+
+            ],
+            [
+                'name' => 'Страны',
+                'class_type' => CountriesScreen::class,
+                'path' => 'system.repository.countries',
+                'uri' => 'countries'
+
+            ],
+            [
+                'name' => 'Регионы',
+                'class_type' => RegionsScreen::class,
+                'path' => 'system.repository.regions',
+                'uri' => 'regions'
+
+            ],
+            [
+                'name' => 'Города',
+                'class_type' => CitiesScreen::class,
+                'path' => 'system.repository.cities',
+                'uri' => 'cities'
+
             ]
         ]);
 

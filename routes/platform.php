@@ -38,9 +38,13 @@ use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
 |
 */
 
+// Landing
+Route::view('/landing', 'landing')->name('landing');
+
 // Main
 Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');
+
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
@@ -155,7 +159,14 @@ Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen
         return $trail -> parent('system.repository.documentSchemas')
             -> push('Добавить схему', route('system.repository.documentSchemas.add'));
     });
-    
+
+Route::screen('/system/repository/language/add', Repository\LanguagesScreen::class)
+    -> name('system.repository.language.add')
+    -> breadcrumbs(function (Trail $trail) {
+        return $trail -> parent('system.repository.languages')
+            -> push('Добавить язык', route('system.repository.languages.add'));
+    });
+
 // CONTINGENT
 // System > Org > Contingent
 Route::screen('/org/contingent', ContingentScreen::class)
