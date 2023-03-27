@@ -4,6 +4,8 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\AdministrativeDocument;
 use App\Orchid\Layouts\System\Repository\AdministrativeDocumentsTable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -105,13 +107,50 @@ class AdministrativeDocumentsScreen extends Screen
         ];
     }
 
-    public function create() {
-        $get = request() -> get('doc');
-        if ($doc = AdministrativeDocument::find($get['id']))
-            $doc -> update($get);
-        else
+    public function create(Request $request) {
+// Валидация даты создания документа
+        $validator = Validator::make($request->all(), [
+            'doc.date_at' => ['required', 'date_format:d.m.Y'],
+        ], [
+            'doc.date_at.required' => 'Заполните дату',
+            'doc.date_at.date_format' => 'Некорректный формат даты',
+        ]);
+
+        if ($validator->fails()) {
+            Toast::error($validator->errors()->first());
+            return;
+        }
+
+        $get = request()->get('doc');
+
+        // Валидация названия документа
+        $docName = isset($get['fullname']) ? trim($get['fullname']) : '';
+        if (empty($docName)) {
+            Toast::error('Необходимо указать наименование документа');
+            return;
+        }
+
+        // Валидация номера документа
+        $docName = isset($get['number']) ? trim($get['number']) : '';
+        if (empty($docName)) {
+            Toast::error('Необходимо указать номер документа');
+            return;
+        }
+
+        // Валидация описания документа
+        $docDesc = isset($get['type']) ? trim($get['type']) : '';
+        if (empty($docDesc)) {
+            Toast::error('Необходимо указать вид документа');
+            return;
+        }
+
+        // Если все поля прошли валидацию, сохраняем документ
+        if ($doc = AdministrativeDocument::find($get['id'])) {
+            $doc->update($get);
+        } else {
             AdministrativeDocument::create($get);
-        
+        }
+
         Toast::info('Данные сохранены');
     }
 }
