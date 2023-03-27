@@ -17,8 +17,10 @@ return new class extends Migration
             $table -> id();
             $table -> char('fullname', 200);
             $table -> foreignId('manager_id')
+                -> nullable()
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> nullOnDelete();
             $table -> timestamps();
         });
     }

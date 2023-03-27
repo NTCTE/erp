@@ -17,10 +17,12 @@ return new class extends Migration
             $table -> id();
             $table -> foreignId('social_status_id')
                 -> references('id')
-                -> on('social_statuses');
+                -> on('social_statuses')
+                -> cascadeOnDelete();
             $table -> foreignId('person_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> timestamps();
         });
     }

@@ -86,7 +86,7 @@ class AddRelationScreen extends Screen
     {
         return [
             Layout::rows(
-                $this -> schema -> orchidSchema($this -> document -> document),
+                $this -> schema -> orchidSchema(!empty($this -> document) ? $this -> document -> document : []),
             ),
         ];
     }

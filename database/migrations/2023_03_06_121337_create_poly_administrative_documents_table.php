@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('poly_administrative_documents', function (Blueprint $table) {
             $table -> id();
             $table -> foreignId('administrative_document_id')
+                -> nullable()
                 -> references('id')
-                -> on('administrative_documents');
+                -> on('administrative_documents')
+                -> cascadeOnDelete();
             $table -> morphs('signed');
             $table -> text('description')
                 -> nullable();

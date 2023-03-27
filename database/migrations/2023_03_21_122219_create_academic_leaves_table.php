@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('academic_leaves', function (Blueprint $table) {
             $table -> id();
             $table -> foreignId('administrative_document_id')
+                -> nullable()
                 -> references('id')
-                -> on('administrative_documents');
+                -> on('administrative_documents')
+                -> cascadeOnDelete();
             $table -> text('reason');
             $table -> date('expired_at');
             $table -> date('returned_at')
@@ -25,7 +27,8 @@ return new class extends Migration
             $table -> char('vanilla_group_name', 10);
             $table -> foreignId('persons_groups_link_id')
                 -> references('id')
-                -> on('persons_groups_links');
+                -> on('persons_groups_links')
+                -> cascadeOnDelete();
             $table -> boolean('is_active')
                 -> default(true);
             $table -> timestamps();

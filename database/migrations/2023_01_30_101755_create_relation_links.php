@@ -17,13 +17,16 @@ return new class extends Migration
             $table -> id();
             $table -> foreignId('person_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> foreignId('relative_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> foreignId('relation_type_id')
                 -> references('id')
-                -> on('relation_types');
+                -> on('relation_types')
+                -> cascadeOnDelete();
             $table -> timestamps();
         });
     }

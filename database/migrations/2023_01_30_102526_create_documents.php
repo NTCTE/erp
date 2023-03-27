@@ -17,10 +17,12 @@ return new class extends Migration
             $table -> id();
             $table -> foreignId('document_schema_id')
                 -> references('id')
-                -> on('document_schemas');
+                -> on('document_schemas')
+                -> cascadeOnDelete();
             $table -> foreignId('person_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> jsonb('document');
             $table -> timestamps();
         });
