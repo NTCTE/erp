@@ -4,10 +4,10 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\EducationalDocIssuer;
 use App\Orchid\Layouts\System\Repository\EducationalDocsIssuersTable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -81,21 +81,13 @@ class EducationalDocsIssuersScreen extends Screen
     }
 
     public function create(Request $request, EducationalDocIssuer $issuer)
-
     {
-        $validator = Validator::make($request->all(), [
-            'fullname' => ['required', 'string', 'max:255'],
+        $request->validate([
+            'fullname' => 'required',
+            'date' => 'date'
         ], [
-            'fullname.required' => 'Поле обязательно для заполнения',
-            'fullname.string' => 'Значение должно быть строкой',
-            'fullname.max' => 'Значение не должно превышать 255 символов',
+            'fullname.required' => 'Введите имя'
         ]);
-
-        if ($validator->fails()) {
-            Toast::error($validator->errors()->first());
-            return;
-        }
-
         $issuer->fill([
             'fullname' => $request->input('fullname'),
         ]);

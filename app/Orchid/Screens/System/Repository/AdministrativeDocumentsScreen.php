@@ -108,41 +108,21 @@ class AdministrativeDocumentsScreen extends Screen
     }
 
     public function create(Request $request) {
-// Валидация даты создания документа
-        $validator = Validator::make($request->all(), [
-            'doc.date_at' => ['required', 'date_format:d.m.Y'],
-        ], [
-            'doc.date_at.required' => 'Заполните дату',
-            'doc.date_at.date_format' => 'Некорректный формат даты',
-        ]);
-
-        if ($validator->fails()) {
-            Toast::error($validator->errors()->first());
-            return;
-        }
-
         $get = request()->get('doc');
 
-        // Валидация названия документа
-        $docName = isset($get['fullname']) ? trim($get['fullname']) : '';
-        if (empty($docName)) {
-            Toast::error('Необходимо указать наименование документа');
-            return;
-        }
-
-        // Валидация номера документа
-        $docName = isset($get['number']) ? trim($get['number']) : '';
-        if (empty($docName)) {
-            Toast::error('Необходимо указать номер документа');
-            return;
-        }
-
-        // Валидация описания документа
-        $docDesc = isset($get['type']) ? trim($get['type']) : '';
-        if (empty($docDesc)) {
-            Toast::error('Необходимо указать вид документа');
-            return;
-        }
+        $request->validate([
+            'doc.fullname' => 'required',
+            'doc.type' => 'required',
+            'doc.number' => 'required',
+            'doc.date_at' => 'required|date_format:d.m.Y',
+            ],
+            [
+                'doc.fullname.required' => 'Заполните поле ФИО',
+                'doc.type.required' => 'Заполните поле Тип',
+                'doc.number.required' => 'Заполните поле Номер',
+                'doc.date_at.required' => 'Заполните поле Дата в формате дд.мм.гггг',
+                'doc.date_at.date_format' => 'Дата должна быть в формате дд.мм.гггг',
+            ]);
 
         // Если все поля прошли валидацию, сохраняем документ
         if ($doc = AdministrativeDocument::find($get['id'])) {
