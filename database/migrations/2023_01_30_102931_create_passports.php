@@ -19,8 +19,10 @@ return new class extends Migration
                 -> nullable();
             $table -> char('number', 20);
             $table -> foreignId('passport_issuer_id')
+                -> nullable()
                 -> references('id')
-                -> on('passport_issuers');
+                -> on('passport_issuers')
+                -> nullOnDelete();
             $table -> date('date_of_issue');
             $table -> text('birthplace')
                 -> nullable();
@@ -28,7 +30,8 @@ return new class extends Migration
                 -> default(true);
             $table -> foreignId('person_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> timestamps();
         });
     }

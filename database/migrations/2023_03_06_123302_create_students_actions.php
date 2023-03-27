@@ -17,10 +17,13 @@ return new class extends Migration
             $table -> id();
             $table -> foreignId('persons_groups_link_id')
                 -> references('id')
-                -> on('persons_groups_links');
+                -> on('persons_groups_links')
+                -> cascadeOnDelete();
             $table -> foreignId('group_id')
+                -> nullable()
                 -> references('id')
-                -> on('groups');
+                -> on('groups')
+                -> nullOnDelete();
             $table -> char('vanilla_name', 10);
             $table -> unsignedTinyInteger('type');
             $table -> text('additionals')
@@ -28,7 +31,8 @@ return new class extends Migration
             $table -> foreignId('administrative_document_id')
                 -> nullable()
                 -> references('id')
-                -> on('administrative_documents');
+                -> on('administrative_documents')
+                -> nullOnDelete();
             $table -> timestamps();
         });
     }

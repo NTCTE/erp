@@ -19,14 +19,19 @@ return new class extends Migration
                 -> nullable();
             $table -> char('number', 25);
             $table -> foreignId('educational_doc_type_id')
+                -> nullable()
                 -> references('id')
-                -> on('educational_doc_types');
+                -> on('educational_doc_types')
+                -> nullOnDelete();
             $table -> foreignId('educational_doc_issuer_id')
+                -> nullable()
                 -> references('id')
-                -> on('educational_doc_issuers');
+                -> on('educational_doc_issuers')
+                -> nullOnDelete();
             $table -> foreignId('person_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> date('date_of_issue');
             $table -> float('average_mark', 8, 3)
                 -> nullable();

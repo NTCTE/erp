@@ -9,7 +9,6 @@ use App\Models\System\Relations\AdministativeDocumentsLinks;
 use App\Models\System\Relations\StudentsLink;
 use App\Models\System\Repository\AdministrativeDocument;
 use App\Notifications\EdPart\Departments\Groups\NotAddedStudentsNotification;
-use App\Orchid\Layouts\EdPart\Departments\Groups\Modals\MoveStudentModal;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\OrderListener;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Rows\InformationRows;
 use App\Orchid\Layouts\EdPart\Departments\Groups\Tables\StudentsTable;
@@ -78,12 +77,18 @@ class MainScreen extends Screen
             Button::make('Создать')
                 -> icon('save')
                 -> method('save')
-                -> canSee(is_null($this -> group)),
+                -> canSee(is_null($this -> group) && Auth::user() -> hasAccess('org.departments.write')),
             Button::make('Обновить')
                 -> icon('refresh')
                 -> method('refresh')
                 -> confirm('Вы уверены, что хотите обновить данные группы?')
-                -> canSee(!is_null($this -> group)),
+                -> canSee(!is_null($this -> group) && Auth::user() -> hasAccess('org.departments.write')),
+        ];
+    }
+
+    public function permission(): iterable {
+        return [
+            'org.departments.*',
         ];
     }
 
@@ -138,7 +143,7 @@ class MainScreen extends Screen
                     -> autoWidth(),
             ])
                 -> title('Активные студенты')
-                -> canSee(!empty(request() -> route() -> parameter('group'))),
+                -> canSee(!empty(request() -> route() -> parameter('group')) && Auth::user() -> hasAccess('org.departments.write')),
             new StudentsTable('students'),
             new StudentsTable('academic_leave', 'В академическом отпуске'),
         ];

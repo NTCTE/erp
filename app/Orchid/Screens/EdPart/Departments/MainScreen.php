@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\EdPart\Departments;
 
 use App\Models\Org\EdPart\Departments\Department;
 use App\Orchid\Layouts\EdPart\Departments\DepartmentsTable;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
@@ -51,7 +52,14 @@ class MainScreen extends Screen
         return [
             Link::make('Создать отделение')
                 -> icon('plus')
-                -> route('org.departments.entity'),
+                -> route('org.departments.entity')
+                -> canSee(Auth::user() -> hasAccess('org.departments.write')),
+        ];
+    }
+
+    public function permission(): iterable {
+        return [
+            'org.departments.*',
         ];
     }
 

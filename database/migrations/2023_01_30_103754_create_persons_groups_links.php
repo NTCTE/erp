@@ -17,14 +17,17 @@ return new class extends Migration
             $table -> id();
             $table -> foreignId('person_id')
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> cascadeOnDelete();
             $table -> foreignId('group_id')
                 -> references('id')
-                -> on('groups');
+                -> on('groups')
+                -> cascadeOnDelete();
             $table -> foreignId('enrollment_order_id')
                 -> nullable()
                 -> references('id')
-                -> on('administrative_documents');
+                -> on('administrative_documents')
+                -> nullOnDelete();
             $table -> boolean('is_academic_leave')
                 -> default(false);
             $table -> boolean('budget')

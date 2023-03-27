@@ -17,7 +17,8 @@ return new class extends Migration
             $table -> id();
             $table -> foreignId('address_id')
                 -> references('id')
-                -> on('addresses');
+                -> on('addresses')
+                -> cascadeOnDelete();
             $table -> morphs('addressable');
             $table -> char('description', 100)
                 -> nullable();

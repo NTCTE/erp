@@ -43,7 +43,6 @@ class GroupsTable extends Table
                         ]);
                 }),
             TD::make('enrollment_date', 'Дата зачисления'),
-            TD::make('training_period', 'Срок обучения (полных лет)'),
             TD::make('curator_id', 'Куратор')
                 -> render(function(Group $group) {
                     $person = Person::find($group -> curator_id);

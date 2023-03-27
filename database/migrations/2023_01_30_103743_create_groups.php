@@ -17,15 +17,20 @@ return new class extends Migration
             $table -> id();
             $table -> unsignedSmallInteger('training_period');
             $table -> foreignId('specialty_id')
+                -> nullable()
                 -> references('id')
-                -> on('specialties');
+                -> on('specialties')
+                -> nullOnDelete();
             $table -> char('shortname', 10);
             $table -> foreignId('department_id')
                 -> references('id')
-                -> on('departments');
+                -> on('departments')
+                -> cascadeOnDelete();
             $table -> foreignId('curator_id')
+                -> nullable()
                 -> references('id')
-                -> on('persons');
+                -> on('persons')
+                -> nullOnDelete();
             $table -> boolean('archived')
                 -> default(false);
             $table -> timestamps();

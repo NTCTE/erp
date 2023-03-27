@@ -86,19 +86,19 @@ class AddRelationScreen extends Screen
     {
         return [
             Layout::rows(
-                $this -> schema -> orchidSchema($this -> document -> document),
+                $this -> schema -> orchidSchema(!empty($this -> document) ? $this -> document -> document : []),
             ),
         ];
     }
 
-    public function saveDoc(Document $document)
+    public function saveDoc()
     {
-        $input = request() -> get('doc');
+        $input = request() -> doc;
         $input['person_id'] = request()
             -> route()
             -> parameter('id');
 
-        $document -> fill($input)
+        (new Document) -> fill($input)
             -> save();
 
         Toast::success('Документ добавлен');
