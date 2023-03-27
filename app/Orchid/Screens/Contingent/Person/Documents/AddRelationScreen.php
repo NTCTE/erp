@@ -91,14 +91,14 @@ class AddRelationScreen extends Screen
         ];
     }
 
-    public function saveDoc(Document $document)
+    public function saveDoc()
     {
-        $input = request() -> get('doc');
+        $input = request() -> doc;
         $input['person_id'] = request()
             -> route()
             -> parameter('id');
 
-        $document -> fill($input)
+        (new Document) -> fill($input)
             -> save();
 
         Toast::success('Документ добавлен');
