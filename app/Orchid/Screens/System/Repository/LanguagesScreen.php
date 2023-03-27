@@ -52,7 +52,7 @@ class LanguagesScreen extends Screen
         return [
             Link::make('Добавить новый язык')
                 -> icon('doc')
-                -> route('system.repository.language.add'),
+                -> route('system.repository.language.edit'),
         ];
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Layouts\System\Repository;
 
+use App\Models\System\Repository\Language;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -25,7 +27,11 @@ class LanguageTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('fullname', 'Название языка'),
+            TD::make('fullname', 'Название языка')
+                ->render(function (Language $language) {
+                        return Link::make($language->fullname)
+                            ->route('system.repository.language.edit', $language);
+                })
         ];
     }
 }
