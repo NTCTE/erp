@@ -26,7 +26,6 @@ use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
-use App\Orchid\Screens\System\Repository\NewLanguageScreen;
 use App\Orchid\Screens\System\Repository\EditLanguageScreen;
 
 /*
@@ -162,13 +161,14 @@ Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen
             -> push('Добавить схему', route('system.repository.documentSchemas.add'));
     });
 
-
+// System > Repository > Language > Add
 Route::screen('/system/repository/language/{language?}', EditLanguageScreen::class)
     -> name('system.repository.language.edit')
     -> breadcrumbs(function (Trail $trail) {
         return $trail -> parent('system.repository.languages')
             -> push('Редактировать язык', route('system.repository.language.edit'));
     });
+
 
 // CONTINGENT
 // System > Org > Contingent

@@ -10,6 +10,7 @@ use Orchid\Screen\Screen;
 class LanguagesScreen extends Screen
 {
     public string $languages;
+
     /**
      * Fetch data to be displayed on the screen.
      *
@@ -32,7 +33,6 @@ class LanguagesScreen extends Screen
         return 'Языки';
     }
 
-
     /**
      * @return string|null
      */
@@ -51,7 +51,7 @@ class LanguagesScreen extends Screen
     {
         return [
             Link::make('Добавить новый язык')
-                -> icon('doc')
+                -> icon('plus')
                 -> route('system.repository.language.edit'),
         ];
     }

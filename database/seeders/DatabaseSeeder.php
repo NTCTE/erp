@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Orchid\Screens\System\Repository\DocumentSchemaScreen;
-use App\Orchid\Screens\System\Repository\LanguageScreen;
 use App\Orchid\Screens\System\Repository\PassportIssuerScreen;
 use App\Orchid\Screens\System\Repository\PositionScreen;
 use App\Orchid\Screens\System\Repository\RelationTypeScreen;
@@ -15,9 +14,9 @@ use App\Orchid\Screens\System\Repository\EducationalDocsTypesScreen;
 use App\Orchid\Screens\System\Repository\SocialStatuses;
 use App\Orchid\Screens\System\Repository\SpecialtiesScreen;
 use App\Orchid\Screens\System\Repository\LanguagesScreen;
-use App\Orchid\Screens\System\Repository\CountriesScreen;
-use App\Orchid\Screens\System\Repository\RegionsScreen;
-use App\Orchid\Screens\System\Repository\CitiesScreen;
+use App\Orchid\Screens\System\Repository\Address\CityScreen;
+use App\Orchid\Screens\System\Repository\Address\CountryScreen;
+use App\Orchid\Screens\System\Repository\Address\RegionScreen;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -111,25 +110,25 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'name' => 'Страны',
-                'class_type' => CountriesScreen::class,
+                'class_type' => CountryScreen::class,
                 'path' => 'system.repository.countries',
-                'uri' => 'countries'
+                'uri' => 'address/countries'
 
             ],
             [
                 'name' => 'Регионы',
-                'class_type' => RegionsScreen::class,
+                'class_type' => RegionScreen::class,
                 'path' => 'system.repository.regions',
-                'uri' => 'regions'
+                'uri' => 'address/regions'
 
             ],
             [
                 'name' => 'Города',
-                'class_type' => CitiesScreen::class,
+                'class_type' => CityScreen::class,
                 'path' => 'system.repository.cities',
-                'uri' => 'cities'
+                'uri' => 'address/cities'
 
-            ]
+            ],
         ]);
 
         /**
@@ -169,6 +168,7 @@ class DatabaseSeeder extends Seeder
         }
         curl_close($curl);
         DB::table('passport_issuers')->insert($csv);
+
 
         DB::table('relation_types')->insert([
             [

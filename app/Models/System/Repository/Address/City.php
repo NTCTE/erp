@@ -4,6 +4,7 @@ namespace App\Models\System\Repository\Address;
 
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
+use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class City extends Model
 {
@@ -13,5 +14,10 @@ class City extends Model
         'fullname',
         'region_id'
     ];
+
+    public function region(): ?BelongsTo
+    {
+        return $this->belongsTo(Region::class);
+    }
 
 }

@@ -13,4 +13,7 @@ class Country extends Model
         'fullname'
     ];
 
+    public function getName() {
+        $this->fullname;
+    }
 }

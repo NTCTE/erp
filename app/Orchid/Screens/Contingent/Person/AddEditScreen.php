@@ -407,7 +407,7 @@ class AddEditScreen extends Screen
             -> format('Y-m-d');
         $passport -> fill($passportData)
             -> save();
-        
+
         Toast::success('Паспорт успешно добавлен');
     }
 

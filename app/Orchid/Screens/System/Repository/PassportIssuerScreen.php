@@ -66,7 +66,7 @@ class PassportIssuerScreen extends Screen
         return [
             Layout::modal('passportIssuerCreate', [
                 Layout::rows([
-                    Input::make('issuer.name')
+                    Input::make('issuer.fullname')
                         ->title('Название места выдачи паспорта')
                         ->placeholder('Название места выдачи паспорта')
                         ->required(),
