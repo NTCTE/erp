@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\Specialty;
 use App\Orchid\Layouts\System\Repository\SpecialtiesTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -95,7 +96,21 @@ class SpecialtiesScreen extends Screen
         ];
     }
 
-    public function create() {
+    public function create(Request $request) {
+
+        $request -> validate([
+            'specialty.fullname' => 'required|string|max:255',
+            'specialty.code' => 'required|string|max:20',
+            ],[
+            'specialty.fullname.required' => 'Введите полное название специальности',
+            'specialty.fullname.string' => 'Название специальности должно быть строкой',
+            'specialty.fullname.max' => 'Название специальности не должно превышать 255 символов',
+            'specialty.code.required' => 'Введите код специальности',
+            'specialty.code.string' => 'Код специальности должен быть строкой',
+            'specialty.code.max' => 'Код специальности не должен превышать 20 символов',
+            ]);
+
+
         $get = request() -> get('specialty');
         if ($specialty = Specialty::find($get['id']))
             $specialty -> update($get);
@@ -107,7 +122,7 @@ class SpecialtiesScreen extends Screen
 
     public function delete() {
         Specialty::find(request() -> get('id')) -> delete();
-        
+
         Toast::info('Специальность успешно удалена');
     }
 }

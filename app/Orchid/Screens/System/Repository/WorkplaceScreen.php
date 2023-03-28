@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\Workplace;
 use App\Orchid\Layouts\System\Repository\WorkplaceTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -91,7 +92,23 @@ class WorkplaceScreen extends Screen
         ];
     }
 
-    public function create(Workplace $wp) {
+    public function create(Request $request, Workplace $wp) {
+
+        $request -> validate([
+            'wp.fullname' => 'required|string|max:255',
+            'wp.tel' => 'nullable|string|max:20',
+            'wp.email' => 'nullable|email|max:255',
+            ],[
+            'wp.fullname.required' => 'Введите полное "рабочее место"',
+            'wp.fullname.string' => '"рабочее место" должно быть строкой',
+            'wp.fullname.max' => '"рабочее место" не должно превышать 255 символов',
+            'wp.tel.string' => 'Номер телефона должен быть строкой',
+            'wp.tel.max' => 'Номер телефона не должен превышать 20 символов',
+            'wp.email.email' => 'Неправильный формат email',
+            'wp.email.max' => 'Email не должен превышать 255 символов',
+            ]);
+
+
         $wp -> fill(request() -> input('wp'))
             -> save();
 

@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\RelationType;
 use App\Orchid\Layouts\System\Repository\RelationTypeTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -79,8 +80,17 @@ class RelationTypeScreen extends Screen
         ];
     }
 
-    public function create(RelationType $rel_type)
+    public function create(Request $request, RelationType $rel_type)
     {
+
+        $request->validate([
+            'fullname' => 'required|string|max:255'
+        ],[
+            'fullname.required' => 'Поле "Родственная связь" является обязательным для заполнения.',
+            'fullname.string' => 'Поле "Родственная связь"е должно быть строкой.',
+            'fullname.max' => 'Поле "Родственная связь" не должно превышать 255 символов.'
+        ]);
+
         $rel_type -> fill(request() -> all());
         $rel_type -> save();
 

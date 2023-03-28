@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\SocialStatus;
 use App\Orchid\Layouts\System\Repository\SocialStatusesTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -89,7 +90,16 @@ class SocialStatuses extends Screen
         ];
     }
 
-    public function create() {
+    public function create(Request $request) {
+
+        $request->validate([
+            'status.fullname' => 'required|string|max:255',
+        ], [
+            'status.fullname.required' => 'Поле "Название" является обязательным.',
+            'status.fullname.string' => 'Поле "Название" должно быть строкой.',
+            'status.fullname.max' => 'Длина поля "Название" не должна превышать 255 символов.',
+
+        ]);
         $get = request() -> get('status');
         if ($status = SocialStatus::find($get['id']))
             $status -> update($get);
