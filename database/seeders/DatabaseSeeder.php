@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Сидер языков
         $this->call([
                 LanguageTableSeeder::class,
                 CountryTableSeeder::class,
