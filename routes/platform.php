@@ -16,6 +16,7 @@ use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\System\Repository;
+use App\Orchid\Screens\System\Repository\EditLanguageScreen;
 use App\Orchid\Screens\System\Repository\NewDocumentSchemaScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
@@ -157,6 +158,14 @@ Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen
     -> breadcrumbs(function (Trail $trail) {
         return $trail -> parent('system.repository.documentSchemas')
             -> push('Добавить схему', route('system.repository.documentSchemas.add'));
+    });
+
+// System > Repository > Language > Add
+Route::screen('/system/repository/language/{language?}', EditLanguageScreen::class)
+    -> name('system.repository.language.edit')
+    -> breadcrumbs(function (Trail $trail) {
+        return $trail -> parent('system.repository.languages')
+            -> push('Редактировать язык', route('system.repository.language.edit'));
     });
 
 // CONTINGENT
