@@ -296,8 +296,9 @@ class AddEditScreen extends Screen
 
         // @ega22a: Не забудь сделать валидацию данных!
         $input = $request -> input('person');
-        $input['birthdate'] = Carbon::createFromFormat('d.m.Y', $input['birthdate'])
-            -> format('Y-m-d');
+        $input['birthdate'] = !empty($input['birthdate']) ? Carbon::createFromFormat('d.m.Y', $input['birthdate'])
+            -> format('Y-m-d') : 
+            null;
         $person -> fill($input)
             -> save();
 
