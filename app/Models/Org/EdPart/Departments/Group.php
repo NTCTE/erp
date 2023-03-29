@@ -39,7 +39,7 @@ class Group extends Model
     public function name() {
         $period = $this -> getActualPeriod();
         $period = $period <= $this -> training_period ? $period : $this -> training_period;
-        
+
         return Str::replace('#', $period, $this -> shortname);
     }
 

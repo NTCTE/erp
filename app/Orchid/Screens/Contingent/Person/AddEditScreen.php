@@ -290,11 +290,36 @@ class AddEditScreen extends Screen
     }
 
     public function saveNewPerson(Request $request, Person $person) {
-        // $request -> validate([
-        //     'person.lastname' => 'required',
-        // ]);
 
-        // @ega22a: Не забудь сделать валидацию данных!
+        $request -> validate([
+
+            'person.lastname' => 'required|string|max:255',
+            'person.firstname' => 'required|string|max:255',
+            'person.patronymic' => 'nullable|string|max:255',
+            'person.email' => 'nullable|email|max:255',
+            'person.corp_email' => 'nullable|email|max:255',
+            'person.tel' => 'nullable|string|max:20',
+            'person.snils' => 'nullable|string|max:11',
+            'person.inn' => 'nullable|string|max:12',
+            'person.hin' => 'nullable|string|max:16',
+            'person.sex' => 'nullable|in:1,2',
+            'person.birthdate' => 'nullable|date_format:d.m.Y',
+        ], [
+            'person.lastname.required' => 'Поле "Фамилия" является обязательным для заполнения',
+            'person.firstname.required' => 'Поле "Имя" является обязательным для заполнения',
+            'person.patronymic.max' => 'Поле "Отчество" не может быть длиннее 255 символов',
+            'person.email.email' => 'Поле "Электронная почта" должно быть действительным адресом электронной почты',
+            'person.email.max' => 'Поле "Электронная почта" не может быть длиннее 255 символов',
+            'person.corp_email.email' => 'Поле "Корпоративная электронная почта" должно быть действительным адресом электронной почты',
+            'person.corp_email.max' => 'Поле "Корпоративная электронная почта" не может быть длиннее 255 символов',
+            'person.tel.max' => 'Поле "Телефон" не может быть длиннее 20 символов',
+            'person.snils.max' => 'Поле "СНИЛС" не может быть длиннее 11 символов',
+            'person.inn.max' => 'Поле "ИНН" не может быть длиннее 12 символов',
+            'person.hin.max' => 'Поле "Номер медицинского полиса" не может быть длиннее 16 символов',
+            'person.sex.in' => 'Поле "Пол" должно быть заполнено значением 1 (мужчина) или 2 (женщина)',
+            'person.birthdate.date_format' => 'Поле "Дата рождения" должно быть в формате "дд.мм.гггг"',
+            ]);
+
         $input = $request -> input('person');
         $input['birthdate'] = Carbon::createFromFormat('d.m.Y', $input['birthdate'])
             -> format('Y-m-d');
@@ -305,7 +330,37 @@ class AddEditScreen extends Screen
         return redirect() -> route('org.contingent.person', $person);
     }
 
-    public function savePerson() {
+    public function savePerson(Request $request) {
+
+        $request -> validate([
+
+            'person.lastname' => 'required|string|max:255',
+            'person.firstname' => 'required|string|max:255',
+            'person.patronymic' => 'nullable|string|max:255',
+            'person.email' => 'nullable|email|max:255',
+            'person.corp_email' => 'nullable|email|max:255',
+            'person.tel' => 'nullable|string|max:20',
+            'person.snils' => 'nullable|string|max:11',
+            'person.inn' => 'nullable|string|max:12',
+            'person.hin' => 'nullable|string|max:16',
+            'person.sex' => 'nullable|in:1,2',
+            'person.birthdate' => 'nullable|date_format:d.m.Y',
+        ],[
+            'person.lastname.required' => 'Поле "Фамилия" является обязательным для заполнения',
+            'person.firstname.required' => 'Поле "Имя" является обязательным для заполнения',
+            'person.patronymic.max' => 'Поле "Отчество" не может быть длиннее 255 символов',
+            'person.email.email' => 'Поле "Электронная почта" должно быть действительным адресом электронной почты',
+            'person.email.max' => 'Поле "Электронная почта" не может быть длиннее 255 символов',
+            'person.corp_email.email' => 'Поле "Корпоративная электронная почта" должно быть действительным адресом электронной почты',
+            'person.corp_email.max' => 'Поле "Корпоративная электронная почта" не может быть длиннее 255 символов',
+            'person.tel.max' => 'Поле "Телефон" не может быть длиннее 20 символов',
+            'person.snils.max' => 'Поле "СНИЛС" не может быть длиннее 11 символов',
+            'person.inn.max' => 'Поле "ИНН" не может быть длиннее 12 символов',
+            'person.hin.max' => 'Поле "Номер медицинского полиса" не может быть длиннее 16 символов',
+            'person.sex.in' => 'Поле "Пол" должно быть заполнено значением 1 (мужчина) или 2 (женщина)',
+            'person.birthdate.date_format' => 'Поле "Дата рождения" должно быть в формате "дд.мм.гггг"',
+        ]);
+
         $person = request() -> input('person');
         $person['birthdate'] = !empty($person['birthdate']) && $person['birthdate'] != 'Не указана' ? Carbon::createFromFormat('d.m.Y', $person['birthdate'])
             -> format('Y-m-d') : null;
@@ -334,10 +389,18 @@ class AddEditScreen extends Screen
     public function modalRelAdd(Request $request) {
         $type = new RelationLink();
         $person = new Person();
-        // $request -> validate([
+        $request->validate([
+            'relative.lastname' => 'required|string|max:255',
+            'relative.firstname' => 'required|string|max:255',
+            'relative.patronymic' => 'nullable|string|max:255',
+            'rel_type' => 'required|exists:relation_types,id',
+        ], [
+            'relative.lastname.required' => 'Поле "Фамилия" является обязательным для заполнения',
+            'relative.firstname.required' => 'Поле "Имя" является обязательным для заполнения',
+            'rel_type.required' => 'Поле "Тип родственной связи" является обязательным для заполнения',
+            'rel_type.exists' => 'Выбранный тип родственной связи не существует',
+        ]);
 
-        // ]);
-        // @ega22a: Не забудь сделать валидацию данных!
 
         $input = $request -> input('relative');
         $person -> fill($input)
@@ -351,7 +414,17 @@ class AddEditScreen extends Screen
     }
 
     public function modalRelAddExisting(Request $request) {
+
         $type = new RelationLink();
+
+        dd($request -> input('rel_type'));
+        $request->validate([
+            'rel_type' => 'exists:relation_types,id',
+            'person_id' => 'required|exists:persons,id',
+        ], [
+            'rel_type.required' => 'Поле "Тип родственной связи" является обязательным для заполнения',
+            'person_id.required' => 'Не указан идентификатор родственника',
+        ]);
 
         $type -> fill($request -> input('relative'))
             -> save();
@@ -398,6 +471,21 @@ class AddEditScreen extends Screen
 
     public function modalPassportAdd(Request $request) {
         $passport = new Passport();
+
+        $request->validate([
+            'passport.series' => 'nullable|string|max:255',
+            'passport.number' => 'required|string|max:20',
+            'passport.passport_issuer_id' => 'required|string',
+            'passport.date_of_issue' => 'required|date_format:d.m.Y',
+            'passport.birthplace' => 'nullable|string',
+        ], [
+            'passport.number.required' => 'Поле "Номер" должно быть заполнено',
+            'passport.number.max' => 'Поле "Номер" не должно превышать 20 символов',
+            'passport.passport_issuer_id.required' => 'Поле "Кем выдан" должно быть заполнено',
+            'passport.date_of_issue.required' => 'Поле "дата выдачи паспорта" должно быть заполнено'
+
+        ]);
+
         $passportData = $request -> input('passport');
         $passport -> where('person_id', '=', $passportData['person_id'])
             -> update([
@@ -407,7 +495,7 @@ class AddEditScreen extends Screen
             -> format('Y-m-d');
         $passport -> fill($passportData)
             -> save();
-        
+
         Toast::success('Паспорт успешно добавлен');
     }
 

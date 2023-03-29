@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\Contingent\Person\Documents;
 use App\Models\Org\Contingent\Passport;
 use App\Models\Org\Contingent\Person;
 use App\Orchid\Layouts\Contingent\Person\Modals\AddPassportModal;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
@@ -82,8 +83,23 @@ class EditPassportScreen extends Screen
         ];
     }
 
-    public function savePassport()
+    public function savePassport(Request $request)
     {
+
+        $request->validate([
+            'passport.series' => 'nullable|string|max:255',
+            'passport.number' => 'required|string|max:20',
+            'passport.passport_issuer_id' => 'required|string',
+            'passport.date_of_issue' => 'required|date_format:d.m.Y',
+            'passport.birthplace' => 'nullable|string',
+        ], [
+            'passport.number.required' => 'Поле "Номер" должно быть заполнено',
+            'passport.number.max' => 'Поле "Номер" не должно превышать 20 символов',
+            'passport.passport_issuer_id.required' => 'Поле "Кем выдан" должно быть заполнено',
+            'passport.date_of_issue.required' => 'Поле "дата выдачи паспорта" должно быть заполнено'
+
+        ]);
+
         $passport = Passport::find(request()
             -> route()
             -> parameter('passport_id')
