@@ -27,6 +27,7 @@ use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
 use App\Orchid\Screens\System\Machines\CommandsScreen;
+use App\Orchid\Screens\System\Machines\ExecutedScreen;
 use App\Orchid\Screens\System\Machines\MachinesScreen;
 
 /*
@@ -246,4 +247,15 @@ Route::screen('/system/machines/commands', CommandsScreen::class)
         return $trail -> parent('platform.index')
             -> push('Машины')
             -> push('Команды', route('system.machines.commands'));
+    });
+
+// System > Machines > Executed Commands
+Route::screen('/system/machines/executed/{machine}', ExecutedScreen::class)
+    -> name('system.machines.executed')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины')
+            -> push('Выполненные команды', route('system.machines.executed', request()
+                -> route()
+                -> parameter('machine')));
     });

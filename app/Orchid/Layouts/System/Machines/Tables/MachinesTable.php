@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Layouts\System\Machines\Tables;
 
+use App\Models\System\Machines\Machine;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -27,7 +29,11 @@ class MachinesTable extends Table
         return [
             TD::make('ip_address', 'IP-адрес'),
             TD::make('created_at', 'Дата регистрации'),
-            TD::make('actions', 'Действия'),
+            TD::make('actions', 'Действия')
+                -> render(function (Machine $machine) {
+                    return Link::make('Выполненные команды')
+                        -> route('system.machines.executed', $machine);
+                }),
         ];
     }
 }

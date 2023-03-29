@@ -19,7 +19,7 @@ class Machine extends Model
 
     public function executed_commands() {
         return $this -> hasManyThrough(Command::class, ExecutedCommand::class, 'machine_id', 'id', 'id', 'command_id')
-            -> select('uuid', 'command');
+            -> select('uuid', 'command', 'executed_commands.created_at');
     }
 
     public function not_executed_commands() {
