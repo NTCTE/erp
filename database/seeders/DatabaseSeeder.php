@@ -29,7 +29,10 @@ class DatabaseSeeder extends Seeder
     {
         // Сидер языков
         $this->call([
-                LanguageTableSeeder::class
+                LanguageTableSeeder::class,
+                CountryTableSeeder::class,
+                RegionTableSeeder::class,
+                CityTableSeeder::class,
             ]
         );
 

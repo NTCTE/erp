@@ -15,9 +15,14 @@ class City extends Model
         'region_id'
     ];
 
-    public function region(): ?BelongsTo
+    public function region()
     {
         return $this->belongsTo(Region::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
 }

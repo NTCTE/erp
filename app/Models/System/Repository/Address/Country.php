@@ -16,4 +16,9 @@ class Country extends Model
     public function getName() {
         $this->fullname;
     }
+
+    public function regions()
+    {
+        return $this->hasMany(Region::class);
+    }
 }
