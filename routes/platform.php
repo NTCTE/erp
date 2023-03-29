@@ -26,7 +26,9 @@ use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
-use App\Orchid\Screens\System\Repository\EditLanguageScreen;
+use App\Orchid\Screens\System\Machines\CommandsScreen;
+use App\Orchid\Screens\System\Machines\ExecutedScreen;
+use App\Orchid\Screens\System\Machines\MachinesScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,13 +41,9 @@ use App\Orchid\Screens\System\Repository\EditLanguageScreen;
 |
 */
 
-// Landing
-Route::view('/landing', 'landing')->name('landing');
-
 // Main
 Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');
-
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
@@ -161,15 +159,6 @@ Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen
             -> push('Добавить схему', route('system.repository.documentSchemas.add'));
     });
 
-// System > Repository > Language > Add
-Route::screen('/system/repository/language/{language?}', EditLanguageScreen::class)
-    -> name('system.repository.language.edit')
-    -> breadcrumbs(function (Trail $trail) {
-        return $trail -> parent('system.repository.languages')
-            -> push('Редактировать язык', route('system.repository.language.edit'));
-    });
-
-
 // CONTINGENT
 // System > Org > Contingent
 Route::screen('/org/contingent', ContingentScreen::class)
@@ -240,4 +229,33 @@ Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}
         return $trail -> parent('org.departments.group')
             -> push('Студент')
             -> push('Действия над студентом');
+    });
+
+// MACHINES
+// System > Machines
+Route::screen('/system/machines', MachinesScreen::class)
+    -> name('system.machines')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины');
+    });
+
+// System > Machines > Commands
+Route::screen('/system/machines/commands', CommandsScreen::class)
+    -> name('system.machines.commands')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины')
+            -> push('Команды', route('system.machines.commands'));
+    });
+
+// System > Machines > Executed Commands
+Route::screen('/system/machines/executed/{machine}', ExecutedScreen::class)
+    -> name('system.machines.executed')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины')
+            -> push('Выполненные команды', route('system.machines.executed', request()
+                -> route()
+                -> parameter('machine')));
     });
