@@ -41,12 +41,6 @@ class CountriesTable extends Table
                                 ->modalTitle('Изменить данные о стране')
                                 ->method('create')
                                 ->asyncParameters($country),
-//                            Button::make('Удалить страну')
-//                                 -> icon('trash')
-//                                 -> confirm("Вы уверены, что хотите удалить страну {$country -> fullname}?")
-//                                 -> method('delete', [
-//                                     'id' => $country -> id,
-//                                 ]),
                         ]);
 
                 }),

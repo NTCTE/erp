@@ -105,7 +105,7 @@ class CityScreen extends Screen
 
     public function create() {
         $get = request() -> get('city');
-        if ($city = Country::find($get['id']))
+        if ($city = City::find($get['id']))
             $city -> update($get);
         else
             City::create($get);
