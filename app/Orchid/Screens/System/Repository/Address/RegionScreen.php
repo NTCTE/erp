@@ -76,8 +76,8 @@ class RegionScreen extends Screen
             Layout::modal('regionModal', [
                 Layout::rows([
                     Input::make('region.fullname')
-                        ->title('Название страны')
-                        ->placeholder('Введите название страны')
+                        ->title('Название региона')
+                        ->placeholder('Введите название региона')
                         ->required(),
                     Relation::make('region.country_id')
                         ->fromModel(Country::class, 'fullname')
