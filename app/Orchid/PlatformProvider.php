@@ -48,6 +48,10 @@ class PlatformProvider extends OrchidServiceProvider
                             -> icon('friends')
                             -> permission('org.contingent.*')
                             -> route('org.contingent'),
+                        Menu::make('Библиотека')
+                            ->icon('book-open')
+                            ->permission('org.library.*')
+                            ->route('org.library'),
                     ]),
             Menu::make('Система')
                 -> icon('config')
@@ -108,7 +112,10 @@ class PlatformProvider extends OrchidServiceProvider
                 -> addPermission('org.contingent.read', 'Контингент: чтение')
                 -> addPermission('org.contingent.write', 'Контингент: запись')
                 -> addPermission('org.departments.read', 'Отделения: чтение')
-                -> addPermission('org.departments.write', 'Отделения: запись'),
+                -> addPermission('org.departments.write', 'Отделения: запись')
+                -> addPermission('org.library.read', 'Библиотека: чтение')
+                -> addPermission('org.library.write', 'Библиотека: запись'),
+
         ];
     }
 }

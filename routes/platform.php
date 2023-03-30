@@ -12,6 +12,7 @@ use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
+use App\Orchid\Screens\Library\LibraryScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -241,6 +242,15 @@ Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}
         return $trail->parent('org.departments.group')
             ->push('Студент')
             ->push('Действия над студентом');
+    });
+
+// LIBRARY
+Route::screen('/org/library', LibraryScreen::class)
+    ->name('org.library')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Организация')
+            ->push('Библиотека', route('org.library'));
     });
 
 // MACHINES
