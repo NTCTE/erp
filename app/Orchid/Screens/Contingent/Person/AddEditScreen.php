@@ -417,13 +417,14 @@ class AddEditScreen extends Screen
 
         $type = new RelationLink();
 
-        dd($request -> input('rel_type'));
         $request->validate([
-            'rel_type' => 'exists:relation_types,id',
-            'person_id' => 'required|exists:persons,id',
+            'relative.relative_id' => 'required|exists:relation_types,id',
+            'relative.person_id' => 'required|exists:persons,id',
         ], [
-            'rel_type.required' => 'Поле "Тип родственной связи" является обязательным для заполнения',
-            'person_id.required' => 'Не указан идентификатор родственника',
+            'relative.relative_id.required' => 'Поле "Тип родственной связи" является обязательным для заполнения',
+            'relative.relative_id.exists' => 'Выбранный тип родственной связи не существует',
+            'relative.person_id.required' => 'Не указан идентификатор родственника',
+            'relative.person_id.exists' => 'Родственник не найден',
         ]);
 
         $type -> fill($request -> input('relative'))
@@ -473,12 +474,13 @@ class AddEditScreen extends Screen
         $passport = new Passport();
 
         $request->validate([
-            'passport.series' => 'nullable|string|max:255',
+            'passport.series' => 'nullable|string|max:10',
             'passport.number' => 'required|string|max:20',
             'passport.passport_issuer_id' => 'required|string',
             'passport.date_of_issue' => 'required|date_format:d.m.Y',
             'passport.birthplace' => 'nullable|string',
         ], [
+            'passport.series.max' => 'Максимум 10 символов',
             'passport.number.required' => 'Поле "Номер" должно быть заполнено',
             'passport.number.max' => 'Поле "Номер" не должно превышать 20 символов',
             'passport.passport_issuer_id.required' => 'Поле "Кем выдан" должно быть заполнено',
@@ -526,7 +528,29 @@ class AddEditScreen extends Screen
         ]);
     }
 
-    public function modalEducationAdd() {
+    public function modalEducationAdd(Request $request) {
+
+        $request->validate([
+            'edDoc.series' => 'required|string|max:10',
+            'edDoc.number' => 'required|string|max:25',
+            'edDoc.date_of_issue' => 'required|date_format:d.m.Y',
+            'edDoc.educational_doc_issuer_id' => 'required|exists:educational_doc_issuers,id',
+            'edDoc.educational_doc_type_id' => 'required|exists:educational_doc_types,id',
+            'edDoc.average_mark' => 'required|numeric|min:0|max:5'
+
+        ], [
+            'edDoc.series.required' => 'Поле "Серия документа" обязательно для заполнения',
+            'edDoc.series.max' => 'Поле "Серия документа" не должно превышать 10 символов',
+            'edDoc.number.required' => 'Поле "Номер документа" обязательно для заполнения',
+            'edDoc.number.max' => 'Поле "Номер документа" не должно превышать 25 символов',
+            'edDoc.date_of_issue.required' => 'Поле "Дата выдачи" обязательно для заполнения',
+            'edDoc.date_of_issue.date_format' => 'Неверный формат даты. Ожидается формат "дд.мм.гггг"',
+            'edDoc.educational_doc_issuer_id.required' => 'Поле "Кем выдан" обязательно для заполнения',
+            'edDoc.educational_doc_type_id.required' => 'Поле "Тип документа" обязательно для заполнения',
+            'edDoc.average_mark.required' => 'После "Средний балл" обязательно для заполнения',
+            'edDoc.average_mark.max' => 'Средний балл не может быть больше 5'
+        ]);
+
         $edDoc = new EducationalDocument();
         $edDocData = request() -> input('edDoc');
         $edDocData['date_of_issue'] = Carbon::createFromFormat('d.m.Y', $edDocData['date_of_issue'])
@@ -538,6 +562,9 @@ class AddEditScreen extends Screen
     }
 
     public function makeMainEdDoc() {
+
+
+
         EducationalDocument::where('person_id', '=', request() -> route() -> parameter('id'))
             -> update([
                 'is_main' => false,
@@ -557,7 +584,23 @@ class AddEditScreen extends Screen
         Toast::success('Документ об образовании успешно удален');
     }
 
-    public function modalWorkplaceAdd() {
+    public function modalWorkplaceAdd(Request $request) {
+
+        $request->validate([
+            'workplaces.fullname' => 'required|exists:workplace,id',
+            'workplaces.tel' => 'nullable|string|max:20',
+            'workplaces.email' => 'nullable|string|email|max:150',
+            'positions.fullname' => 'required|exists:position,id',
+        ], [
+            'workplaces.fullname.required' => 'Поле "Место работы" обязательно для заполнения',
+            'workplaces.fullname.max' => 'Поле "Полное наименование места работы" не должно превышать 255 символов',
+            'workplaces.tel.max' => 'Поле "Телефон" не должно превышать 20 символов',
+            'workplaces.email.max' => 'Поле "E-mail" не должно превышать 150 символов',
+            'workplaces.email.email' => 'Поле "E-mail" должно быть валидным email-адресом',
+            'positions.fullname.required' => 'Поле "Должность" обязательно для заполнения',
+            'positions.fullname.max' => 'Поле "Должность" не должно превышать 255 символов',
+        ]);
+
         $workplace = Workplace::firstWhere('fullname', request() -> input('workplace')['fullname']);
         $raw = request() -> input('workplace');
         if (is_null($raw['tel']))
@@ -582,4 +625,5 @@ class AddEditScreen extends Screen
 
         Toast::success('Место работы успешно обновлено');
     }
+
 }
