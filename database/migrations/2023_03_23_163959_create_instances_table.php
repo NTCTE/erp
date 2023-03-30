@@ -19,7 +19,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('book_sets');
             $table->char('inventory_number', 100)->unique();
-            $table->char('rfid_signature', 100)->unique();
+            $table->char('rfid_signature', 100)->unique()->nullable();
             $table->timestamps();
         });
     }

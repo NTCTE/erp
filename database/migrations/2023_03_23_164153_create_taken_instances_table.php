@@ -22,6 +22,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('instances');
             $table->date('deadline')->nullable();
+            $table->date('return_date')->nullable();
             $table->timestamps();
         });
     }
