@@ -26,6 +26,9 @@ use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
+use App\Orchid\Screens\System\Machines\CommandsScreen;
+use App\Orchid\Screens\System\Machines\ExecutedScreen;
+use App\Orchid\Screens\System\Machines\MachinesScreen;
 
 /*
 |--------------------------------------------------------------------------
@@ -226,4 +229,33 @@ Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}
         return $trail -> parent('org.departments.group')
             -> push('Студент')
             -> push('Действия над студентом');
+    });
+
+// MACHINES
+// System > Machines
+Route::screen('/system/machines', MachinesScreen::class)
+    -> name('system.machines')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины');
+    });
+
+// System > Machines > Commands
+Route::screen('/system/machines/commands', CommandsScreen::class)
+    -> name('system.machines.commands')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины')
+            -> push('Команды', route('system.machines.commands'));
+    });
+
+// System > Machines > Executed Commands
+Route::screen('/system/machines/executed/{machine}', ExecutedScreen::class)
+    -> name('system.machines.executed')
+    -> breadcrumbs(function(Trail $trail) {
+        return $trail -> parent('platform.index')
+            -> push('Машины')
+            -> push('Выполненные команды', route('system.machines.executed', request()
+                -> route()
+                -> parameter('machine')));
     });

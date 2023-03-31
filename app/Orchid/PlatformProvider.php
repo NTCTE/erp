@@ -56,6 +56,15 @@ class PlatformProvider extends OrchidServiceProvider
                         -> icon('number-list')
                         -> route('system.repository')
                         -> permission('platform.systems.repository'),
+                    Menu::make('Команды')
+                        -> icon('linux')
+                        -> route('system.machines.commands')
+                        -> permission('platform.systems.machines')
+                        -> title('Машины'),
+                    Menu::make('Машины')
+                        -> icon('os')
+                        -> route('system.machines')
+                        -> permission('platform.systems.machines'),
                     Menu::make(__('Users'))
                         ->icon('user')
                         ->route('platform.systems.users')
@@ -91,7 +100,8 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group(__('System'))
                 -> addPermission('platform.systems.roles', __('Roles'))
                 -> addPermission('platform.systems.users', __('Users'))
-                -> addPermission('platform.systems.repository', 'Репозиторий'),
+                -> addPermission('platform.systems.repository', 'Репозиторий')
+                -> addPermission('platform.systems.machines', 'Машины'),
             ItemPermission::group('Расписание (старое)')
                 -> addPermission('edPart.schedule.legacy.add', 'Добавить/изменить расписание'),
             ItemPermission::group('Организация')
