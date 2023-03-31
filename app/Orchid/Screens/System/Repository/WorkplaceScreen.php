@@ -97,7 +97,7 @@ class WorkplaceScreen extends Screen
         $request -> validate([
             'wp.fullname' => 'required|string|max:255',
             'wp.tel' => 'nullable|string|max:20',
-            'wp.email' => 'nullable|email|max:255',
+            'wp.email' => 'nullable|email|max:150',
             ],[
             'wp.fullname.required' => 'Введите полное "рабочее место"',
             'wp.fullname.string' => '"рабочее место" должно быть строкой',

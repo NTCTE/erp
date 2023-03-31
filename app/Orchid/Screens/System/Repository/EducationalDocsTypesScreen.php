@@ -91,7 +91,7 @@ class EducationalDocsTypesScreen extends Screen
     public function create(Request $request)
     {
        $request ->validate([
-            'fullname' => ['required', 'string', 'max:255'],
+            'fullname' => 'required|string|max:200',
         ], [
             'fullname.required' => 'Поле обязательно для заполнения',
             'fullname.string' => 'Значение должно быть строкой',

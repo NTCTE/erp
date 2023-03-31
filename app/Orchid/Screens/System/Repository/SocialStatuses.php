@@ -93,7 +93,7 @@ class SocialStatuses extends Screen
     public function create(Request $request) {
 
         $request->validate([
-            'status.fullname' => 'required|string|max:255',
+            'status.fullname' => 'required|string|max:200',
         ], [
             'status.fullname.required' => 'Поле "Название" является обязательным.',
             'status.fullname.string' => 'Поле "Название" должно быть строкой.',

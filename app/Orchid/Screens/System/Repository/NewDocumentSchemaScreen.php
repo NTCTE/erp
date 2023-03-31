@@ -87,7 +87,7 @@ class NewDocumentSchemaScreen extends Screen
 
     public function saveSchema(Request $request, DocumentSchema $document) {
         $request -> validate([
-            'doc.fullname' => 'required|string|max:255',
+            'doc.fullname' => 'required|string|max:200',
             'doc.schema.*.title' => 'required|string|max:255',
             'doc.schema.*.placeholder' => 'nullable|string|max:255',
             'doc.schema.*.help' => 'nullable|string|max:255',

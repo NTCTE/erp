@@ -113,7 +113,7 @@ class AdministrativeDocumentsScreen extends Screen
         $request->validate([
             'doc.fullname' => 'required',
             'doc.type' => 'required',
-            'doc.number' => 'required',
+            'doc.number' => 'required|max:20',
             'doc.date_at' => 'required|date_format:d.m.Y',
             ],
             [

@@ -83,8 +83,7 @@ class EducationalDocsIssuersScreen extends Screen
     public function create(Request $request, EducationalDocIssuer $issuer)
     {
         $request->validate([
-            'fullname' => 'required',
-            'date' => 'date'
+            'fullname' => 'required|max:255',
         ], [
             'fullname.required' => 'Введите имя'
         ]);

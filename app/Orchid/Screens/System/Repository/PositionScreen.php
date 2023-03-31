@@ -83,7 +83,7 @@ class PositionScreen extends Screen
     public function create(Request $request, Position $position) {
 
         $request->validate([
-            'fullname' => 'required|string|max:255'
+            'fullname' => 'required|string|max:200'
         ],[
             'fullname.required' => 'Поле "Должность" является обязательным для заполнения.',
             'fullname.string' => 'Поле "Должность" должно быть строкой.',

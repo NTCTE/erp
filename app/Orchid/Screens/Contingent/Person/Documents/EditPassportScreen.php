@@ -87,9 +87,9 @@ class EditPassportScreen extends Screen
     {
 
         $request->validate([
-            'passport.series' => 'nullable|string|max:255',
+            'passport.series' => 'nullable|string|max:10',
             'passport.number' => 'required|string|max:20',
-            'passport.passport_issuer_id' => 'required|string',
+            'passport.passport_issuer_id' => 'required|sometimes|string|numeric',
             'passport.date_of_issue' => 'required|date_format:d.m.Y',
             'passport.birthplace' => 'nullable|string',
         ], [

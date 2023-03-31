@@ -90,12 +90,13 @@ class PassportIssuerScreen extends Screen
     public function create(Request $request, PassportIssuer $issuer)
     {
         $request -> validate([
-            'issuer.fullname' => 'required|string|max:255',
+            'issuer.fullname' => 'required|string',
+            'issuer.code' => 'nullable|string|max:40',
             'issuer.address' => 'string|max:255',
 
         ], [
             'issuer.fullname.required' => 'Поле "Название места выдачи" обязательно для заполнения',
-            'issuer.code' => 'Поле "Код места выдачи" обязательно для заполнения',
+            'issuer.code.max' => 'Поле "Код места выдачи" не может превышать 40 символов',
 
         ]);
 

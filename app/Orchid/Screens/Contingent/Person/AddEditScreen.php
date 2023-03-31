@@ -299,9 +299,9 @@ class AddEditScreen extends Screen
             'person.email' => 'nullable|email|max:255',
             'person.corp_email' => 'nullable|email|max:255',
             'person.tel' => 'nullable|string|max:20',
-            'person.snils' => 'nullable|string|max:11',
-            'person.inn' => 'nullable|string|max:12',
-            'person.hin' => 'nullable|string|max:16',
+            'person.snils' => 'nullable|string|max:20',
+            'person.inn' => 'nullable|string|max:20',
+            'person.hin' => 'nullable|string|max:20',
             'person.sex' => 'nullable|in:1,2',
             'person.birthdate' => 'nullable|date_format:d.m.Y',
         ], [
@@ -334,15 +334,15 @@ class AddEditScreen extends Screen
 
         $request -> validate([
 
-            'person.lastname' => 'required|string|max:255',
-            'person.firstname' => 'required|string|max:255',
-            'person.patronymic' => 'nullable|string|max:255',
-            'person.email' => 'nullable|email|max:255',
-            'person.corp_email' => 'nullable|email|max:255',
+            'person.lastname' => 'required|string|max:100',
+            'person.firstname' => 'required|string|max:100',
+            'person.patronymic' => 'nullable|string|max:100',
+            'person.email' => 'nullable|email|max:200',
+            'person.corp_email' => 'nullable|email|max:200',
             'person.tel' => 'nullable|string|max:20',
-            'person.snils' => 'nullable|string|max:11',
-            'person.inn' => 'nullable|string|max:12',
-            'person.hin' => 'nullable|string|max:16',
+            'person.snils' => 'nullable|string|max:20',
+            'person.inn' => 'nullable|string|max:20',
+            'person.hin' => 'nullable|string|max:20',
             'person.sex' => 'nullable|in:1,2',
             'person.birthdate' => 'nullable|date_format:d.m.Y',
         ],[
@@ -390,9 +390,9 @@ class AddEditScreen extends Screen
         $type = new RelationLink();
         $person = new Person();
         $request->validate([
-            'relative.lastname' => 'required|string|max:255',
-            'relative.firstname' => 'required|string|max:255',
-            'relative.patronymic' => 'nullable|string|max:255',
+            'relative.lastname' => 'required|string|max:100',
+            'relative.firstname' => 'required|string|max:100',
+            'relative.patronymic' => 'nullable|string|max:100',
             'rel_type' => 'required|exists:relation_types,id',
         ], [
             'relative.lastname.required' => 'Поле "Фамилия" является обязательным для заполнения',
@@ -476,7 +476,7 @@ class AddEditScreen extends Screen
         $request->validate([
             'passport.series' => 'nullable|string|max:10',
             'passport.number' => 'required|string|max:20',
-            'passport.passport_issuer_id' => 'required|string',
+            'passport.passport_issuer_id' => 'required|sometimes|string|numeric',
             'passport.date_of_issue' => 'required|date_format:d.m.Y',
             'passport.birthplace' => 'nullable|string',
         ], [
@@ -531,12 +531,12 @@ class AddEditScreen extends Screen
     public function modalEducationAdd(Request $request) {
 
         $request->validate([
-            'edDoc.series' => 'required|string|max:10',
+            'edDoc.series' => 'nullable|string|max:10',
             'edDoc.number' => 'required|string|max:25',
             'edDoc.date_of_issue' => 'required|date_format:d.m.Y',
             'edDoc.educational_doc_issuer_id' => 'required|exists:educational_doc_issuers,id',
             'edDoc.educational_doc_type_id' => 'required|exists:educational_doc_types,id',
-            'edDoc.average_mark' => 'required|numeric|min:0|max:5'
+            'edDoc.average_mark' => 'required|numeric|min:3|max:5'
 
         ], [
             'edDoc.series.required' => 'Поле "Серия документа" обязательно для заполнения',
@@ -548,6 +548,7 @@ class AddEditScreen extends Screen
             'edDoc.educational_doc_issuer_id.required' => 'Поле "Кем выдан" обязательно для заполнения',
             'edDoc.educational_doc_type_id.required' => 'Поле "Тип документа" обязательно для заполнения',
             'edDoc.average_mark.required' => 'После "Средний балл" обязательно для заполнения',
+            'edDoc.average_mark.min' => 'Средний балл не может быть больше 3',
             'edDoc.average_mark.max' => 'Средний балл не может быть больше 5'
         ]);
 
@@ -587,10 +588,10 @@ class AddEditScreen extends Screen
     public function modalWorkplaceAdd(Request $request) {
 
         $request->validate([
-            'workplaces.fullname' => 'required|exists:workplace,id',
+            'workplaces.fullname' => 'required|max:255|exists:workplace,id',
             'workplaces.tel' => 'nullable|string|max:20',
             'workplaces.email' => 'nullable|string|email|max:150',
-            'positions.fullname' => 'required|exists:position,id',
+            'positions.fullname' => 'required|max:200|exists:position,id',
         ], [
             'workplaces.fullname.required' => 'Поле "Место работы" обязательно для заполнения',
             'workplaces.fullname.max' => 'Поле "Полное наименование места работы" не должно превышать 255 символов',

@@ -99,7 +99,7 @@ class SpecialtiesScreen extends Screen
     public function create(Request $request) {
 
         $request -> validate([
-            'specialty.fullname' => 'required|string|max:255',
+            'specialty.fullname' => 'required|string|max:200',
             'specialty.code' => 'required|string|max:20',
             ],[
             'specialty.fullname.required' => 'Введите полное название специальности',

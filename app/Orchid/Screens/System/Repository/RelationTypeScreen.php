@@ -84,7 +84,7 @@ class RelationTypeScreen extends Screen
     {
 
         $request->validate([
-            'fullname' => 'required|string|max:255'
+            'fullname' => 'required|string|max:200'
         ],[
             'fullname.required' => 'Поле "Родственная связь" является обязательным для заполнения.',
             'fullname.string' => 'Поле "Родственная связь"е должно быть строкой.',
