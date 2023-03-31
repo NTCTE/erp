@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('machines', function (Blueprint $table) {
             $table -> id();
-            $table -> uuid();
             $table -> ipAddress()
                 -> unique();
             $table -> timestamps();

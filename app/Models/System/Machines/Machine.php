@@ -10,16 +10,15 @@ use Orchid\Screen\AsSource;
 
 class Machine extends Model
 {
-    use HasFactory, AsSource, UuidSetter, Dates;
+    use HasFactory, AsSource, Dates;
 
     protected $fillable = [
-        'uuid',
         'ip_address'
     ];
 
     public function executed_commands() {
         return $this -> hasManyThrough(Command::class, ExecutedCommand::class, 'machine_id', 'id', 'id', 'command_id')
-            -> select('uuid', 'command', 'executed_commands.created_at');
+            -> select('commands.id', 'command', 'executed_commands.created_at');
     }
 
     public function not_executed_commands() {
@@ -27,6 +26,6 @@ class Machine extends Model
             $query -> select('command_id')
                 -> from('executed_commands')
                 -> where('machine_id', $this -> id);
-        }) -> get(['uuid', 'command']);
+        }) -> get(['id', 'command']);
     }
 }

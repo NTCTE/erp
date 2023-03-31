@@ -28,7 +28,7 @@ class MachinesController extends Controller
                 $machine -> ip_address = $address;
                 $machine -> save();
                 return response() -> json([
-                    'token' => $machine -> uuid,
+                    'id' => $machine -> id,
                 ], 200);
             } else return response() -> json([
                 'message' => 'Машина уже зарегистрирована',
@@ -41,12 +41,12 @@ class MachinesController extends Controller
     /**
      * Получить список команд для машины.
      *
-     * @param  mixed $uuid UUID машины.
+     * @param  int $id Идентификатор машины.
      * @return JsonResponse Ответ.
      */
-    public function get_commands(string $uuid = null): JsonResponse {
-        if ($uuid) {
-            $machine = Machine::where('uuid', $uuid) -> first();
+    public function get_commands(int $id = null): JsonResponse {
+        if ($id) {
+            $machine = Machine::find($id);
             if ($machine) {
                 return response() -> json([
                     'commands' => $machine -> not_executed_commands(),
@@ -55,31 +55,31 @@ class MachinesController extends Controller
                 'message' => 'Машина не найдена',
             ], 404);
         } else return response() -> json([
-            'message' => 'Не указан UUID машины',
+            'message' => 'Не указан идентификатор машины',
         ], 400);
     }
     
     /**
      * Сообщение машиной о выполнении команды.
      *
-     * @param  string $uuid UUID машины.
+     * @param  int $id Идентификатор машины.
      * @return JsonResponse Ответ.
      */
-    public function set_command(string $uuid = null): JsonResponse {
-        if ($uuid) {
+    public function set_command(int $id = null): JsonResponse {
+        if ($id) {
             $request = request() -> validate([
-                'uuid' => 'required|uuid',
-                'exit_code' => 'required|integer',
+                'id' => 'required|numeric',
+                'exit_code' => 'required|numeric',
             ], [
-                'uuid.required' => 'Не указан UUID команды',
-                'uuid.uuid' => 'UUID команды указан неверно',
+                'id.required' => 'Не указан идентификатор команды',
+                'id.numeric' => 'Идентификатор команды указан неверно',
                 'exit_code.required' => 'Не указан код завершения команды',
-                'exit_code.integer' => 'Код завершения команды указан неверно',
+                'exit_code.numeric' => 'Код завершения команды указан неверно',
             ]);
-            $machine = Machine::where('uuid', $uuid) -> first();
+            $machine = Machine::find($id);
             if ($machine) {
-                if ($machine -> executed_commands -> where('uuid', $request['uuid']) -> count() == 0) {
-                    $command = Command::where('uuid', $request['uuid']) -> first();
+                if ($machine -> executed_commands -> where('id', $request['id']) -> count() == 0) {
+                    $command = Command::where('id', $request['id']) -> first();
                     if ($command) {
                         (new ExecutedCommand)
                             -> fill([
@@ -101,7 +101,7 @@ class MachinesController extends Controller
                 'message' => 'Машина не найдена',
             ], 400);
         } else return response() -> json([
-            'message' => 'Не указан UUID машины',
+            'message' => 'Не указан идентификатор машины',
         ], 400);
     }
 }

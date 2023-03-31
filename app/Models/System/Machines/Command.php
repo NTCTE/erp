@@ -10,11 +10,10 @@ use Orchid\Screen\AsSource;
 
 class Command extends Model
 {
-    use HasFactory, AsSource, UuidSetter, Dates;
+    use HasFactory, AsSource, Dates;
 
     protected $fillable = [
         'command',
-        'uuid',
     ];
 
     protected $hidden = [

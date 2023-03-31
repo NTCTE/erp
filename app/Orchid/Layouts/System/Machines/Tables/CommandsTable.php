@@ -27,7 +27,7 @@ class CommandsTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('uuid', 'UUID команды')
+            TD::make('id', 'Номер команды')
                 -> width('25%'),
             TD::make('command', 'Команда')
                 -> render(function(Command $command) {
