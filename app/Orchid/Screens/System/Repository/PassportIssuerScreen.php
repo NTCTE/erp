@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\PassportIssuer;
 use App\Orchid\Layouts\System\Repository\PassportIssuerTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -66,7 +67,7 @@ class PassportIssuerScreen extends Screen
         return [
             Layout::modal('passportIssuerCreate', [
                 Layout::rows([
-                    Input::make('issuer.name')
+                    Input::make('issuer.fullname')
                         ->title('Название места выдачи паспорта')
                         ->placeholder('Название места выдачи паспорта')
                         ->required(),
@@ -86,8 +87,19 @@ class PassportIssuerScreen extends Screen
         ];
     }
 
-    public function create(PassportIssuer $issuer)
+    public function create(Request $request, PassportIssuer $issuer)
     {
+        $request -> validate([
+            'issuer.fullname' => 'required|string',
+            'issuer.code' => 'nullable|string|max:40',
+            'issuer.address' => 'string|max:255',
+
+        ], [
+            'issuer.fullname.required' => 'Поле "Название места выдачи" обязательно для заполнения',
+            'issuer.code.max' => 'Поле "Код места выдачи" не может превышать 40 символов',
+
+        ]);
+
         $issuer -> fill(request() -> get('issuer'))
             -> save();
 

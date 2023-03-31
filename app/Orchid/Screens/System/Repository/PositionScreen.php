@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\Position;
 use App\Orchid\Layouts\System\Repository\PositionTable;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
@@ -79,7 +80,16 @@ class PositionScreen extends Screen
         ];
     }
 
-    public function create(Position $position) {
+    public function create(Request $request, Position $position) {
+
+        $request->validate([
+            'fullname' => 'required|string|max:200'
+        ],[
+            'fullname.required' => 'Поле "Должность" является обязательным для заполнения.',
+            'fullname.string' => 'Поле "Должность" должно быть строкой.',
+            'fullname.max' => 'Поле "Должность" не должно превышать 255 символов.'
+        ]);
+
         $position -> fill(request() -> all())
             -> save();
 
