@@ -3,21 +3,22 @@
 namespace App\Orchid\Screens\Library;
 
 use App\Models\Org\Library\BookSet;
-use App\Models\Org\Library\Instance;
 use App\Orchid\Layouts\Library\LibraryTable;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 
 class LibraryScreen extends Screen
 {
-
+    public $booksets;
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query( ): iterable
+    public function query(BookSet $bookset): iterable
     {
         return [
+            'booksets' => BookSet::paginate(),
         ];
     }
 
@@ -28,12 +29,12 @@ class LibraryScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Библиотека';
+        return 'Библиотека | Наборы книг';
     }
 
     public function description(): ?string
     {
-        return 'Добро пожаловать на главный экран библиотечной системы! Отсюда вы можете взаимодействовать со всей системой.';
+        return 'Добро пожаловать в библиотечную систему! Отсюда вы можете взаимодействовать с наборами книг.';
     }
 
     /**
@@ -43,7 +44,11 @@ class LibraryScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            Link::make('Добавить набор')
+                ->icon('plus')
+                ->route('org.library.bookset.edit')
+        ];
     }
 
     /**
@@ -54,7 +59,7 @@ class LibraryScreen extends Screen
     public function layout(): iterable
     {
         return [
-//            LibraryTable::class,
+            LibraryTable::class,
         ];
     }
 }

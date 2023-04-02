@@ -12,6 +12,7 @@ use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
+use App\Orchid\Screens\Library\EditBooksetScreen;
 use App\Orchid\Screens\Library\LibraryScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
@@ -251,6 +252,14 @@ Route::screen('/org/library', LibraryScreen::class)
         return $trail->parent('platform.index')
             ->push('Организация')
             ->push('Библиотека', route('org.library'));
+    });
+
+// LIBRARY > New Book Set
+Route::screen('/org/library/bookset/{bookset?}', EditBooksetScreen::class)
+    ->name('org.library.bookset.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.library')
+            ->push('Работа над набором', route('org.library.bookset.edit'));
     });
 
 // MACHINES

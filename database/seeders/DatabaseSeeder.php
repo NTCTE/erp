@@ -17,6 +17,10 @@ use App\Orchid\Screens\System\Repository\LanguagesScreen;
 use App\Orchid\Screens\System\Repository\Address\CityScreen;
 use App\Orchid\Screens\System\Repository\Address\CountryScreen;
 use App\Orchid\Screens\System\Repository\Address\RegionScreen;
+use App\Orchid\Screens\System\Repository\Library\PertainingInformationScreen;
+use App\Orchid\Screens\System\Repository\Library\PublisherScreen;
+use App\Orchid\Screens\System\Repository\Library\BookSetTypeScreen;
+use App\Orchid\Screens\System\Repository\Library\SubjectHeadlineScreen;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -129,6 +133,34 @@ class DatabaseSeeder extends Seeder
                 'class_type' => CityScreen::class,
                 'path' => 'system.repository.cities',
                 'uri' => 'address/cities'
+
+            ],
+            [
+                'name' => 'Информация, относящаяся к заглавию',
+                'class_type' => PertainingInformationScreen::class,
+                'path' => 'system.repository.pertainingInformations',
+                'uri' => 'library/pertainingInformation'
+
+            ],
+            [
+                'name' => 'Издания',
+                'class_type' => PublisherScreen::class,
+                'path' => 'system.repository.publishers',
+                'uri' => 'library/publishers'
+
+            ],
+            [
+                'name' => 'Типы комплектов книг',
+                'class_type' => BookSetTypeScreen::class,
+                'path' => 'system.repository.booksetTypes',
+                'uri' => 'library/book-set-types'
+
+            ],
+            [
+                'name' => 'Предметные заголовки',
+                'class_type' => SubjectHeadlineScreen::class,
+                'path' => 'system.repository.subjectHeadlines',
+                'uri' => 'library/subject-headlines'
 
             ],
         ]);

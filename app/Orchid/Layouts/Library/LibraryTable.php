@@ -15,7 +15,7 @@ class LibraryTable extends Table
      *
      * @var string
      */
-    protected $target = 'bookset';
+    protected $target = 'booksets';
 
     /**
      * Get the table cells to be displayed.
@@ -25,7 +25,13 @@ class LibraryTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('123')
+            TD::make('title', 'Название'),
+            TD::make('booksetType', 'Тип набора'),
+            TD::make('pertainingTitleInformation', 'Информация, относящаяся к заглавию'),
+            TD::make('publishingYear', 'Год издания'),
+            TD::make('ISBN', 'ISBN'),
+            TD::make('pagesNumber', 'Количество страниц'),
+            TD::make('language', 'Язык')
         ];
     }
 }
