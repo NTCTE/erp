@@ -88,7 +88,7 @@ class PublisherScreen extends Screen
     }
     public function asyncGetPublisher(array $fields = null): array {
         return is_null($fields) ? [] : [
-            'publishers' => $fields,
+            'publisher' => $fields,
         ];
     }
 

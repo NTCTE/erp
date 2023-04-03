@@ -18,7 +18,7 @@ class PublisherTable extends Table
      *
      * @var string
      */
-    protected $target = 'publisher';
+    protected $target = 'publishers';
 
     /**
      * Get the table cells to be displayed.
@@ -28,8 +28,13 @@ class PublisherTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('formatted', 'Название'),
-            TD::make('publisher.city_id', 'Город'),
+            TD::make('fullname', 'Название'),
+            TD::make('city', 'Город')
+                -> render(function (Publisher $publisher) {
+                    return $publisher
+                        ->city
+                        ->fullname;
+                }),
             TD::make('actions', 'Действия')
                 -> render(function (Publisher $publisher) {
                     return DropDown::make()
