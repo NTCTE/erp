@@ -33,11 +33,11 @@ return new class extends Migration
                     ->on('book_set_types');
                 $table->foreignId('pertaining_title_information_id')
                     ->references('id')
-                    ->on('pertaining_title_informations');
+                    ->on('pertaining_title_information');
                 $table->year('publishing_year');
                 $table->foreignId('publication_information_id')
                     ->references('id')
-                    ->on('publication_informations');
+                    ->on('publication_information');
                 $table->foreignId('publisher_id')
                     ->references('id')
                     ->on('publishers');

@@ -138,8 +138,8 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Информация, относящаяся к заглавию',
                 'class_type' => PertainingInformationScreen::class,
-                'path' => 'system.repository.pertainingInformations',
-                'uri' => 'library/pertainingInformation'
+                'path' => 'system.repository.pertainingTitleInformation',
+                'uri' => 'library/pertaining-information'
 
             ],
             [
