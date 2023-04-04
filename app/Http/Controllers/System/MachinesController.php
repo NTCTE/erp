@@ -23,16 +23,20 @@ class MachinesController extends Controller
     public function register(Request $request): JsonResponse {
         $address = $request -> input('address');
         if ($address) {
-            if (Machine::where('ip_address', $address) -> count() == 0) {
+            $exists = Machine::where('ip_address', $address);
+            if ($exists -> count() == 0) {
                 $machine = new Machine();
                 $machine -> ip_address = $address;
                 $machine -> save();
                 return response() -> json([
                     'id' => $machine -> id,
                 ], 200);
-            } else return response() -> json([
-                'message' => 'Машина уже зарегистрирована',
-            ], 400);
+            } else {
+                $machine = $exists -> first();
+                return response() -> json([
+                    'id' => $machine -> id,
+                ], 200);
+            }
         } else return response() -> json([
             'message' => 'Не указан IP-адрес машины',
         ], 400);
