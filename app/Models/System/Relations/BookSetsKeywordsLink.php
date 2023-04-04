@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Models\Org\Library\Additionals;
+namespace App\Models\System\Relations;
 
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
-class Keyword extends Model
+class BookSetsKeywordsLink extends Model
 {
     use AsSource;
 
     protected $fillable = [
-        'fullname'
+        'book_sets_keyword_id',
+        'book_set_id',
     ];
 }

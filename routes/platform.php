@@ -12,6 +12,7 @@ use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
+use App\Orchid\Screens\Library\BookSetScreen;
 use App\Orchid\Screens\Library\EditBooksetScreen;
 use App\Orchid\Screens\Library\LibraryScreen;
 use App\Orchid\Screens\PlatformScreen;
@@ -246,20 +247,19 @@ Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}
     });
 
 // LIBRARY
-Route::screen('/org/library', LibraryScreen::class)
-    ->name('org.library')
+Route::screen('library/booksets', BookSetScreen::class)
+    ->name('library.booksets')
     ->breadcrumbs(function (Trail $trail) {
         return $trail->parent('platform.index')
-            ->push('Организация')
-            ->push('Библиотека', route('org.library'));
+            ->push('Наборы книг', route('library.booksets'));
     });
 
 // LIBRARY > New Book Set
-Route::screen('/org/library/bookset/{bookset?}', EditBooksetScreen::class)
-    ->name('org.library.bookset.edit')
+Route::screen('library/bookset/{bookset?}', EditBooksetScreen::class)
+    ->name('library.bookset.edit')
     ->breadcrumbs(function (Trail $trail) {
-        return $trail->parent('org.library')
-            ->push('Работа над набором', route('org.library.bookset.edit'));
+        return $trail->parent('library.booksets')
+            ->push('Работа над набором', route('library.bookset.edit'));
     });
 
 // MACHINES

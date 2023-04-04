@@ -77,7 +77,7 @@ class PertainingInformationScreen extends Screen
                 ->withoutCloseButton()
                 ->applyButton('Сохранить')
                 ->staticBackdrop()
-                ->async('asyncGetPertainingInformation'),
+                ->async('asyncGetPertainingTitleInformation'),
             PertainingTitleInformationTable::class,
         ];
     }
@@ -96,5 +96,6 @@ class PertainingInformationScreen extends Screen
             PertainingTitleInformation::create($get);
 
         Toast::info('Данные сохранены');
+
     }
 }

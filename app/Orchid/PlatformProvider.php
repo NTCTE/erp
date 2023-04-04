@@ -46,11 +46,16 @@ class PlatformProvider extends OrchidServiceProvider
                             -> icon('friends')
                             -> permission('org.contingent.*')
                             -> route('org.contingent'),
-                        Menu::make('Библиотека')
-                            ->icon('book-open')
-                            ->permission('org.library.*')
-                            ->route('org.library'),
                     ]),
+            Menu::make('Библиотека')
+                ->icon('book-open')
+                ->permission('library.*')
+                ->list([
+                   Menu::make('Наборы книг')
+                       ->icon('layers')
+                       ->permission('library.read')
+                       ->route('library.booksets'),
+                ]),
             Menu::make('Система')
                 -> icon('config')
                 -> list([

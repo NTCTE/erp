@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Orchid\Screens\System\Repository\DocumentSchemaScreen;
+use App\Orchid\Screens\System\Repository\Library\PublicationInformationScreen;
+use App\Orchid\Screens\System\Repository\Library\PublicationInformatioScreen;
 use App\Orchid\Screens\System\Repository\PassportIssuerScreen;
 use App\Orchid\Screens\System\Repository\PositionScreen;
 use App\Orchid\Screens\System\Repository\RelationTypeScreen;
@@ -161,6 +163,13 @@ class DatabaseSeeder extends Seeder
                 'class_type' => SubjectHeadlineScreen::class,
                 'path' => 'system.repository.subjectHeadlines',
                 'uri' => 'library/subject-headlines'
+
+            ],
+            [
+                'name' => 'Сведения об издании',
+                'class_type' => PublicationInformationScreen::class,
+                'path' => 'system.repository.publicationInformation',
+                'uri' => 'library/publication-information'
 
             ],
         ]);

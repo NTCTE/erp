@@ -38,7 +38,7 @@ class PublisherScreen extends Screen
     }
 
     public function description():? string {
-        return 'придумать текст...';
+        return 'Здесь вы можете добавить издателя.';
     }
 
     /**

@@ -2,13 +2,13 @@
 
 namespace App\Orchid\Layouts\System\Repository\Library;
 
-use App\Models\Org\Library\Additionals\PertainingTitleInformation;
+use App\Models\Org\Library\Additionals\SubjectHeadline;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-class PertainingTitleInformationTable extends Table
+class SubjectHeadlineTable extends Table
 {
     /**
      * Data source.
@@ -18,7 +18,7 @@ class PertainingTitleInformationTable extends Table
      *
      * @var string
      */
-    protected $target = 'pertainingTitleInformation';
+    protected $target = 'subjectHeadlines';
 
     /**
      * Get the table cells to be displayed.
@@ -30,16 +30,16 @@ class PertainingTitleInformationTable extends Table
         return [
             TD::make('fullname', 'Название'),
             TD::make('actions', 'Действия')
-                -> render(function (PertainingTitleInformation $pertainingTitleInformation) {
+                -> render(function (SubjectHeadline $subjectHeadline) {
                     return DropDown::make()
                         -> icon('options-vertical')
                         -> list([
                             ModalToggle::make('Изменить')
                                 -> icon('pencil')
-                                -> modal('pertainingTitleInformationModal')
-                                -> modalTitle('Изменение информации, относящейся к заглавию')
+                                -> modal('subjectHeadlineModal')
+                                -> modalTitle('Изменение информацию о предметном заголовке')
                                 -> method('create')
-                                -> asyncParameters($pertainingTitleInformation),
+                                -> asyncParameters($subjectHeadline),
                         ]);
                 }),
         ];

@@ -51,7 +51,7 @@ return new class extends Migration
                 $table->foreignId('language_id')
                     ->references('id')
                     ->on('languages');
-                $table->foreignId('basic_doc_id')
+                $table->foreignId('basis_doc_id')
                     ->references('id')
                     ->on('administrative_documents');
                 $table->char('barcode', 100)->nullable();
