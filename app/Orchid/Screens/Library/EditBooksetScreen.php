@@ -14,6 +14,7 @@ use Faker\Provider\Text;
 use Illuminate\Http\Request;
 use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Picture;
@@ -96,10 +97,11 @@ class EditBooksetScreen extends Screen
                     ->title('Информация, относящаяся к заглавию')
                     ->fromModel(PertainingTitleInformation::class, 'fullname')
                     ->required(),
-                Input::make('bookset.publishing_year')
-                    ->title('Год издания')
-                    ->type('number')
-                    ->required(),
+                DateTimer::make('bookset.publishing_year')
+                ->title('Год издания')
+                ->format('Y')
+                ->allowInput()
+                ->required(),
                 Relation::make('bookset.publication_information_id')
                     ->title('Информация об издании')
                     ->fromModel(PublicationInformation::class, 'fullname')
