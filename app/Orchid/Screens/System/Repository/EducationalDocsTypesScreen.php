@@ -5,6 +5,8 @@ namespace App\Orchid\Screens\System\Repository;
 use App\Models\System\Repository\EducationalDocType;
 use App\Orchid\Layouts\System\Repository\EducationalDocsTypesTable;
 use Orchid\Screen\Actions\ModalToggle;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
@@ -86,9 +88,18 @@ class EducationalDocsTypesScreen extends Screen
         Toast::success('Тип документа об образовании успешно изменен.');
     }
 
-    public function create() {
+    public function create(Request $request)
+    {
+       $request ->validate([
+            'fullname' => 'required|string|max:200',
+        ], [
+            'fullname.required' => 'Поле обязательно для заполнения',
+            'fullname.string' => 'Значение должно быть строкой',
+            'fullname.max' => 'Значение не должно превышать 255 символов',
+        ]);
+
         $type = EducationalDocType::create([
-            'fullname' => request('fullname'),
+            'fullname' => $request->input('fullname'),
         ]);
 
         Toast::success('Тип документа об образовании успешно добавлен.');

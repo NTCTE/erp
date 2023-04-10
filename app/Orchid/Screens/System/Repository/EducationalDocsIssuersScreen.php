@@ -6,6 +6,8 @@ use App\Models\System\Repository\EducationalDocIssuer;
 use App\Orchid\Layouts\System\Repository\EducationalDocsIssuersTable;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -78,12 +80,17 @@ class EducationalDocsIssuersScreen extends Screen
         ];
     }
 
-    public function create(EducationalDocIssuer $issuer)
+    public function create(Request $request, EducationalDocIssuer $issuer)
     {
-        $issuer -> fill([
-            'fullname' => request('fullname'),
+        $request->validate([
+            'fullname' => 'required|max:255',
+        ], [
+            'fullname.required' => 'Введите имя'
         ]);
-        $issuer -> save();
+        $issuer->fill([
+            'fullname' => $request->input('fullname'),
+        ]);
+        $issuer->save();
 
         Toast::success('Место выдачи документов об образовании успешно добавлено');
     }

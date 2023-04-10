@@ -4,6 +4,8 @@ namespace App\Orchid\Screens\System\Repository;
 
 use App\Models\System\Repository\AdministrativeDocument;
 use App\Orchid\Layouts\System\Repository\AdministrativeDocumentsTable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -105,13 +107,30 @@ class AdministrativeDocumentsScreen extends Screen
         ];
     }
 
-    public function create() {
-        $get = request() -> get('doc');
-        if ($doc = AdministrativeDocument::find($get['id']))
-            $doc -> update($get);
-        else
+    public function create(Request $request) {
+        $get = request()->get('doc');
+
+        $request->validate([
+            'doc.fullname' => 'required',
+            'doc.type' => 'required',
+            'doc.number' => 'required|max:20',
+            'doc.date_at' => 'required|date_format:d.m.Y',
+            ],
+            [
+                'doc.fullname.required' => 'Заполните поле ФИО',
+                'doc.type.required' => 'Заполните поле Тип',
+                'doc.number.required' => 'Заполните поле Номер',
+                'doc.date_at.required' => 'Заполните поле Дата в формате дд.мм.гггг',
+                'doc.date_at.date_format' => 'Дата должна быть в формате дд.мм.гггг',
+            ]);
+
+        // Если все поля прошли валидацию, сохраняем документ
+        if ($doc = AdministrativeDocument::find($get['id'])) {
+            $doc->update($get);
+        } else {
             AdministrativeDocument::create($get);
-        
+        }
+
         Toast::info('Данные сохранены');
     }
 }

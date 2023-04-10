@@ -49,7 +49,6 @@ class Personal extends Rows
             Input::make('person.birthdate')
                 -> title('Дата рождения')
                 -> placeholder('Введите дату рождения...')
-                -> readonly()
                 -> canSee(!Auth::user() -> hasAccess('org.contingent.write')),
             Select::make('person.sex')
                 -> title('Пол')

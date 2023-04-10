@@ -92,4 +92,10 @@ class CommandsScreen extends Screen
 
         Toast::info('Ваша команда успешно создана!');
     }
+
+    public function remove() {
+        Command::find(request() -> id) -> delete();
+
+        Toast::info('Команда успешно удалена!');
+    }
 }
