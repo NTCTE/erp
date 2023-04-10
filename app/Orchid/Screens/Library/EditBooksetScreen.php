@@ -99,6 +99,7 @@ class EditBooksetScreen extends Screen
                     ->required(),
                 DateTimer::make('bookset.publishing_year')
                 ->title('Год издания')
+                ->placeholder('')
                 ->format('Y')
                 ->allowInput()
                 ->required(),
