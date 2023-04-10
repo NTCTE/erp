@@ -67,7 +67,7 @@ class NewDocumentSchemaScreen extends Screen
                     -> required(),
                 Matrix::make('doc.schema')
                     -> title('Схема документа')
-                    -> help('Внесите поля, которые нужно заполнять при добавлении докумета к персоне.')
+                    -> help('Внесите поля, которые нужно заполнять при добавлении документа к персоне.')
                     -> columns([
                         'Наименование' => 'title',
                         'Подсказка в поле' => 'placeholder',

@@ -12,10 +12,14 @@ use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
+use App\Orchid\Screens\Library\BookSetScreen;
+use App\Orchid\Screens\Library\EditBooksetScreen;
+use App\Orchid\Screens\Library\LibraryScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\System\Repository;
+use App\Orchid\Screens\System\Repository\EditLanguageScreen;
 use App\Orchid\Screens\System\Repository\NewDocumentSchemaScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
@@ -40,6 +44,9 @@ use App\Orchid\Screens\System\Machines\MachinesScreen;
 | contains the need "dashboard" middleware group. Now create something great!
 |
 */
+
+// Landing
+Route::view('/landing', 'landing')->name('landing');
 
 // Main
 Route::screen('/main', PlatformScreen::class)
@@ -112,150 +119,174 @@ Route::screen('roles', RoleListScreen::class)
 // SCHEDULE LEGACY
 // Platform > Schedule LEGACY List
 Route::screen('schedule/legacy', FullList::class)
-    -> name('schedule.legacy')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Расписание (старое)', route('schedule.legacy'));
+    ->name('schedule.legacy')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Расписание (старое)', route('schedule.legacy'));
     });
 // Platform > Schedule LEGACY List > Edit
 Route::screen('schedule/legacy/list/{list}', Edit::class)
-    -> name('schedule.legacy.item')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('schedule.legacy');
+    ->name('schedule.legacy.item')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('schedule.legacy');
     });
 // Platform > Schedule LEGACY List > Add
 Route::screen('schedule/legacy/add', Add::class)
-    -> name('schedule.legacy.add')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('schedule.legacy')
-            -> push('Добавить', route('schedule.legacy.add'));
+    ->name('schedule.legacy.add')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('schedule.legacy')
+            ->push('Добавить', route('schedule.legacy.add'));
     });
 
 // SYSTEM
 // System > Repository
 Route::screen('/system/repository', Repository::class)
-    -> name('system.repository')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Система')
-            -> push('Репозиторий', 'system.repository');
+    ->name('system.repository')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Система')
+            ->push('Репозиторий', 'system.repository');
     });
 // System > Repository > Entities
 if (Schema::hasTable('repository'))
     foreach (RepositoryRepository::all() as $entity) {
         Route::screen("/system/repository/{$entity['uri']}", $entity['class_type'])
-            -> name($entity['path'])
-            -> breadcrumbs(function(Trail $trail) use ($entity) {
-                return $trail -> parent('system.repository')
-                    -> push($entity['name'], route($entity['path']));
+            ->name($entity['path'])
+            ->breadcrumbs(function (Trail $trail) use ($entity) {
+                return $trail->parent('system.repository')
+                    ->push($entity['name'], route($entity['path']));
             });
     }
 
 // System > Repository > Documents Schema > Add Item
 Route::screen('/system/repository/document-schemas/add', NewDocumentSchemaScreen::class)
-    -> name('system.repository.documentSchemas.add')
-    -> breadcrumbs(function (Trail $trail) {
-        return $trail -> parent('system.repository.documentSchemas')
-            -> push('Добавить схему', route('system.repository.documentSchemas.add'));
+    ->name('system.repository.documentSchemas.add')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('system.repository.documentSchemas')
+            ->push('Добавить схему', route('system.repository.documentSchemas.add'));
     });
-    
+
+// System > Repository > Language > Add
+Route::screen('/system/repository/language/{language?}', EditLanguageScreen::class)
+    ->name('system.repository.language.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('system.repository.languages')
+            ->push('Редактировать язык', route('system.repository.language.edit'));
+    });
+
 // CONTINGENT
 // System > Org > Contingent
 Route::screen('/org/contingent', ContingentScreen::class)
-    -> name('org.contingent')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Организация')
-            -> push('Контингент', route('org.contingent'));
+    ->name('org.contingent')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Организация')
+            ->push('Контингент', route('org.contingent'));
     });
 
 // System > Org > Contingent > Person
 Route::screen('/org/contingent/person/{id?}', AddEditScreen::class)
-    -> name('org.contingent.person')
-    -> breadcrumbs(function (Trail $trail) {
-        return $trail -> parent('org.contingent')
-            -> push('Персона');
+    ->name('org.contingent.person')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.contingent')
+            ->push('Персона');
     });
 
 // System > Org > Contingent > Person > Add New Document
 Route::screen('/org/contingent/person/{id}/document/{type}/{doc_id?}', AddRelationScreen::class)
-    -> name('org.contingent.person.document')
-    -> breadcrumbs(function (Trail $trail) {
-        return $trail -> parent('org.contingent.person')
-            -> push('Добавить новый документ');
+    ->name('org.contingent.person.document')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.contingent.person')
+            ->push('Добавить новый документ');
     });
 
 // System > Org > Contingent > Person > Edit Passport
 Route::screen('/org/contingent/person/{id}/passport/{passport_id}', EditPassportScreen::class)
-    -> name('org.contingent.person.passport')
-    -> breadcrumbs(function (Trail $trail) {
-        return $trail -> parent('org.contingent.person')
-            -> push('Редактировать паспорт');
+    ->name('org.contingent.person.passport')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.contingent.person')
+            ->push('Редактировать паспорт');
     });
 
 // DEPARTMENTS
 //System > Org > Departments
 Route::screen('/org/departments', MainScreen::class)
-    -> name('org.departments')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Организация')
-            -> push('Отделения', route('org.departments'));
+    ->name('org.departments')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Организация')
+            ->push('Отделения', route('org.departments'));
     });
 
 // System > Org > Departments > Entity
 Route::screen('/org/departments/entity/{department?}', DepartmentScreen::class)
-    -> name('org.departments.entity')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('org.departments')
-            -> push('Отделение', route('org.departments.entity', request() -> route() -> parameter('department')));
+    ->name('org.departments.entity')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.departments')
+            ->push('Отделение', route('org.departments.entity', request()->route()->parameter('department')));
     });
 
 // System > Org > Departments > Groups > Entity
 Route::screen('/org/departments/{department}/group/{group?}', GroupsMainScreen::class)
-    -> name('org.departments.group')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('org.departments.entity')
-            -> push('Группа', route('org.departments.group', [
-                'department' => request() -> route('department'),
-                'group' => request() -> route('group')
+    ->name('org.departments.group')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.departments.entity')
+            ->push('Группа', route('org.departments.group', [
+                'department' => request()->route('department'),
+                'group' => request()->route('group')
             ]));
     });
 
 // System > Org > Departments > Groups > Entity > Student > Jobs
 Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}', JobScreen::class)
-    -> name('org.departments.group.student.jobs')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('org.departments.group')
-            -> push('Студент')
-            -> push('Действия над студентом');
+    ->name('org.departments.group.student.jobs')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('org.departments.group')
+            ->push('Студент')
+            ->push('Действия над студентом');
+    });
+
+// LIBRARY
+Route::screen('library/booksets', BookSetScreen::class)
+    ->name('library.booksets')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Наборы книг', route('library.booksets'));
+    });
+
+// LIBRARY > New Book Set
+Route::screen('library/bookset/{bookset?}', EditBooksetScreen::class)
+    ->name('library.bookset.edit')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('library.booksets')
+            ->push('Работа над набором', route('library.bookset.edit'));
     });
 
 // MACHINES
 // System > Machines
 Route::screen('/system/machines', MachinesScreen::class)
-    -> name('system.machines')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Машины');
+    ->name('system.machines')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Машины');
     });
 
 // System > Machines > Commands
 Route::screen('/system/machines/commands', CommandsScreen::class)
-    -> name('system.machines.commands')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Машины')
-            -> push('Команды', route('system.machines.commands'));
+    ->name('system.machines.commands')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Машины')
+            ->push('Команды', route('system.machines.commands'));
     });
 
 // System > Machines > Executed Commands
 Route::screen('/system/machines/executed/{machine}', ExecutedScreen::class)
-    -> name('system.machines.executed')
-    -> breadcrumbs(function(Trail $trail) {
-        return $trail -> parent('platform.index')
-            -> push('Машины')
-            -> push('Выполненные команды', route('system.machines.executed', request()
-                -> route()
-                -> parameter('machine')));
+    ->name('system.machines.executed')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Машины')
+            ->push('Выполненные команды', route('system.machines.executed', request()
+                ->route()
+                ->parameter('machine')));
     });

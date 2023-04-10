@@ -17,8 +17,6 @@ class PlatformProvider extends OrchidServiceProvider
     public function boot(Dashboard $dashboard): void
     {
         parent::boot($dashboard);
-
-        // ...
     }
 
     /**
@@ -49,6 +47,15 @@ class PlatformProvider extends OrchidServiceProvider
                             -> permission('org.contingent.*')
                             -> route('org.contingent'),
                     ]),
+            Menu::make('Библиотека')
+                ->icon('book-open')
+                ->permission('library.*')
+                ->list([
+                   Menu::make('Наборы книг')
+                       ->icon('layers')
+                       ->permission('library.read')
+                       ->route('library.booksets'),
+                ]),
             Menu::make('Система')
                 -> icon('config')
                 -> list([
@@ -78,6 +85,7 @@ class PlatformProvider extends OrchidServiceProvider
                 -> permission('platform.systems.*'),
         ];
     }
+
 
     /**
      * @return Menu[]
@@ -109,6 +117,9 @@ class PlatformProvider extends OrchidServiceProvider
                 -> addPermission('org.contingent.write', 'Контингент: запись')
                 -> addPermission('org.departments.read', 'Отделения: чтение')
                 -> addPermission('org.departments.write', 'Отделения: запись'),
+            ItemPermission::group('Библиотека')
+                -> addPermission('library.read', 'Библиотека: чтение')
+                -> addPermission('library.write', 'Библиотека: запись'),
         ];
     }
 }

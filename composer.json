@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "ext-curl": "*",
         "guzzlehttp/guzzle": "^7.2",
         "hflabs/dadata": "^22.3",
         "laravel/framework": "^9.19",

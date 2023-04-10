@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Orchid\Screens\System\Repository\DocumentSchemaScreen;
+use App\Orchid\Screens\System\Repository\Library\PublicationInformationScreen;
+use App\Orchid\Screens\System\Repository\Library\PublicationInformatioScreen;
 use App\Orchid\Screens\System\Repository\PassportIssuerScreen;
 use App\Orchid\Screens\System\Repository\PositionScreen;
 use App\Orchid\Screens\System\Repository\RelationTypeScreen;
@@ -13,6 +15,14 @@ use App\Orchid\Screens\System\Repository\EducationalDocsIssuersScreen;
 use App\Orchid\Screens\System\Repository\EducationalDocsTypesScreen;
 use App\Orchid\Screens\System\Repository\SocialStatuses;
 use App\Orchid\Screens\System\Repository\SpecialtiesScreen;
+use App\Orchid\Screens\System\Repository\LanguagesScreen;
+use App\Orchid\Screens\System\Repository\Address\CityScreen;
+use App\Orchid\Screens\System\Repository\Address\CountryScreen;
+use App\Orchid\Screens\System\Repository\Address\RegionScreen;
+use App\Orchid\Screens\System\Repository\Library\PertainingInformationScreen;
+use App\Orchid\Screens\System\Repository\Library\PublisherScreen;
+use App\Orchid\Screens\System\Repository\Library\BookSetTypeScreen;
+use App\Orchid\Screens\System\Repository\Library\SubjectHeadlineScreen;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +36,15 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        DB::table('repository') -> insert([
+        $this->call([
+                LanguageTableSeeder::class,
+                CountryTableSeeder::class,
+                RegionTableSeeder::class,
+                CityTableSeeder::class,
+            ]
+        );
+
+        DB::table('repository')->insert([
             [
                 'name' => 'Схемы документов',
                 'class_type' => DocumentSchemaScreen::class,
@@ -92,24 +110,88 @@ class DatabaseSeeder extends Seeder
                 'class_type' => SpecialtiesScreen::class,
                 'path' => 'system.repository.specialties',
                 'uri' => 'students/specialties'
-            ]
+
+            ],
+            [
+                'name' => 'Языки',
+                'class_type' => LanguagesScreen::class,
+                'path' => 'system.repository.languages',
+                'uri' => 'languages'
+
+            ],
+            [
+                'name' => 'Страны',
+                'class_type' => CountryScreen::class,
+                'path' => 'system.repository.countries',
+                'uri' => 'address/countries'
+
+            ],
+            [
+                'name' => 'Регионы',
+                'class_type' => RegionScreen::class,
+                'path' => 'system.repository.regions',
+                'uri' => 'address/regions'
+
+            ],
+            [
+                'name' => 'Города',
+                'class_type' => CityScreen::class,
+                'path' => 'system.repository.cities',
+                'uri' => 'address/cities'
+
+            ],
+            [
+                'name' => 'Информация, относящаяся к заглавию',
+                'class_type' => PertainingInformationScreen::class,
+                'path' => 'system.repository.pertainingTitleInformation',
+                'uri' => 'library/pertaining-information'
+
+            ],
+            [
+                'name' => 'Издания',
+                'class_type' => PublisherScreen::class,
+                'path' => 'system.repository.publishers',
+                'uri' => 'library/publishers'
+
+            ],
+            [
+                'name' => 'Типы комплектов книг',
+                'class_type' => BookSetTypeScreen::class,
+                'path' => 'system.repository.booksetTypes',
+                'uri' => 'library/book-set-types'
+
+            ],
+            [
+                'name' => 'Предметные заголовки',
+                'class_type' => SubjectHeadlineScreen::class,
+                'path' => 'system.repository.subjectHeadlines',
+                'uri' => 'library/subject-headlines'
+
+            ],
+            [
+                'name' => 'Сведения об издании',
+                'class_type' => PublicationInformationScreen::class,
+                'path' => 'system.repository.publicationInformation',
+                'uri' => 'library/publication-information'
+
+            ],
         ]);
 
         /**
          * Экспорт паспортных данных от Dadata.ru.
          * Экспорт данных идет с этой CSV-таблицы: https://raw.githubusercontent.com/hflabs/fms-unit/master/fms_unit.csv
-        */
+         */
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://raw.githubusercontent.com/hflabs/fms-unit/master/fms_unit.csv',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_URL => 'https://raw.githubusercontent.com/hflabs/fms-unit/master/fms_unit.csv',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
         ));
         $csv = [];
         $first_line = true;
@@ -131,9 +213,10 @@ class DatabaseSeeder extends Seeder
             }
         }
         curl_close($curl);
-        DB::table('passport_issuers') -> insert($csv);
+        DB::table('passport_issuers')->insert($csv);
 
-        DB::table('relation_types') -> insert([
+
+        DB::table('relation_types')->insert([
             [
                 'fullname' => 'Мать',
             ],
@@ -163,7 +246,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        DB::table('educational_doc_types') -> insert([
+        DB::table('educational_doc_types')->insert([
             [
                 'fullname' => 'Свидетельство о неполном среднем образовании',
             ],
