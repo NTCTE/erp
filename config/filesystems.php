@@ -52,13 +52,13 @@ return [
 //            'throw' => false,
 //        ],
 
-        'library_digitized_books' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/library/digitized_books'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
+//        'library_digitized_books' => [
+//            'driver' => 'local',
+//            'root' => storage_path('app/public/library/digitized_books'),
+//            'url' => env('APP_URL').'/storage/',
+//            'visibility' => 'public',
+//            'throw' => false,
+//        ],
 
         's3' => [
             'driver' => 's3',
@@ -87,7 +87,6 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
-        public_path('digitized_books') => storage_path('app/public/library/digitized_books')
     ],
 
 ];
