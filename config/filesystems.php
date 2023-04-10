@@ -87,6 +87,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('digitized_books') => storage_path('app/public/library/digitized_books')
     ],
 
 ];
