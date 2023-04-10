@@ -146,7 +146,7 @@ class EditBooksetScreen extends Screen
                 Upload::make('bookset.digitized_id')
                     ->title('Цифровизированный экземпляр')
                     ->acceptedFiles('.pdf')
-                    ->storage('library_digitized_books')
+                    ->storage('public')
                     ->maxFiles(1)
                     ->horizontal(),
             ])
