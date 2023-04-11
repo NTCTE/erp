@@ -31,12 +31,12 @@ class BookSetScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Наборы книг';
+        return 'Комплекты книг';
     }
 
     public function description(): ?string
     {
-        return 'Список наборов книг';
+        return 'Список комплектов книг';
     }
 
     /**

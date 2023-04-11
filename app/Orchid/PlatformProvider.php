@@ -51,7 +51,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('book-open')
                 ->permission('library.*')
                 ->list([
-                   Menu::make('Наборы книг')
+                   Menu::make('Комплекты книг')
                        ->icon('layers')
                        ->permission('library.read')
                        ->route('library.booksets'),

@@ -4,18 +4,20 @@ namespace App\Models\Org\Library;
 
 use App\Models\Org\Library\Additionals\Author;
 use App\Models\Org\Library\Additionals\BookSetType;
-use App\Models\Org\Library\Additionals\Keyword;
 use App\Models\Org\Library\Additionals\PertainingTitleInformation;
 use App\Models\Org\Library\Additionals\Publisher;
 use App\Models\Org\Library\Additionals\SubjectHeadline;
 use App\Models\System\Repository\AdministrativeDocument;
+use App\Models\System\Repository\Language;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Orchid\Attachment\Attachable;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\AsSource;
 
 class BookSet extends Model
 {
-    use AsSource;
+    use AsSource, Attachable;
 
     protected $fillable = [
         'title',
@@ -37,7 +39,7 @@ class BookSet extends Model
     ];
 
     public function authors() {
-        $this->hasManyThrough(Author::class, BookSet::class);
+        return $this->hasManyThrough(Author::class, BookSet::class);
     }
 
     public function publisher(): BelongsTo
@@ -59,7 +61,15 @@ class BookSet extends Model
     }
 
     public function administrativeDocument(): BelongsTo {
-        return $this->belongsTo(AdministrativeDocument::class);
+        return $this->belongsTo(AdministrativeDocument::class, 'basis_doc_id', 'id');
+    }
+
+    public function language(): BelongsTo {
+        return $this->belongsTo(Language::class);
+    }
+
+    public function hero() {
+        return $this->hasOne(Attachment::class, 'id', 'cover_id');
     }
 
 }

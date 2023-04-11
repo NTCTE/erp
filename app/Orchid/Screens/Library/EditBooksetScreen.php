@@ -48,7 +48,7 @@ class EditBooksetScreen extends Screen
      */
     public function name(): ?string
     {
-        return $this->bookset->exist ? 'Редактировать набор книг' : 'Добавить новый набор книг';
+        return $this->bookset->exist ? 'Редактировать комплект книг' : 'Добавить новый комплект книг';
     }
 
     /**
@@ -61,7 +61,7 @@ class EditBooksetScreen extends Screen
         return [
             Button::make('Сохранить')
                 ->icon('save')
-                ->confirm('Вы уверены, что хотите сохранить новый набор книг?')
+                ->confirm('Вы уверены, что хотите сохранить новый комплект книг?')
                 ->method('saveBookSet')
                 ->canSee(!$this->bookset->exists),
 
@@ -148,7 +148,7 @@ class EditBooksetScreen extends Screen
                     ->acceptedFiles('.pdf')
                     ->storage('library_digitized_books')
                     ->maxFiles(1)
-                    ->horizontal(),
+                    ->horizontal()
             ])
         ];
     }

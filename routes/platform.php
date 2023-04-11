@@ -12,6 +12,7 @@ use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
+use App\Orchid\Screens\Library\BookSetLegendScreen;
 use App\Orchid\Screens\Library\BookSetScreen;
 use App\Orchid\Screens\Library\EditBooksetScreen;
 use App\Orchid\Screens\Library\LibraryScreen;
@@ -44,9 +45,6 @@ use App\Orchid\Screens\System\Machines\MachinesScreen;
 | contains the need "dashboard" middleware group. Now create something great!
 |
 */
-
-// Landing
-Route::view('/landing', 'landing')->name('landing');
 
 // Main
 Route::screen('/main', PlatformScreen::class)
@@ -251,7 +249,7 @@ Route::screen('library/booksets', BookSetScreen::class)
     ->name('library.booksets')
     ->breadcrumbs(function (Trail $trail) {
         return $trail->parent('platform.index')
-            ->push('Наборы книг', route('library.booksets'));
+            ->push('Комплекты книг', route('library.booksets'));
     });
 
 // LIBRARY > New Book Set
@@ -259,7 +257,15 @@ Route::screen('library/bookset/{bookset?}', EditBooksetScreen::class)
     ->name('library.bookset.edit')
     ->breadcrumbs(function (Trail $trail) {
         return $trail->parent('library.booksets')
-            ->push('Работа над набором', route('library.bookset.edit'));
+            ->push('Работа над комплектом', route('library.bookset.edit'));
+    });
+
+// LIBRARY > Book Sets > Legend (Info about Book Set)
+Route::screen('library/bookset/info/{bookset?}', BookSetLegendScreen::class)
+    ->name('library.bookset.info')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('library.booksets')
+            ->push('Работа над комплектом', route('library.bookset.edit'));
     });
 
 // MACHINES
