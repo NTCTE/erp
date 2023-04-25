@@ -4,6 +4,7 @@ namespace App\Models\System\Repository\Address;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Screen\AsSource;
 
 class Region extends Model
@@ -15,12 +16,12 @@ class Region extends Model
         'country_id'
     ];
 
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function cities()
+    public function cities(): HasMany
     {
         return $this->hasMany(City::class);
     }

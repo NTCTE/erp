@@ -3,9 +3,9 @@
 namespace App\Orchid\Layouts\System\Repository;
 
 use App\Models\System\Repository\Address\City;
-use App\Models\System\Repository\Address\Region;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -29,7 +29,8 @@ class CitiesTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('fullname', 'Город'),
+            TD::make('fullname', 'Город')
+            ->filter(Input::make()),
             TD::make('region_id', 'Регион')
                 ->render(function (City $city) {
                     return $city->region->fullname;

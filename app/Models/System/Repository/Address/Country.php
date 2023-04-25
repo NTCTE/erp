@@ -3,6 +3,7 @@
 namespace App\Models\System\Repository\Address;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Screen\AsSource;
 
 class Country extends Model
@@ -17,7 +18,7 @@ class Country extends Model
         $this->fullname;
     }
 
-    public function regions()
+    public function regions(): HasMany
     {
         return $this->hasMany(Region::class);
     }

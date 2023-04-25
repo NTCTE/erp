@@ -3,24 +3,29 @@
 namespace App\Models\System\Repository\Address;
 
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class City extends Model
 {
-    use AsSource;
+    use AsSource, Filterable;
 
     protected $fillable = [
         'fullname',
         'region_id'
     ];
 
-    public function region()
+    protected $allowedFilters = [
+        'fullname'
+    ];
+
+    public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);
     }
 
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
