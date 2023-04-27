@@ -32,6 +32,16 @@ class TakenInstance extends Model
         return $this->persons->getFullnameAttribute();
     }
 
+    public function setDeadlineAttribute($value)
+    {
+        $this->attributes['deadline'] = Carbon::parse($value);
+    }
+
+    public function setReturnDateAttribute($value)
+    {
+        $this->attributes['return_date'] = Carbon::parse($value);
+    }
+
     public function getDeadlineAttribute($value):? string {
         return !empty($value) ? Carbon::createFromFormat('Y-m-d', $value) -> format('d.m.Y') : null;
     }

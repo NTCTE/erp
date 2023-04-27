@@ -100,13 +100,16 @@ class BookSetLegendScreen extends Screen
                     }),
                 Sight::make('cover_id', 'Обложка')
                     ->render(function (BookSet $bookSet) {
-                        $path = $bookSet->hero()->get()->first()->url();
-                        $image = asset($path);
-                        return "<img src='$image' width='300px' height='300px' alt='Обложка'>";
-                    }),
+                        $path = $bookSet->hero()->get()->first()?->url();
+                        if ($path == null) {
+                            return 'Обложка отсутствует';
+                        } else {
+                            $image = asset($path);
+                            return "<img src='$image' width='300px' height='300px' alt='Обложка'>";
+                        }}),
                 Sight::make('digitized_id', 'Оцифрованная копия')
                     ->render(function (BookSet $bookSet) {
-                        $path = $bookSet->digitized()->get()->first()->url();
+                        $path = $bookSet->digitized()->get()->first()?->url();
                         if ($path == null) {
                             return 'Оцифрованная копия книги не найдена';
                         } else {

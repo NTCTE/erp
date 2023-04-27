@@ -6,6 +6,7 @@ use App\Models\Org\Contingent\Person;
 use App\Models\Org\Library\Actions\TakenInstance;
 use App\Models\Org\Library\Instance;
 use App\Orchid\Layouts\Library\InstanceIssuanceTable;
+use Carbon\Carbon;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -96,10 +97,10 @@ class IssuanceScreen extends Screen
                         ->placeholder('Укажите дату, когда экземпляр был возвращён')
                 ])
             ])
-            ->withoutCloseButton()
-            ->applyButton('Выдать')
-            ->staticBackdrop()
-            ->async('asyncGetTakenInstances'),
+                ->withoutCloseButton()
+                ->applyButton('Выдать')
+                ->staticBackdrop()
+                ->async('asyncGetTakenInstances'),
             InstanceIssuanceTable::class
         ];
     }
