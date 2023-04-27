@@ -15,7 +15,8 @@ use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
 use App\Orchid\Screens\Library\BookSetLegendScreen;
 use App\Orchid\Screens\Library\BookSetScreen;
 use App\Orchid\Screens\Library\EditBooksetScreen;
-use App\Orchid\Screens\Library\LibraryScreen;
+use App\Orchid\Screens\Library\InstanceScreen;
+use App\Orchid\Screens\Library\IssuanceScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
@@ -29,7 +30,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Tabuna\Breadcrumbs\Trail;
 use App\Orchid\Screens\EdPart\Departments\Groups\MainScreen as GroupsMainScreen;
-use App\Orchid\Screens\EdPart\Departments\Groups\Students\ActionsScreen;
 use App\Orchid\Screens\EdPart\Departments\Groups\Students\JobScreen;
 use App\Orchid\Screens\System\Machines\CommandsScreen;
 use App\Orchid\Screens\System\Machines\ExecutedScreen;
@@ -244,7 +244,7 @@ Route::screen('/org/departments/{department}/group/{group}/{student}/jobs/{jobs}
             ->push('Действия над студентом');
     });
 
-// LIBRARY
+// LIBRARY > Book Sets
 Route::screen('library/booksets', BookSetScreen::class)
     ->name('library.booksets')
     ->breadcrumbs(function (Trail $trail) {
@@ -266,6 +266,22 @@ Route::screen('library/bookset/info/{bookset?}', BookSetLegendScreen::class)
     ->breadcrumbs(function (Trail $trail) {
         return $trail->parent('library.booksets')
             ->push('Работа над комплектом', route('library.bookset.edit'));
+    });
+
+// LIBRARY > Instances
+Route::screen('library/instances', InstanceScreen::class)
+    ->name('library.instances')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Экземпляры книг', route('library.instances'));
+    });
+
+// LIBRARY > Instances > Issuance
+Route::screen('library/instances/issuance', IssuanceScreen::class)
+    ->name('library.instances.issuance')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('library.instances')
+            ->push('Выдача экземпляров', route('library.instances.issuance'));
     });
 
 // MACHINES

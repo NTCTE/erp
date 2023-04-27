@@ -4,7 +4,6 @@ namespace App\Orchid\Screens\System\Repository\Address;
 
 use App\Models\System\Repository\Address\City;
 use App\Models\System\Repository\Address\Region;
-use App\Orchid\Layouts\Selections\CitySelection;
 use App\Orchid\Layouts\System\Repository\CitiesTable;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
@@ -30,7 +29,6 @@ class CityScreen extends Screen
     {
         return [
             'cities' => $cities
-//                -> filtersApplySelection(CitySelection::class)
                 -> filters()
                 -> paginate(),
         ];
@@ -97,7 +95,6 @@ class CityScreen extends Screen
                 ->staticBackdrop()
                 ->async('asyncGetCity'),
             CitiesTable::class,
-//            CitySelection::class,
         ];
     }
     public function asyncGetCity(array $fields = null): array {

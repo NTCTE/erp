@@ -102,12 +102,16 @@ class BookSetLegendScreen extends Screen
                     ->render(function (BookSet $bookSet) {
                         $path = $bookSet->hero()->get()->first()->url();
                         $image = asset($path);
-                        return "<img src='$image' width='300px' height='300px' alt='Hero'>";
+                        return "<img src='$image' width='300px' height='300px' alt='Обложка'>";
                     }),
                 Sight::make('digitized_id', 'Оцифрованная копия')
                     ->render(function (BookSet $bookSet) {
-//                        return Upload::make('bookset.digitized_id');
-                        return 'Оцифрованная копия книги временно не доступна';
+                        $path = $bookSet->digitized()->get()->first()->url();
+                        if ($path == null) {
+                            return 'Оцифрованная копия книги не найдена';
+                        } else {
+                            return '<a href="' . asset($path) . '" target="_blank">Скачать</a>';
+                        }
                     }),
             ])
         ];
