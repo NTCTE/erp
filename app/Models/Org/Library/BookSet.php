@@ -11,6 +11,7 @@ use App\Models\System\Repository\AdministrativeDocument;
 use App\Models\System\Repository\Language;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Orchid\Attachment\Attachable;
 use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\AsSource;
@@ -39,8 +40,8 @@ class BookSet extends Model
         'barcode'
     ];
 
-    public function authors() {
-        return $this->hasManyThrough(Author::class, BookSet::class, 'author_id', 'id');
+    public function authors(): BelongsTo {
+        return $this->belongsTo(Author::class);
     }
 
     public function publisher(): BelongsTo
@@ -69,11 +70,12 @@ class BookSet extends Model
         return $this->belongsTo(Language::class);
     }
 
-    public function hero() {
+    public function hero(): HasOne
+    {
         return $this->hasOne(Attachment::class, 'id', 'cover_id');
     }
 
-    public function digitized() {
+    public function digitized(): hasOne {
         return $this->hasOne(Attachment::class, 'id', 'digitized_id');
     }
 
