@@ -40,7 +40,7 @@ class BookSet extends Model
     ];
 
     public function authors() {
-        return $this->hasManyThrough(Author::class, BookSet::class);
+        return $this->belongsTo(Author::class, 'id');
     }
 
     public function publisher(): BelongsTo
