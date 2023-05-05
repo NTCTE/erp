@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Org\Library\Additionals\Author;
 use App\Orchid\Screens\System\Repository\DocumentSchemaScreen;
+use App\Orchid\Screens\System\Repository\Library\AuthorScreen;
 use App\Orchid\Screens\System\Repository\Library\PublicationInformationScreen;
 use App\Orchid\Screens\System\Repository\Library\PublicationInformatioScreen;
 use App\Orchid\Screens\System\Repository\PassportIssuerScreen;
@@ -153,6 +155,12 @@ class DatabaseSeeder extends Seeder
                 'path' => 'system.repository.publishers',
                 'uri' => 'library/publishers'
 
+            ],
+            [
+                'name' => 'Авторы',
+                'class_type' => AuthorScreen::class,
+                'path' => 'system.repository.authors',
+                'uri' => 'library/authors'
             ],
             [
                 'name' => 'Типы комплектов книг',

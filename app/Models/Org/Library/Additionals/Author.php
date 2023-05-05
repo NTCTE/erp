@@ -14,4 +14,8 @@ class Author extends Model
         'firstname',
         'patronymic'
     ];
+
+    public function getFullnameAttribute(): string {
+        return "{$this -> lastname} {$this -> firstname} {$this -> patronymic}";
+    }
 }
