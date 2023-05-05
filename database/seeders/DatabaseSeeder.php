@@ -150,7 +150,7 @@ class DatabaseSeeder extends Seeder
 
             ],
             [
-                'name' => 'Издания',
+                'name' => 'Издатели',
                 'class_type' => PublisherScreen::class,
                 'path' => 'system.repository.publishers',
                 'uri' => 'library/publishers'
