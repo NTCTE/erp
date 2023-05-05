@@ -137,6 +137,7 @@ class EditBooksetScreen extends Screen
                 Relation::make('bookset.basis_doc_id')
                     ->title('Основание поступления документа')
                     ->fromModel(AdministrativeDocument::class, 'fullname')
+                    ->displayAppend('Formatted')
                     ->required(),
                 Input::make('bookset.barcode')
                     ->title('Штрих-код')
