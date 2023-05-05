@@ -76,7 +76,7 @@ class BookSetLegendScreen extends Screen
                     }),
                 Sight::make('author_id', 'Автор')
                     ->render(function (BookSet $bookSet) {
-                        return $bookSet->authors->getFullnameAtribute();
+                        $bookSet->authors->getFullnameAttribute();
                     }),
                 Sight::make('isbn', 'ISBN'),
                 Sight::make('pages_number', 'Количество страниц'),

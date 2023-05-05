@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Orchid\Attachment\Attachable;
 use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\AsSource;
+use const http\Client\Curl\AUTH_ANY;
 
 class BookSet extends Model
 {
@@ -40,7 +41,7 @@ class BookSet extends Model
         'barcode'
     ];
 
-    public function authors(): BelongsTo {
+    public function authors() {
         return $this->belongsTo(Author::class, 'author_id', 'id');
     }
 
