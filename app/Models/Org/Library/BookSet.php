@@ -41,7 +41,7 @@ class BookSet extends Model
     ];
 
     public function authors(): BelongsTo {
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(Author::class, 'author_id', 'id');
     }
 
     public function publisher(): BelongsTo
