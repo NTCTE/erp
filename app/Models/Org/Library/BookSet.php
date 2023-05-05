@@ -41,7 +41,7 @@ class BookSet extends Model
         'barcode'
     ];
 
-    public function authors() {
+    public function authors(): BelongsTo {
         return $this->belongsTo(Author::class, 'author_id', 'id');
     }
 
