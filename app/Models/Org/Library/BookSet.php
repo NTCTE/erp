@@ -75,7 +75,7 @@ class BookSet extends Model
         return $this->hasOne(Attachment::class, 'id', 'cover_id');
     }
 
-    public function digitized(): hasOne {
+    public function digitized(): HasOne {
         return $this->hasOne(Attachment::class, 'id', 'digitized_id');
     }
 
