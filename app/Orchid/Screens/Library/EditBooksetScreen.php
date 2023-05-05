@@ -91,7 +91,7 @@ class EditBooksetScreen extends Screen
                     ->required(),
                 Relation::make('bookset.book_set_type_id')
                     ->fromModel(BookSetType::class, 'fullname')
-                    ->title('Тип набора')
+                    ->title('Тип комплекта')
                     ->required(),
                 Relation::make('bookset.pertaining_title_information_id')
                     ->title('Информация, относящаяся к заглавию')
