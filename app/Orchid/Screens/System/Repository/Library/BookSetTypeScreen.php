@@ -32,11 +32,11 @@ class BookSetTypeScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Типы наборов книг';
+        return 'Типы комплектов книг';
     }
 
     public function description():? string {
-        return 'Здесь вы можете добавить тип набора книг.';
+        return 'Здесь вы можете добавить тип комплекта книг.';
     }
 
     /**
