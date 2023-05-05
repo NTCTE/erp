@@ -30,7 +30,7 @@ class BookSetTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('title', 'Название набора')
+            TD::make('title', 'Название комплекта')
                 ->render(function (BookSet $bookSet) {
                         return Link::make($bookSet->title)
                             ->route('library.bookset.edit', $bookSet);
