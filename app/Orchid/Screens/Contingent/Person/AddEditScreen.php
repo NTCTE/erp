@@ -322,7 +322,7 @@ class AddEditScreen extends Screen
 
         $input = $request -> input('person');
         $input['birthdate'] = !empty($input['birthdate']) ? Carbon::createFromFormat('d.m.Y', $input['birthdate'])
-            -> format('Y-m-d') : 
+            -> format('Y-m-d') :
             null;
         $person -> fill($input)
             -> save();
