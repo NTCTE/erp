@@ -41,6 +41,9 @@ return new class extends Migration
                 $table->foreignId('publisher_id')
                     ->references('id')
                     ->on('publishers');
+                $table->foreignId('author_id')
+                    ->references('id')
+                    ->on('authors');
                 $table->char('isbn', 50)->unique();
                 $table->unsignedInteger('pages_number');
                 $table->text('annotation');

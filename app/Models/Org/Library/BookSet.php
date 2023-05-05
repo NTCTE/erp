@@ -29,6 +29,7 @@ class BookSet extends Model
         'publishing_year',
         'publication_information_id',
         'publisher_id',
+        'author_id',
         'isbn',
         'pages_number',
         'annotation',

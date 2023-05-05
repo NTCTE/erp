@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Library;
 
+use App\Models\Org\Library\Additionals\Author;
 use App\Models\Org\Library\Additionals\BookSetType;
 use App\Models\Org\Library\Additionals\PertainingTitleInformation;
 use App\Models\Org\Library\Additionals\PublicationInformation;
@@ -10,12 +11,9 @@ use App\Models\Org\Library\Additionals\SubjectHeadline;
 use App\Models\Org\Library\BookSet;
 use App\Models\System\Repository\AdministrativeDocument;
 use App\Models\System\Repository\Language;
-use Faker\Provider\Text;
 use Illuminate\Http\Request;
-use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\DateTimer;
-use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Relation;
@@ -110,6 +108,12 @@ class EditBooksetScreen extends Screen
                 Relation::make('bookset.publisher_id')
                     ->title('Издатель')
                     ->fromModel(Publisher::class, 'fullname')
+                    ->required(),
+                Relation::make('bookset.author_id')
+                    ->title('Автор')
+                    ->fromModel(Author::class, 'lastname')
+                    ->displayAppend('Fullname')
+                    ->searchColumns('firstname', 'patronymic')
                     ->required(),
                 Input::make('bookset.isbn')
                     ->title('ISBN')

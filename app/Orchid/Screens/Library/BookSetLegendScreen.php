@@ -74,6 +74,10 @@ class BookSetLegendScreen extends Screen
                     ->render(function (BookSet $bookSet) {
                         return $bookSet->publisher->fullname;
                     }),
+                Sight::make('author_id', 'Автор')
+                    ->render(function (BookSet $bookSet) {
+                        return $bookSet->authors->getFullnameAtribute();
+                    }),
                 Sight::make('isbn', 'ISBN'),
                 Sight::make('pages_number', 'Количество страниц'),
                 Sight::make('annotation', 'Аннотация'),
