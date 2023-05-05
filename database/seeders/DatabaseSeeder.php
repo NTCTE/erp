@@ -177,7 +177,7 @@ class DatabaseSeeder extends Seeder
 
             ],
             [
-                'name' => 'Сведения об издании',
+                'name' => 'Информация об издании',
                 'class_type' => PublicationInformationScreen::class,
                 'path' => 'system.repository.publicationInformation',
                 'uri' => 'library/publication-information'
