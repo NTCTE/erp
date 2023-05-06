@@ -40,7 +40,7 @@ class AuthorTable extends Table
                             ModalToggle::make('Изменить')
                                 -> icon('pencil')
                                 -> modal('authorModal')
-                                -> modalTitle('Изменение информацию о авторе')
+                                -> modalTitle('Изменение информации об авторе')
                                 -> method('create')
                                 -> asyncParameters($author),
                         ]);
