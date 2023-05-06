@@ -74,7 +74,7 @@ class InstanceScreen extends Screen
                     Relation::make('instance.book_set_id')
                         ->fromModel(BookSet::class, 'title')
                         ->required()
-                        ->placeholder('Выберите набор книг, к которому относится экземпляр'),
+                        ->placeholder('Выберите комплект книг, к которому относится экземпляр'),
                     Input::make('instance.inventory_number')
                         ->title('Инвентарный номер')
                         ->type('text')
