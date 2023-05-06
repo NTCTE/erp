@@ -43,7 +43,7 @@ class PublisherTable extends Table
                             ModalToggle::make('Изменить')
                                 -> icon('pencil')
                                 -> modal('publisherModal')
-                                -> modalTitle('Изменение информацию о издательстве')
+                                -> modalTitle('Изменение информации об издательстве')
                                 -> method('create')
                                 -> asyncParameters($publisher),
                         ]);
