@@ -25,6 +25,13 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+            Menu::make('Личный кабинет')
+            ->icon('star')
+            ->list([
+                Menu::make('Книги')
+                ->icon('barcode')
+                ->route('account.books'),
+            ]),
             Menu::make('Учебная часть')
                 -> icon('organization')
                 -> list([
@@ -64,7 +71,6 @@ class PlatformProvider extends OrchidServiceProvider
                        ->icon('share-alt')
                        ->permission('library.*')
                        ->route('library.instances.issuance')
-
                 ]),
             Menu::make('Система')
                 -> icon('config')

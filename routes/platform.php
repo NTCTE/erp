@@ -10,6 +10,7 @@ use App\Orchid\Screens\Contingent\Person\Documents\EditPassportScreen;
 use App\Orchid\Screens\EdPart\Departments\DepartmentScreen;
 use App\Orchid\Screens\EdPart\Departments\MainScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Add;
+use App\Orchid\Screens\Account\ReceivedBooksScreen;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\Edit;
 use App\Orchid\Screens\EdPart\Schedule\Legacy\FullList;
 use App\Orchid\Screens\Library\BookSetLegendScreen;
@@ -311,4 +312,12 @@ Route::screen('/system/machines/executed/{machine}', ExecutedScreen::class)
             ->push('Выполненные команды', route('system.machines.executed', request()
                 ->route()
                 ->parameter('machine')));
+    });
+
+//Account > Books
+Route::screen('account/books', ReceivedBooksScreen::class)
+    ->name('account.books')
+    ->breadcrumbs(function (Trail $trail) {
+        return $trail->parent('platform.index')
+            ->push('Полученные книги', route('account.books'));
     });

@@ -2,6 +2,7 @@
 
 namespace App\Models\Org\Library;
 
+use App\Models\Org\Library\Actions\TakenInstance;
 use App\Models\Org\Library\Additionals\Author;
 use App\Models\Org\Library\Additionals\BookSetType;
 use App\Models\Org\Library\Additionals\PertainingTitleInformation;
@@ -77,6 +78,10 @@ class BookSet extends Model
 
     public function digitized(): HasOne {
         return $this->hasOne(Attachment::class, 'id', 'digitized_id');
+    }
+
+    public function instance() {
+        return $this->belongsTo(Instance::class);
     }
 
 }
