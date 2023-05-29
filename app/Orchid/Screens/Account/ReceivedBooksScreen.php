@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Orchid\Layouts\Account\BookTable;
 use App\Orchid\Layouts\Library\InstanceIssuanceTable;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -20,10 +22,10 @@ use Orchid\Support\Facades\Toast;
 
 class ReceivedBooksScreen extends Screen
 {
-    public function query(Instance $instance): iterable
+    public function query(): iterable
     {
         return [
-            'instance' => $instance -> paginate(),
+            'takenInstance' => TakenInstance::query()->where('taken_instances.person_id', '=', Auth::id())-> paginate(),
         ];
     }
 

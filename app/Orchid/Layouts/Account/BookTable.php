@@ -22,7 +22,7 @@ class BookTable extends Table
      *
      * @var string
      */
-    protected $target = 'instance';
+    protected $target = 'takenInstance';
 
     /**
      * Get the table cells to be displayed.
@@ -34,16 +34,16 @@ class BookTable extends Table
     {
         return [
             TD::make('title', 'Название')
-                ->render(function (Instance $instance) {
-                    return $instance->bookSet->title;
+                ->render(function (TakenInstance $takenInstance) {
+                    return $takenInstance->instances->bookSet->title;
                 }),
             TD::make('instance_id', 'Экземпляр (инв. №)')
-                ->render(function (Instance $instance) {
-                    return $instance->inventory_number;
+                ->render(function (TakenInstance $takenInstance) {
+                    return $takenInstance->instances->inventory_number;
                 }),
             TD::make('deadline', 'Срок сдачи')
-                ->render(function (Instance $instance) {
-                    return $instance->takenInstance->deadline;
+                ->render(function (TakenInstance $takenInstance) {
+                    return $takenInstance->deadline;
                 }),
         ];
     }
