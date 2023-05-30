@@ -96,11 +96,11 @@ class EditBooksetScreen extends Screen
                     ->fromModel(PertainingTitleInformation::class, 'fullname')
                     ->required(),
                 DateTimer::make('bookset.publishing_year')
-                    ->title('Год издания')
-                    ->placeholder('')
-                    ->format('Y')
-                    ->allowInput()
-                    ->required(),
+                ->title('Год издания')
+                ->placeholder('')
+                ->format('Y')
+                ->allowInput()
+                ->required(),
                 Relation::make('bookset.publication_information_id')
                     ->title('Информация об издании')
                     ->fromModel(PublicationInformation::class, 'fullname')

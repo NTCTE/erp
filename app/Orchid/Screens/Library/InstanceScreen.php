@@ -5,7 +5,6 @@ namespace App\Orchid\Screens\Library;
 use App\Models\Org\Library\BookSet;
 use App\Models\Org\Library\Instance;
 use App\Orchid\Layouts\Library\InstanceTable;
-use Illuminate\Support\Facades\Auth;
 use Orchid\Support\Facades\Toast;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
@@ -15,6 +14,7 @@ use Orchid\Screen\Screen;
 
 class InstanceScreen extends Screen
 {
+    public $instace;
 
     /**
      * Fetch data to be displayed on the screen.
@@ -56,7 +56,6 @@ class InstanceScreen extends Screen
                 ->method('create')
                 ->icon('plus')
                 ->modalTitle('Добавить новый экземпляр')
-                ->canSee(Auth::user()->hasAccess('library.write'))
         ];
     }
 

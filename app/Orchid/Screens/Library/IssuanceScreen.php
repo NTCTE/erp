@@ -7,7 +7,6 @@ use App\Models\Org\Library\Actions\TakenInstance;
 use App\Models\Org\Library\Instance;
 use App\Orchid\Layouts\Library\InstanceIssuanceTable;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -61,7 +60,6 @@ class IssuanceScreen extends Screen
                 ->method('issuance')
                 ->icon('share-alt')
                 ->modalTitle('Выдать экземпляр')
-                ->canSee(Auth::user()->hasAccess('library.write'))
         ];
     }
 

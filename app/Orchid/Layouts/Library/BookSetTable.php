@@ -3,7 +3,6 @@
 namespace App\Orchid\Layouts\Library;
 
 use App\Models\Org\Library\BookSet;
-use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -31,15 +30,13 @@ class BookSetTable extends Table
             TD::make('title', 'Название комплекта')
                 ->render(function (BookSet $bookSet) {
                         return Link::make($bookSet->title)
-                            ->route('library.bookset.edit', $bookSet)
-                            ->canSee(Auth::user()->hasAccess('library.write'));
+                            ->route('library.bookset.edit', $bookSet);
                 }),
             TD::make('actions', 'Действия')
                     -> render(function (BookSet $bookSet) {
                         return Link::make('')
                             -> icon('info')
-                            -> route('library.bookset.info', $bookSet)
-                            ->canSee(Auth::user()->hasAccess('library.write'));
+                            -> route('library.bookset.info', $bookSet);
                     })
         ];
     }

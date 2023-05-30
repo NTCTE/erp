@@ -4,7 +4,6 @@ namespace App\Orchid\Layouts\Library;
 
 use App\Models\Org\Library\Actions\TakenInstance;
 use App\Models\Org\Library\Instance;
-use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Table;
@@ -51,8 +50,7 @@ class InstanceIssuanceTable extends Table
                                 ->modalTitle('Изменить данные о выданном экземпляре')
                                 ->method('issuance')
                                 ->asyncParameters($takenInstance)
-                        ])
-                        ->canSee(Auth::user()->hasAccess('library.write'));
+                        ]);
                 })
         ];
     }
