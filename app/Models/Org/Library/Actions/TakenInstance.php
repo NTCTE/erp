@@ -3,6 +3,7 @@
 namespace App\Models\Org\Library\Actions;
 
 use App\Models\Org\Contingent\Person;
+use App\Models\Org\Library\BookSet;
 use App\Models\Org\Library\Instance;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ class TakenInstance extends Model
         return $this->belongsTo(Person::class, 'person_id', 'id');
     }
 
-    public function instances() {
+    public function instances(): BelongsTo {
         return $this->belongsTo(Instance::class, 'instance_id', 'id');
     }
 

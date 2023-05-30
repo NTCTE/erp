@@ -45,6 +45,13 @@ class BookTable extends Table
                 ->render(function (TakenInstance $takenInstance) {
                     return $takenInstance->deadline;
                 }),
+            TD::make('download_book', 'Скачать книгу')
+                ->render(function (TakenInstance $takenInstance){
+                    $path = $takenInstance->instances->bookSet->digitized()->get()->first()?->url();
+                    return Link::make('')
+                        ->icon('arrow-down-circle')
+                        ->href($path);
+                })
         ];
     }
 }

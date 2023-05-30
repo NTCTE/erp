@@ -114,7 +114,7 @@ class BookSetLegendScreen extends Screen
                 Sight::make('digitized_id', 'Оцифрованная копия')
                     ->render(function (BookSet $bookSet) {
                         $path = $bookSet->digitized()->get()->first()?->url();
-                        if ($path == null) {
+                        if ($path === null) {
                             return 'Оцифрованная копия книги не найдена';
                         } else {
                             return '<a href="' . asset($path) . '" target="_blank">Скачать</a>';
