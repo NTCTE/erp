@@ -3,14 +3,12 @@
 namespace App\Orchid\Layouts\Account;
 
 use App\Models\Org\Library\Actions\TakenInstance;
-use App\Models\Org\Library\BookSet;
-use App\Models\Org\Library\Instance;
-use Illuminate\Support\Facades\Auth;
-use Orchid\Screen\Actions\DropDown;
+use Orchid\Alert\Toast;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Orchid\Support\Facades\Alert;
 
 class BookTable extends Table
 {
@@ -23,12 +21,6 @@ class BookTable extends Table
      * @var string
      */
     protected $target = 'takenInstance';
-
-    /**
-     * Get the table cells to be displayed.
-     *
-     * @return TD[]
-     */
 
     protected function columns(): iterable
     {
@@ -48,9 +40,14 @@ class BookTable extends Table
             TD::make('download_book', 'Скачать книгу')
                 ->render(function (TakenInstance $takenInstance){
                     $path = $takenInstance->instances->bookSet->digitized()->get()->first()?->url();
-                    return Link::make('')
-                        ->icon('arrow-down-circle')
-                        ->href($path);
+                    if ($path === null) {
+                        return Link::make('')
+                            ->icon('close');
+                    } else {
+                        return Link::make('')
+                            ->icon('arrow-down-circle')
+                            ->href($path);
+                    }
                 })
         ];
     }
