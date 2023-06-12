@@ -79,7 +79,7 @@ class AddEditScreen extends Screen
     {
         return [
             'org.contingent.read',
-            'prg.contingent.write',
+            'org.contingent.write',
         ];
     }
 

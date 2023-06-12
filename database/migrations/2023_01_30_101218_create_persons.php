@@ -41,7 +41,7 @@ return new class extends Migration
             $table -> char('inn', 20)
                 -> unique()
                 -> nullable();
-            $table -> char('hin', 20)
+            $table -> char('hin', 20) # полис ОМС
                 -> unique()
                 -> nullable();
             $table -> unsignedTinyInteger('sex')
