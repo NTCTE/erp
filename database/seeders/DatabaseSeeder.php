@@ -46,6 +46,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        DB::table('persons')->insert([
+            [
+                'id' => '1',
+                'uuid' => '9902933c-d050-499b-bea2-a675bac737fa',
+                'lastname' => 'Администратор',
+                'firstname' => 'системы',
+                'patronymic' => '!НЕ УДАЛЯТЬ!',
+                'email' => 'admin@nttek.ru',
+                'sex' => '1'
+            ]
+            ]);
+
         DB::table('repository')->insert([
             [
                 'name' => 'Схемы документов',
