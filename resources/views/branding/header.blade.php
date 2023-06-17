@@ -1,6 +1,6 @@
 @push('head')
   <link
-      href="/public/NTTEK.ico"
+      href="favicon.ico"
       id="favicon"
       rel="icon"
   >
