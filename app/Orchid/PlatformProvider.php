@@ -26,79 +26,76 @@ class PlatformProvider extends OrchidServiceProvider
     {
         return [
             Menu::make('Личный кабинет')
-            ->icon('star')
-            ->list([
-                Menu::make('Книги')
-                ->icon('barcode')
-                ->route('account.books'),
-            ]),
+                ->icon('star')
+                ->list([
+                    Menu::make('Книги')
+                        ->icon('barcode')
+                        ->route('account.books'),
+                ]),
             Menu::make('Учебная часть')
-                -> icon('organization')
-                -> list([
+                ->icon('organization')
+                ->list([
                     Menu::make('Расписание (старое)')
-                        -> icon('table')
-                        -> route('schedule.legacy')
-                        -> permission('edPart.schedule.legacy.add'),
+                        ->icon('table')
+                        ->route('schedule.legacy')
+                        ->permission('edPart.schedule.legacy.add'),
                     Menu::make('Список отделений')
-                        -> icon('list')
-                        -> route('org.departments')
-                        -> permission('org.departments.*'),
+                        ->icon('list')
+                        ->route('org.departments')
+                        ->permission('org.departments.*'),
                 ])
-                -> permission('edPart.*'),
+                ->permission('edPart.*'),
             Menu::make('Организация')
-                    -> icon('directions')
-                    -> permission('org.*')
-                    -> list([
-                        Menu::make('Контингент')
-                            -> icon('friends')
-                            -> permission('org.contingent.*')
-                            -> route('org.contingent'),
-                    ]),
+                ->icon('directions')
+                ->permission('org.*')
+                ->list([
+                    Menu::make('Контингент')
+                        ->icon('friends')
+                        ->permission('org.contingent.*')
+                        ->route('org.contingent'),
+                ]),
             Menu::make('Библиотека')
                 ->icon('book-open')
                 ->permission('library.*')
                 ->list([
-                   Menu::make('Комплекты книг')
-                       ->icon('layers')
-                       ->permission('library.*')
-                       ->route('library.booksets'),
-                   Menu::make('Экземпляры')
-                       ->icon('doc')
-                       ->permission('library.*')
-                       ->route('library.instances')
-                       ->title('Экземпляры'),
-                   Menu::make('Выдача')
-                       ->icon('share-alt')
-                       ->permission('library.*')
-                       ->route('library.instances.issuance')
+                    Menu::make('Комплекты книг')
+                        ->icon('layers')
+                        ->route('library.booksets'),
+                    Menu::make('Экземпляры')
+                        ->icon('doc')
+                        ->route('library.instances')
+                        ->title('Экземпляры'),
+                    Menu::make('Выдача')
+                        ->icon('share-alt')
+                        ->route('library.instances.issuance')
                 ]),
             Menu::make('Система')
-                -> icon('config')
-                -> list([
+                ->icon('config')
+                ->list([
                     Menu::make('Репозиторий')
-                        -> icon('number-list')
-                        -> route('system.repository')
-                        -> permission('platform.systems.repository'),
+                        ->icon('number-list')
+                        ->route('system.repository')
+                        ->permission('platform.systems.repository'),
                     Menu::make('Команды')
-                        -> icon('linux')
-                        -> route('system.machines.commands')
-                        -> permission('platform.systems.machines')
-                        -> title('Машины'),
+                        ->icon('linux')
+                        ->route('system.machines.commands')
+                        ->permission('platform.systems.machines')
+                        ->title('Машины'),
                     Menu::make('Машины')
-                        -> icon('os')
-                        -> route('system.machines')
-                        -> permission('platform.systems.machines'),
-                    Menu::make(__('Users'))
+                        ->icon('os')
+                        ->route('system.machines')
+                        ->permission('platform.systems.machines'),
+                    Menu::make('Пользователи')
                         ->icon('user')
                         ->route('platform.systems.users')
                         ->permission('platform.systems.users')
                         ->title(__('Access rights')),
-                    Menu::make(__('Roles'))
+                    Menu::make('Роли')
                         ->icon('lock')
                         ->route('platform.systems.roles')
                         ->permission('platform.systems.roles'),
                 ])
-                -> permission('platform.systems.*'),
+                ->permission('platform.systems.*'),
         ];
     }
 
@@ -122,20 +119,20 @@ class PlatformProvider extends OrchidServiceProvider
     {
         return [
             ItemPermission::group(__('System'))
-                -> addPermission('platform.systems.roles', __('Roles'))
-                -> addPermission('platform.systems.users', __('Users'))
-                -> addPermission('platform.systems.repository', 'Репозиторий')
-                -> addPermission('platform.systems.machines', 'Машины'),
+                ->addPermission('platform.systems.roles', __('Roles'))
+                ->addPermission('platform.systems.users', __('Users'))
+                ->addPermission('platform.systems.repository', 'Репозиторий')
+                ->addPermission('platform.systems.machines', 'Машины'),
             ItemPermission::group('Расписание (старое)')
-                -> addPermission('edPart.schedule.legacy.add', 'Добавить/изменить расписание'),
+                ->addPermission('edPart.schedule.legacy.add', 'Добавить/изменить расписание'),
             ItemPermission::group('Организация')
-                -> addPermission('org.contingent.read', 'Контингент: чтение')
-                -> addPermission('org.contingent.write', 'Контингент: запись')
-                -> addPermission('org.departments.read', 'Отделения: чтение')
-                -> addPermission('org.departments.write', 'Отделения: запись'),
+                ->addPermission('org.contingent.read', 'Контингент: чтение')
+                ->addPermission('org.contingent.write', 'Контингент: запись')
+                ->addPermission('org.departments.read', 'Отделения: чтение')
+                ->addPermission('org.departments.write', 'Отделения: запись'),
             ItemPermission::group('Библиотека')
-                -> addPermission('library.read', 'Библиотека: чтение')
-                -> addPermission('library.write', 'Библиотека: запись'),
+                ->addPermission('library.read', 'Библиотека: чтение')
+                ->addPermission('library.write', 'Библиотека: запись'),
         ];
     }
 }

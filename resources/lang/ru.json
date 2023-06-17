@@ -1,4 +1,10 @@
 {
     "There are no objects currently displayed": "На данный момент нет объектов для отображения",
-    "Import or create objects, or check back later for updates": "Импортируйте или создайте объекты. Или проверьте позже для обновлений"
+    "Import or create objects, or check back later for updates": "Импортируйте или создайте объекты. Или проверьте позже для обновлений",
+    "Regular user": "Пользователь",
+    "Access rights": "Права доступа",
+    "User": "Пользователи",
+    "All registered users": "Все зарегистрированные пользователи",
+    "Details such as name, email and password": "Такие данные, как имя, электронная почта и пароль",
+    "Manage roles": "Управление ролями"
 }
