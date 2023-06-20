@@ -9,17 +9,17 @@ use Orchid\Screen\Screen;
 
 class LanguagesScreen extends Screen
 {
-    public string $languages;
+    public $language;
 
     /**
      * Fetch data to be displayed on the screen.
      *
      * @return array
      */
-    public function query(Language $languages): iterable
+    public function query(Language $language): iterable
     {
         return [
-            'language' => $languages::paginate(),
+            'language' => $language::paginate(),
         ];
     }
 

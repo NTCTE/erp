@@ -31,7 +31,7 @@ class Repository extends Screen
     {
         return 'Репозиторий';
     }
-    
+
     /**
      * Description of screen.
      *
@@ -39,9 +39,9 @@ class Repository extends Screen
      */
     public function description(): ?string
     {
-        return 'На данном окне вы можете изменить редактировать системные таблицы. Таблицы появляются при обновлении системы, если на это есть необходимость.';
+        return 'Здесь вы можете редактировать системные таблицы. Таблицы появляются при обновлении системы, если на это есть необходимость.';
     }
-    
+
     /**
      * Permissions of screen.
      *
